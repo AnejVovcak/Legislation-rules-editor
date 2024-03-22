@@ -1,15 +1,20 @@
 import React from 'react';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
 import TableViewTax from "./components/TableViewTax";
+import MainPage from "./components/MainPage";
+import TableViewMig from "./components/TableViewMig";
+import TableViewSocSec from "./components/TableViewSocSec";
+import Layout from "./components/Layout";
 
 function App() {
     return (
-        <div className="main">
-            <h2>React Crud Operations</h2>
-            <div className="overflow-auto">
-                <TableViewTax/>
-            </div>
-        </div>
+        <Routes>
+            <Route path="/" element={<Layout><MainPage /></Layout>} />
+            <Route path="/tax" element={<Layout><TableViewTax /></Layout>} />
+            <Route path="/mig" element={<Layout><TableViewMig /></Layout>} />
+            <Route path="/socSec" element={<Layout><TableViewSocSec /></Layout>} />
+        </Routes>
     );
 }
 

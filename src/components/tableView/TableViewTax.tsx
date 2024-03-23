@@ -1,23 +1,30 @@
-import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
-import {useEffect, useState} from "react";
-import {Tax} from "../dtos/tax";
-import {MongoRequest} from "../dtos/mongo-request";
-import {querySocSec, queryTax} from "../api/api";
-import {SocSec} from "../dtos/socSec";
+import React, {useEffect, useState} from "react";
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderCell,
+    TableRow
+} from "semantic-ui-react";
+import {queryTax} from "../../api/api";
+import {MongoRequest} from "../../dtos/mongo-request";
+import {Tax} from "../../dtos/tax";
 
-function TableViewSocSec() {
-//data of type Tax[] to store the fetched data
-    const [data, setData] = useState<SocSec[]>([]);
+
+function TableViewTax() {
+
+    //data of type TaxEnum[] to store the fetched data
+    const [data, setData] = useState<Tax[]>([]);
 
     useEffect(() => {
         const getData = async () => {
             let request: MongoRequest = {
                 dataSource: "LawBrainerTest",
                 database: "lawBrainer",
-                collection: "socSecStaging",
+                collection: "taxStaging",
             }
             try {
-                const result = await querySocSec(request); // Call the function from api.js
+                const result = await queryTax(request); // Call the function from api.js
                 setData(result); // Set the state with the fetched data
                 console.log("Data fetched:", result[0])
             } catch (error) {
@@ -35,14 +42,13 @@ function TableViewSocSec() {
                 <TableHeader>
                     <TableRow>
                         <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell>Content</TableHeaderCell>
+                        <TableHeaderCell>Text</TableHeaderCell>
                         <TableHeaderCell>COVERED</TableHeaderCell>
                         <TableHeaderCell>ARTICLE</TableHeaderCell>
-                        <TableHeaderCell>STATUTE</TableHeaderCell>
                         <TableHeaderCell>IN</TableHeaderCell>
                         <TableHeaderCell>OUT</TableHeaderCell>
-                        <TableHeaderCell>EMPL</TableHeaderCell>
-                        <TableHeaderCell>IF EMPL0 EQ EMPL1</TableHeaderCell>
+                        <TableHeaderCell>SECONDMENT</TableHeaderCell>
+                        <TableHeaderCell>NAT</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 
@@ -53,15 +59,12 @@ function TableViewSocSec() {
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}
                             <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                            <td>{item["ssc-covered"]}</td>
-                            <td>{item["ssc-article"].map((article, index) => (
-                                <div style={{backgroundColor: "lightblue"}} key={index}>{article}</div>
-                            ))}</td>
-                            <td>{item["ssc-statute"]}</td>
-                            <td>{item["ssc-in_value"]}</td>
-                            <td>{item["ssc-out_value"]}</td>
-                            <td>{item["ssc-empl"]}</td>
-                            <td>{item["ssc-if_empl0_eq_empl1"]}</td>
+                            <td>{item["tax-covered"]}</td>
+                            <td>{item["tax-article"]}</td>
+                            <td>{item["tax-out_value"]}</td>
+                            <td>{item["tax-in_value"]}</td>
+                            <td>{item["tax-empl"]}</td>
+                            <td>{item["tax-tax"]}</td>
                         </tr>
                     ))}
                 </TableBody>
@@ -70,4 +73,4 @@ function TableViewSocSec() {
     );
 }
 
-export default TableViewSocSec;
+export default TableViewTax;

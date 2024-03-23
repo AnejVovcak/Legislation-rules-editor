@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Tax} from "../dtos/tax";
-import {MongoRequest} from "../dtos/mongo-request";
-import {queryMig, queryTax} from "../api/api";
+import {Tax} from "../../dtos/tax";
+import {MongoRequest} from "../../dtos/mongo-request";
+import {queryMig, queryTax} from "../../api/api";
 import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
-import {Mig} from "../dtos/mig";
+import {Mig} from "../../dtos/mig";
 
 function TableViewMig() {
 
-    //data of type Tax[] to store the fetched data
+    //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Mig[]>([]);
 
     useEffect(() => {

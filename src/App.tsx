@@ -7,6 +7,7 @@ import TableViewMig from "./components/tableView/TableViewMig";
 import TableViewSocSec from "./components/tableView/TableViewSocSec";
 import Layout from "./components/layouts/Layout";
 import TaxDetail from "./components/detailPages/TaxDetail";
+import 'react-quill/dist/quill.snow.css';
 
 function App() {
     return (

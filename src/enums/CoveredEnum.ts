@@ -32,3 +32,7 @@ export enum CoveredEnum {
     UkLawExpats = 'UK law (expats)',
     UkLawNew = 'UK law (new)'
 }
+
+const dropdownOptions = Object.entries(CoveredEnum).map(([key, value]) => {
+    return { label: value, value: key };
+});

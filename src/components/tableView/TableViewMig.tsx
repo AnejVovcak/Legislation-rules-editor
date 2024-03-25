@@ -4,11 +4,14 @@ import {MongoRequest} from "../../dtos/mongo-request";
 import {queryMig, queryTax} from "../../api/api";
 import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 import {Mig} from "../../dtos/mig";
+import {useNavigate} from "react-router-dom";
 
 function TableViewMig() {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Mig[]>([]);
+
+    const navigate = useNavigate(); // For navigation
 
     useEffect(() => {
         const getData = async () => {
@@ -30,6 +33,12 @@ function TableViewMig() {
     }, []); // Empty dependency array means this effect runs once on mount
 
 
+    const handleRowClick = (id: string) => {
+        console.log("ID:", id);
+        // Redirect to the detail page
+        navigate(`/mig/${id}`);
+    };
+
     return (
         <Table celled selectable>
             <TableHeader>
@@ -49,7 +58,7 @@ function TableViewMig() {
 
             <TableBody>
                 {data.map((item, index) => (
-                    <tr key={index}>
+                    <tr key={index} onClick={() => handleRowClick(item._id as string)}>
                         {/* Render table cells as per your data structure */}
                         <td>{item.title}</td>
                         {/*content is a html text, parse it to show it in a readable way*/}

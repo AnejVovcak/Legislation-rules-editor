@@ -1,16 +1,13 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {createTax, getTaxById, updateTax} from "../../api/api";
+import {createObject, getById, updateObject} from "../../api/api";
 import {Tax} from "../../dtos/tax";
 import {
     Form,
     FormButton,
-    FormCheckbox,
     FormGroup,
     FormInput,
-    FormRadio,
     FormSelect,
-    FormTextArea
 } from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
@@ -24,30 +21,32 @@ function TaxDetail() {
     const {id} = useParams();
     const navigate = useNavigate(); // For navigation
     const [data, setData] = useState<Tax>({} as Tax);
-    const isNew = !id; // Determine if this is a new object creation
 
     useEffect(() => {
-        if (!isNew && id !== "new") {
-            getTaxById(id).then((result) => {
-                setData(result);
+        if (id !== "new" && id) {
+            getById(id, 'taxStaging').then((result) => {
+                setData(result as Tax);
             }).catch((error) => {
                 console.error("Failed to fetch data:", error);
             });
-        } else {
+        } else if (id === "new") {
             setData({} as Tax);
+        } else {
+            navigate('/tax');
         }
-    }, [id, isNew]);
+    }, [id, navigate]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (isNew || id === "new") {
+        if (id === "new") {
             // Implement object creation logic
             await createTaxObject(data)
-        } else {
+        } else if (id) {
             // Implement update logic
             await updateTaxObject(id, data)
+        } else {
+            navigate('/tax');
         }
-        // navigate('/tax'); // Redirect to the list page
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +55,7 @@ function TaxDetail() {
     };
 
     const createTaxObject = async (data: Tax) => {
-        createTax(data).then((result) => {
+        createObject(data,'taxStaging').then((result) => {
             console.log("TaxEnum created:", result);
         }).catch((error) => {
             console.error("Failed to create TaxEnum:", error);
@@ -64,7 +63,7 @@ function TaxDetail() {
     }
 
     const updateTaxObject = async (id: string, data: Tax) => {
-        updateTax(id, data).then((result) => {
+        updateObject(id, data,'taxStaging').then((result) => {
             console.log("TaxEnum updated:", result);
         }).catch((error) => {
             console.error("Failed to update TaxEnum:", error);
@@ -89,7 +88,7 @@ function TaxDetail() {
                         return {text: value, value: value, key: key}
                     })}
                     placeholder='Covered'
-                    onChange={(e, { value }) => setData(prev => ({ ...prev, "tax-covered": value as CoveredEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-covered": value as CoveredEnum}))}
                 />
                 <FormSelect
                     fluid
@@ -99,7 +98,7 @@ function TaxDetail() {
                     options={Object.entries(ArticleEnum).map(([key, value]) => {
                         return {text: value, value: value, key: key}
                     })}
-                    onChange={(e, { value }) => setData(prev => ({ ...prev, "tax-article": value as ArticleEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-article": value as ArticleEnum}))}
                 />
                 <FormSelect
                     fluid
@@ -110,7 +109,7 @@ function TaxDetail() {
                         return {text: value, value: value, key: key}
                     })}
                     placeholder='Out Value'
-                    onChange={(e, { value }) => setData(prev => ({ ...prev, "tax-out_value": value as OutEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-out_value": value as OutEnum}))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
@@ -123,7 +122,7 @@ function TaxDetail() {
                         return {text: value, value: value, key: key}
                     })}
                     placeholder='In Value'
-                    onChange={(e, { value }) => setData(prev => ({ ...prev, "tax-in_value": value as InEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-in_value": value as InEnum}))}
                 />
                 <FormSelect
                     fluid
@@ -134,7 +133,7 @@ function TaxDetail() {
                         return {text: value, value: value, key: key}
                     })}
                     placeholder='Empl'
-                    onChange={(e, { value }) => setData(prev => ({ ...prev, "tax-empl": value as EmplEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-empl": value as EmplEnum}))}
                 />
                 <FormSelect
                     fluid
@@ -145,7 +144,7 @@ function TaxDetail() {
                         return {text: value, value: value, key: key}
                     })}
                     placeholder='Tax'
-                    onChange={(e, { value }) => setData(prev => ({ ...prev, "tax-tax": value as TaxEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-tax": value as TaxEnum}))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>

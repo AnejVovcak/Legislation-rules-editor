@@ -6,7 +6,7 @@ import {TaxEnum} from "../enums/TaxEnum";
 import {ArticleEnum} from "../enums/ArticleEnum";
 
 export interface Tax {
-    _id?: {'$oid': string}; // Adjust based on the actual structure of your `_id` field
+    _id?: {'$oid': string} | string; // Adjust based on the actual structure of your `_id` field
     title: string;
     date: string; // Consider using the `Date` type if you plan to manipulate the date
     content: string;

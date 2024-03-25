@@ -9,12 +9,14 @@ import {
 import {queryTax} from "../../api/api";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {Tax} from "../../dtos/tax";
+import {useNavigate} from "react-router-dom";
 
 
 function TableViewTax() {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Tax[]>([]);
+    const navigate = useNavigate(); // For navigation
 
     useEffect(() => {
         const getData = async () => {
@@ -35,9 +37,16 @@ function TableViewTax() {
         getData();
     }, []); // Empty dependency array means this effect runs once on mount
 
+    //fun that reraoutes to detail page
+    const handleRowClick = (id: string) => {
+        console.log("ID:", id);
+        // Redirect to the detail page
+        navigate(`/tax/${id}`);
+    };
+
 
     return (
-        <div style={{overflowX: "auto",padding: 32}}>
+        <div style={{overflowX: "auto", padding: 32}}>
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>
@@ -54,7 +63,7 @@ function TableViewTax() {
 
                 <TableBody>
                     {data.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} onClick={() => handleRowClick(item._id as string)}>
                             {/* Render table cells as per your data structure */}
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}

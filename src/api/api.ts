@@ -3,50 +3,60 @@ import {MongoRequest} from "../dtos/mongo-request";
 import {Tax} from "../dtos/tax";
 import {SocSec} from "../dtos/socSec";
 import {Mig} from "../dtos/mig";
+import {Login} from "../dtos/login";
 
 const API_BASE_URL = 'https://eu-central-1.aws.data.mongodb-api.com/app/data-xjdlx/endpoint/data/v1/action/';
+const JWT_BASE_URL = 'https://services.cloud.mongodb.com/api/client/v2.0/app/data-xjdlx/auth/providers/local-userpass/login';
+
 const enum Actions {
     FIND = 'find',
     INSERT = 'insertOne',
     UPDATE = 'updateOne',
 }
-const API_KEY = 'TpNhuXslsnf0BoeketRa5YGbiSdEgczCPBl0anPlV1DTHA6q6O6rKjcVF2hBMkN5';
-// Create an Axios instance you can customize globally (e.g., headers, timeout, baseURL)
-const JWT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYWFzX2RldmljZV9pZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsImJhYXNfZG9tYWluX2lkIjoiNjVmMDZjOGI3MjY3MWZjYmY5ZDViOTUxIiwiZXhwIjoxNzExMjY4NzIzLCJpYXQiOjE3MTEyNjY5MjMsImlzcyI6IjY1ZmZkYzZiMGU0ZmEwMWY5OTc1MzQ2MiIsImp0aSI6IjY1ZmZkYzZiMGU0ZmEwMWY5OTc1MzQ2NCIsInN0aXRjaF9kZXZJZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsInN0aXRjaF9kb21haW5JZCI6IjY1ZjA2YzhiNzI2NzFmY2JmOWQ1Yjk1MSIsInN1YiI6IjY1ZjA2Y2RiMzJkM2Q5ZWJmODM1YzAxMCIsInR5cCI6ImFjY2VzcyJ9.6wCHXcG2_CEKwLHGf6k_Iw-E1PqIl2xY6hhAgcAq6qs'
-const headers= {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${JWT_KEY}`,
-    };
 
-export const queryTax = async (queryDto: MongoRequest):Promise<Tax[]> => {
+const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+};
+
+// get JWT token from api
+export const getJWT = async (loginDto: Login) => {
+    const response = await axios.post(JWT_BASE_URL, {
+        email: loginDto.email,
+        password: loginDto.password,
+    });
+    return response.data;
+}
+
+export const queryTax = async (queryDto: MongoRequest): Promise<Tax[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
     });
     return response.data.documents;
 };
 
-export const querySocSec = async (queryDto: MongoRequest):Promise<SocSec[]> => {
+export const querySocSec = async (queryDto: MongoRequest): Promise<SocSec[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
     });
     return response.data.documents;
 }
 
-export const queryMig = async (queryDto: MongoRequest):Promise<Mig[]> => {
+export const queryMig = async (queryDto: MongoRequest): Promise<Mig[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
     });
     return response.data.documents;
 }
 
-export const getTaxById = async (id: string):Promise<Tax> => {
+export const getById = async (id: string, collectionName: string): Promise<Tax | Mig | SocSec> => {
     const queryDto: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: "taxStaging",
+        collection: collectionName,
         filter: {
-            _id: { "$oid": id },
-            },
+            _id: {"$oid": id},
+        },
     };
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
@@ -54,11 +64,11 @@ export const getTaxById = async (id: string):Promise<Tax> => {
     return response.data.documents[0];
 }
 
-export const createTax = async (data: Tax) => {
+export const createObject = async (data: Tax | Mig | SocSec, collectionName: string) => {
     const response = await axios.post(API_BASE_URL + Actions.INSERT, {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: "taxStaging",
+        collection: collectionName,
         document: data,
     }, {
         headers: headers,
@@ -66,15 +76,15 @@ export const createTax = async (data: Tax) => {
     return response.data;
 }
 
-export const updateTax = async (id: string, data: Tax) => {
+export const updateObject = async (id: string, data: Tax | Mig | SocSec, collectionName: string) => {
     //remove _id from data
     delete data._id;
     const response = await axios.post(API_BASE_URL + Actions.UPDATE, {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: "taxStaging",
+        collection: collectionName,
         filter: {
-            _id: { "$oid": id },
+            _id: {"$oid": id},
         },
         update: {"$set": data}
     }, {
@@ -82,5 +92,17 @@ export const updateTax = async (id: string, data: Tax) => {
     });
     return response.data;
 }
+
+//for all requests check if they get 401 and if so refresh token
+axios.interceptors.response.use((response) => {
+    return response;
+}, async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401) {
+        //reroute to login page
+        window.location.href = '/login';
+    }
+    return Promise.reject(error);
+});
 
 

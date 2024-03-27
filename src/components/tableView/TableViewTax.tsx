@@ -44,41 +44,38 @@ function TableViewTax() {
         navigate(`/tax/${id}`);
     };
 
-
     return (
-        <div style={{overflowX: "auto", padding: 32}}>
-            <Table celled selectable>
-                <TableHeader>
-                    <TableRow>
-                        <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell>Text</TableHeaderCell>
-                        <TableHeaderCell>COVERED</TableHeaderCell>
-                        <TableHeaderCell>ARTICLE</TableHeaderCell>
-                        <TableHeaderCell>IN</TableHeaderCell>
-                        <TableHeaderCell>OUT</TableHeaderCell>
-                        <TableHeaderCell>SECONDMENT</TableHeaderCell>
-                        <TableHeaderCell>NAT</TableHeaderCell>
-                    </TableRow>
-                </TableHeader>
+        <Table celled selectable>
+            <TableHeader>
+                <TableRow>
+                    <TableHeaderCell>Title</TableHeaderCell>
+                    <TableHeaderCell>Text</TableHeaderCell>
+                    <TableHeaderCell>COVERED</TableHeaderCell>
+                    <TableHeaderCell>ARTICLE</TableHeaderCell>
+                    <TableHeaderCell>IN</TableHeaderCell>
+                    <TableHeaderCell>OUT</TableHeaderCell>
+                    <TableHeaderCell>EMPL</TableHeaderCell>
+                    <TableHeaderCell>TAX</TableHeaderCell>
+                </TableRow>
+            </TableHeader>
 
-                <TableBody>
-                    {data.map((item, index) => (
-                        <tr key={index} onClick={() => handleRowClick(item._id as string)}>
-                            {/* Render table cells as per your data structure */}
-                            <td>{item.title}</td>
-                            {/*content is a html text, parse it to show it in a readable way*/}
-                            <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                            <td>{item["tax-covered"]}</td>
-                            <td>{item["tax-article"]}</td>
-                            <td>{item["tax-out_value"]}</td>
-                            <td>{item["tax-in_value"]}</td>
-                            <td>{item["tax-empl"]}</td>
-                            <td>{item["tax-tax"]}</td>
-                        </tr>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+            <TableBody>
+                {data.map((item, index) => (
+                    <tr key={index} onClick={() => handleRowClick(item._id as string)}>
+                        {/* Render table cells as per your data structure */}
+                        <td>{item.title}</td>
+                        {/*content is a html text, parse it to show it in a readable way*/}
+                        <td dangerouslySetInnerHTML={{__html: item.content}}/>
+                        <td>{item["tax-covered"]}</td>
+                        <td>{item["tax-article"]}</td>
+                        <td>{item["tax-in_value"]}</td>
+                        <td>{item["tax-out_value"]}</td>
+                        <td>{item["tax-empl"]}</td>
+                        <td>{item["tax-tax"]}</td>
+                    </tr>
+                ))}
+            </TableBody>
+        </Table>
     );
 }
 

@@ -10,7 +10,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div>
             <Header />
-            <main>{children}</main>
+            <main style={{overflowX: "auto", padding: 32}}>{children}</main>
         </div>
     );
 };

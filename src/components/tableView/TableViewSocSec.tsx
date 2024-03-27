@@ -1,36 +1,58 @@
 import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
-import {useEffect, useState} from "react";
-import {Tax} from "../../dtos/tax";
+import React, {useEffect, useState} from "react";
 import {MongoRequest} from "../../dtos/mongo-request";
-import {querySocSec, queryTax} from "../../api/api";
+import {querySocSec} from "../../api/api";
 import {SocSec} from "../../dtos/socSec";
+import {CoveredEnum} from "../../enums/CoveredEnum";
+import {ArticleEnum} from "../../enums/ArticleEnum";
+import {InEnum} from "../../enums/InEnum";
+import {OutEnum} from "../../enums/OutEnum";
+import {EmplEnum} from "../../enums/EmplEnum";
+import {TaxEnum} from "../../enums/TaxEnum";
+import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
+import TableFilters from "../tableFilters/TableFilters";
 
 function TableViewSocSec() {
 //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<SocSec[]>([]);
+    const [filters, setFilters] = useState<Record<string, string[]>>({});
+
+    const request: MongoRequest = {
+        dataSource: "LawBrainerTest",
+        database: "lawBrainer",
+        collection: "socSecStaging",
+    }
+
+    const fieldsConfig = [
+        {fieldName: 'ssc-covered', enumType: CoveredEnum},
+        {fieldName: 'ssc-article', enumType: ArticleEnum},
+        {fieldName: 'ssc-in_value', enumType: InEnum},
+        {fieldName: 'ssc-out_value', enumType: OutEnum},
+        {fieldName: 'ssc-empl', enumType: EmplEnum},
+        {fieldName: 'ssc-tax', enumType: TaxEnum}
+    ]
 
     useEffect(() => {
-        const getData = async () => {
-            let request: MongoRequest = {
-                dataSource: "LawBrainerTest",
-                database: "lawBrainer",
-                collection: "socSecStaging",
-            }
-            try {
-                const result = await querySocSec(request); // Call the function from api.js
-                setData(result); // Set the state with the fetched data
-                console.log("Data fetched:", result[0])
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            }
-        };
-
-        getData();
+        fetchData()
     }, []); // Empty dependency array means this effect runs once on mount
 
+    const fetchData = () => {
+        // Now use requestWithFilter to fetch the data
+        querySocSec(getRequestWithFilter(request, filters)).then((result) => {
+            setData(result);
+        }).catch((error) => {
+            console.error("Failed to fetch data:", error);
+        });
+    };
+
+    useEffect(() => {
+        fetchData(); // Call your fetch function which now uses the dynamically constructed request object
+    }, [filters]); // Re-fetch data whenever filters change
 
     return (
-        <div style={{overflowX: "auto",padding: 32}}>
+        <div>
+            <TableFilters fieldsConfig={fieldsConfig}
+                          onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>

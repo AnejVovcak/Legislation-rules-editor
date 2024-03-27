@@ -19,15 +19,20 @@ const TableFilter = ({ fieldsConfig, onFilterChange }: TableFilterProps) => {
             gap: '10px', // This adds some space between the dropdowns
         }}>
             {fieldsConfig.map((field) => (
-                <Dropdown
-                    placeholder={`Select ${field.fieldName}`}
-                    selection
-                    multiple
-                    options={getDropdownOptions(field.enumType)}
-                    onChange={(e, {value}) => onFilterChange(field.fieldName, value as string)}
-                />
+                <div key={field.fieldName}
+                     style={{minWidth: '200px'}}> {/* Ensure each dropdown and label are grouped and can wrap as a unit */}
+                    <div style={{marginBottom: '5px'}}>{field.fieldName.split('-')[1]}</div> {/* Label */}
+                    {/* Label */}
+                    <Dropdown
+                        selection
+                        multiple
+                        options={getDropdownOptions(field.enumType)}
+                        onChange={(e, {value}) => onFilterChange(field.fieldName, value as string)}
+                    />
+                </div>
             ))}
         </div>
+
     );
 };
 

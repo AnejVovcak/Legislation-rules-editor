@@ -17,6 +17,7 @@ function TableViewTax() {
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Tax[]>([]);
     const navigate = useNavigate(); // For navigation
+    const [filters, setFilters] = useState<Record<string, string[]>>({});
 
     const fieldsConfig = [
         {fieldName:'tax-covered', enumType: CoveredEnum},
@@ -55,27 +56,45 @@ function TableViewTax() {
         navigate(`/tax/${id}`);
     };
 
-    const handleFilterChange = (field: string, value: string|string[]) => {
-        //create a copy of the request object
-        const requestWithFilter = {...request};
+    const fetchData = () => {
+        let requestWithFilter = {
+            ...request, // Your base request object
+            filter: Object.keys(filters).reduce((acc, key) => {
+                // For each filter, add its criterion to the request
+                if (filters[key].length > 1) {
+                    // @ts-ignore
+                    acc[key] = { $in: filters[key] };
+                } else {
+                    // @ts-ignore
+                    acc[key] = filters[key][0];
+                }
+                return acc;
+            }, {})
+        };
 
-        //add the filter to the request object (if the value is an array, it means that the filter is an enum)
-        if(Array.isArray(value) && value.length > 0){
-            requestWithFilter.filter = {...request.filter, [field]: {$in: value}}
-        } else if(value !== ""){
-            requestWithFilter.filter = {...request.filter, [field]: value}
-        } else {
-            //if the value is empty, remove the filter from the request object
-            requestWithFilter.filter = {...request.filter};
-        }
-
-        //call the queryTax function with the new request object
+        // Now use requestWithFilter to fetch the data
         queryTax(requestWithFilter).then((result) => {
             setData(result);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
-    }
+    };
+
+    const handleFilterChange = (field: string, value: string | string[]) => {
+        setFilters(prevFilters => {
+            // If the array is empty or the value is an empty string, remove the filter for this field
+            if ((Array.isArray(value) && value.length === 0) || value === "") {
+                const { [field]: _, ...remainingFilters } = prevFilters;
+                return remainingFilters;
+            }
+            // Otherwise, update the filter for this field with the new value(s)
+            return { ...prevFilters, [field]: Array.isArray(value) ? value : [value] };
+        });
+    };
+
+    useEffect(() => {
+        fetchData(); // Call your fetch function which now uses the dynamically constructed request object
+    }, [filters]); // Re-fetch data whenever filters change
 
     return (
         <div>

@@ -20,7 +20,6 @@ const TableFilter = ({ fieldsConfig, onFilterChange }: TableFilterProps) => {
         }}>
             {fieldsConfig.map((field) => (
                 <Dropdown
-                    key={field.fieldName}
                     placeholder={`Select ${field.fieldName}`}
                     selection
                     multiple

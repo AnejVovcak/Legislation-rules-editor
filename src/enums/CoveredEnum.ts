@@ -22,7 +22,6 @@ export enum CoveredEnum {
     SourceTBC = 'source TBC',
     BelgianLawExpats = 'Belgian law (expats)',
     BelgianLawNew = 'Belgian law (new)',
-    EuLaw = 'EU law',
     InternationalBilateralTreaty = 'International (bilateral) treaty',
     PortugueseLawExpats = 'Portuguese law (expats)',
     RomanianLawExpat = 'Romanian law (expat)',

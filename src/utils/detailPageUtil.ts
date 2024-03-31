@@ -15,10 +15,13 @@ export async function performAction
     try {
         if (id === "new") {
             await createObject(data, collectionName);
+
+            setTimeout(() => {
+                navigate("/" + url);
+            }, 1000);
         } else if (id) {
             await updateObject(id, data, collectionName);
 
-            //wait for 2 seconds before navigating (make sure that navigation is set to root)
             setTimeout(() => {
                 navigate("/" + url);
             }, 1000);

@@ -1,7 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import { getById } from "../../api/api";
-import {Tax} from "../../dtos/tax";
 import {
     Button,
     Form,
@@ -14,35 +13,37 @@ import {ArticleEnum} from "../../enums/ArticleEnum";
 import {OutEnum} from "../../enums/OutEnum";
 import {InEnum} from "../../enums/InEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
-import {TaxEnum} from "../../enums/TaxEnum";
 import ReactQuill from "react-quill";
 import {getFormOptions, performAction} from "../../utils/detailPageUtil";
+import {SocSec} from "../../dtos/socSec";
+import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
+import {StatueEnum} from "../../enums/StatueEnum";
 
-function TaxDetail() {
+function SocSecDetail() {
     const {id} = useParams();
     const navigate = useNavigate(); // For navigation
-    const [data, setData] = useState<Tax>({} as Tax);
+    const [data, setData] = useState<SocSec>({} as SocSec);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
 
 
     useEffect(() => {
         if (id !== "new" && id) {
-            getById(id, 'taxStaging').then((result) => {
-                setData(result as Tax);
+            getById(id, 'socSecStaging').then((result) => {
+                setData(result as SocSec);
             }).catch((error) => {
                 console.error("Failed to fetch data:", error);
                 navigate('/tax');
             });
         } else {
-            setData({} as Tax)
+            setData({} as SocSec)
         }
     }, [id, navigate]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        performAction(id, data, navigate, setSuccess, setError, 'taxStaging', 'tax').then(() => {
+        performAction(id, data, navigate, setSuccess, setError, 'socSecStaging', 'socSec').then(() => {
             console.log(success, error)
         })
     };
@@ -64,58 +65,67 @@ function TaxDetail() {
                 <FormSelect
                     fluid
                     multiple={true}
-                    name="tax-covered"
+                    name="ssc-covered"
                     label='Covered'
-                    value={data["tax-covered"] || []}
+                    value={data["ssc-covered"] || []}
                     options={getFormOptions(CoveredEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-covered": value as CoveredEnum[]}))}
+                    onChange={(e, {value}) =>
+                        setData(prev => ({...prev, "ssc-covered": value as CoveredEnum[]}))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-article"
+                    name="ssc-article"
                     label='Article'
                     multiple={true}
-                    value={data["tax-article"] || []}
+                    value={data["ssc-article"] || []}
                     options={getFormOptions(ArticleEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-article": value as ArticleEnum[]}))}
+                    onChange={(e, {value}) =>
+                        setData(prev => ({...prev, "ssc-article": value as ArticleEnum[]}))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-out_value"
-                    value={data["tax-out_value"] || ''}
-                    label='Out Value'
+                    name="ssc-statute"
+                    value={data["ssc-statute"] || []}
+                    label='Statute'
+                    multiple={true}
                     options={getFormOptions(OutEnum)}
-                    placeholder='Out Value'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-out_value": value as OutEnum}))}
+                    onChange={(e, {value}) =>
+                        setData(prev => ({...prev, "ssc-statute": value as StatueEnum[]}))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
                 <FormSelect
                     fluid
-                    name="tax-in_value"
-                    value={data["tax-in_value"] || ''}
+                    name="ssc-out_value"
+                    value={data["ssc-out_value"] || ''}
+                    label='Out Value'
+                    options={getFormOptions(OutEnum)}
+                    onChange={(e, {value}) =>
+                        setData(prev => ({...prev, "tax-in_value": value as OutEnum}))}
+                />
+                <FormSelect
+                    fluid
+                    name="ssc-in_value"
+                    value={data["ssc-in_value"] || ''}
                     label='In Value'
                     options={getFormOptions(InEnum)}
-                    placeholder='In Value'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-in_value": value as InEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "ssc-in_value": value as InEnum}))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-empl"
-                    value={data["tax-empl"] || ''}
+                    name="ssc-empl"
+                    value={data["ssc-empl"] || ''}
                     label='Empl'
                     options={getFormOptions(EmplEnum)}
-                    placeholder='Empl'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-empl": value as EmplEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "ssc-empl": value as EmplEnum}))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-tax"
-                    value={data["tax-tax"] || ''}
-                    label='Tax'
-                    options={getFormOptions(TaxEnum)}
-                    placeholder='Tax'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-tax": value as TaxEnum}))}
+                    name="ssc-if_empl0_eq_empl1"
+                    value={data["ssc-if_empl0_eq_empl1"] || ''}
+                    label='If Empl0 Eq Empl1'
+                    options={getFormOptions(Empl0EQEmpl1Enum)}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "ssc-if_empl0_eq_empl1": value as Empl0EQEmpl1Enum}))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
@@ -135,9 +145,9 @@ function TaxDetail() {
                 content='There was an error with your submission. Please try again.'
             />
             <Button positive type="submit">Submit</Button>
-            <Button negative onClick={() => navigate('/tax')}>Cancel</Button>
+            <Button negative onClick={() => navigate('/socSec')}>Cancel</Button>
         </Form>
     );
 }
 
-export default TaxDetail;
+export default SocSecDetail;

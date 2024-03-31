@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
+import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 import {queryTax} from "../../api/api";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {Tax} from "../../dtos/tax";
@@ -21,12 +21,12 @@ function TableViewTax() {
     const [filters, setFilters] = useState<Record<string, string[]>>({});
 
     const fieldsConfig = [
-        {fieldName:'tax-covered', enumType: CoveredEnum},
-        {fieldName:'tax-article', enumType: ArticleEnum},
-        {fieldName:'tax-in_value', enumType: InEnum},
-        {fieldName:'tax-out_value', enumType: OutEnum},
-        {fieldName:'tax-empl', enumType: EmplEnum},
-        {fieldName:'tax-tax', enumType: TaxEnum}
+        {fieldName: 'tax-covered', enumType: CoveredEnum},
+        {fieldName: 'tax-article', enumType: ArticleEnum},
+        {fieldName: 'tax-in_value', enumType: InEnum},
+        {fieldName: 'tax-out_value', enumType: OutEnum},
+        {fieldName: 'tax-empl', enumType: EmplEnum},
+        {fieldName: 'tax-tax', enumType: TaxEnum}
     ]
 
     const request: MongoRequest = {
@@ -54,9 +54,12 @@ function TableViewTax() {
 
     return (
         <div>
-            <TableFilters fieldsConfig={fieldsConfig}
-                          onFilterChange={(field, value) => handleFilterChange(field, value,setFilters)}/>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
 
+                <TableFilters fieldsConfig={fieldsConfig}
+                              onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
+                <Button onClick={() => navigate('/tax/new')}>Add new</Button>
+            </div>
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>
@@ -73,7 +76,7 @@ function TableViewTax() {
 
                 <TableBody>
                     {data.map((item, index) => (
-                        <tr key={index} onClick={() =>  navigate(`/tax/${item._id as string}`)}>
+                        <tr key={index} onClick={() => navigate(`/tax/${item._id as string}`)}>
                             {/* Render table cells as per your data structure */}
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}

@@ -1,4 +1,4 @@
-import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
+import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {querySocSec} from "../../api/api";
@@ -11,10 +11,12 @@ import {EmplEnum} from "../../enums/EmplEnum";
 import {TaxEnum} from "../../enums/TaxEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
 import TableFilters from "../tableFilters/TableFilters";
+import {useNavigate} from "react-router-dom";
 
 function TableViewSocSec() {
 //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<SocSec[]>([]);
+    const navigate = useNavigate(); // For navigation
     const [filters, setFilters] = useState<Record<string, string[]>>({});
 
     const request: MongoRequest = {
@@ -51,8 +53,11 @@ function TableViewSocSec() {
 
     return (
         <div>
-            <TableFilters fieldsConfig={fieldsConfig}
-                          onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <TableFilters fieldsConfig={fieldsConfig}
+                              onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
+                <Button onClick={() => navigate('/socSec/new')}>Add new</Button>
+            </div>
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>
@@ -70,7 +75,7 @@ function TableViewSocSec() {
 
                 <TableBody>
                     {data.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} onClick={() => navigate(`/socSec/${item._id as string}`)}>
                             {/* Render table cells as per your data structure */}
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}

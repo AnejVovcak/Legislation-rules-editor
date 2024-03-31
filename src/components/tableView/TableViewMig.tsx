@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {queryMig} from "../../api/api";
-import {Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
+import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 import {Mig} from "../../dtos/mig";
 import {useNavigate} from "react-router-dom";
 import {CoveredEnum} from "../../enums/CoveredEnum";
@@ -60,8 +60,12 @@ function TableViewMig() {
 
     return (
         <div>
-            <TableFilters fieldsConfig={fieldsConfig}
-                          onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+
+                <TableFilters fieldsConfig={fieldsConfig}
+                              onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
+                <Button onClick={() => navigate('/mig/new')}>Add new</Button>
+            </div>
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>

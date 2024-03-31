@@ -4,15 +4,16 @@ import {EmplEnum} from "../enums/EmplEnum";
 import {InEnum} from "../enums/InEnum";
 import {OutEnum} from "../enums/OutEnum";
 import {ArticleEnum} from "../enums/ArticleEnum";
+import {StatueEnum} from "../enums/StatueEnum";
 
 export interface SocSec {
     _id: string;
     title: string;
-    date: string; // You might consider using the Date type if you need to handle it as a date object in your code
+    date: string;
     content: string;
     "ssc-covered": CoveredEnum[];
     "ssc-article": ArticleEnum[];
-    "ssc-statute": string[];
+    "ssc-statute": StatueEnum[];
     "ssc-out_value": OutEnum;
     "ssc-in_value": InEnum;
     "ssc-empl": EmplEnum;

@@ -39,6 +39,8 @@ function MigDetail() {
             });
         } else {
             setData({} as Mig)
+            //set migration-time to empty array
+            setData(prev => ({...prev, "migration-time": []}))
         }
     }, [id, navigate]);
 

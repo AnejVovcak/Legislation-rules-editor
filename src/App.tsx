@@ -10,6 +10,7 @@ import TaxDetail from "./components/detailPages/TaxDetail";
 import Login from "./components/login/Login";
 import 'react-quill/dist/quill.snow.css';
 import MigDetail from "./components/detailPages/MigDetail";
+import SocSecDetail from "./components/detailPages/SocSecDetail";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/socSec" element={<Layout><TableViewSocSec /></Layout>} />
             <Route path="/tax/:id" element={<Layout><TaxDetail /></Layout>} />
             <Route path="/mig/:id" element={<Layout><MigDetail /></Layout>} />
+            <Route path="/socSec/:id" element={<Layout><SocSecDetail /></Layout>} />
             <Route path="/login" element={<Login></Login>} />
         </Routes>
     );

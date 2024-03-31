@@ -20,6 +20,7 @@ import {NatEnum} from "../../enums/NatEnum";
 import {OutTitleEnum} from "../../enums/OutTitleEnum";
 import {InTitleEnum} from "../../enums/InTitleEnum";
 import {MigTimeEnum} from "../../enums/MigTimeEnum";
+import {getFormOptions, performAction} from "../../utils/detailPageUtil";
 
 function MigDetail() {
     const {id} = useParams();
@@ -43,33 +44,14 @@ function MigDetail() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const performAction = async () => {
-            console.log(id)
-            try {
-                if (id === "new") {
-                    await createObject(data, 'migStaging');
-                } else if (id) {
-                    await updateObject(id, data, 'migStaging');
-                } else {
-                    navigate('/mig');
-                    return;
-                }
-                setSuccess(true);
-                setError(false);
-            } catch (error) {
-                setError(true);
-                setSuccess(false);
-            }
-        };
-
-        performAction().then(() => {
+        performAction(id, data, navigate, setSuccess, setError, 'migStaging', 'mig').then(() => {
             console.log(success, error)
         })
     };
 
 
     return (
-        <Form onSubmit={handleSubmit} style={{padding: '3em'}} error={error} success={success}>
+        <Form onSubmit={handleSubmit} error={error} success={success}>
 
             <FormGroup widths='equal'>
                 <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
@@ -81,27 +63,21 @@ function MigDetail() {
                     fluid
                     label='Covered'
                     value={data["migration-covered"] || ''}
-                    options={Object.entries(CoveredEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(CoveredEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-covered": value as CoveredEnum}))}
                 />
                 <FormSelect
                     fluid
                     value={data["migration-article"] || ''}
                     label='Article'
-                    options={Object.entries(ArticleEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(ArticleEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-article": value as ArticleEnum}))}
                 />
                 <FormSelect
                     fluid
                     value={data["migration-out_value"] || ''}
                     label='Out Value'
-                    options={Object.entries(OutEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(OutEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-out_value": value as OutEnum}))}
                 />
             </FormGroup>
@@ -110,18 +86,14 @@ function MigDetail() {
                     fluid
                     label='In Value'
                     value={data["migration-in_value"] || ''}
-                    options={Object.entries(InEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(InEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-in_value": value as InEnum}))}
                 />
                 <FormSelect
                     fluid
                     value={data["migration-out_title"] || ''}
                     label='Out Title'
-                    options={Object.entries(OutTitleEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(OutTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev,
                         "migration-out_title": value as OutTitleEnum
@@ -131,9 +103,7 @@ function MigDetail() {
                     fluid
                     value={data["migration-in_title"] || ''}
                     label='In Title'
-                    options={Object.entries(InTitleEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(InTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-in_title": value as InTitleEnum}))}
                 />
             </FormGroup>
@@ -143,18 +113,14 @@ function MigDetail() {
                     multiple={true}
                     value={data["migration-time"] || []}
                     label='Time'
-                    options={Object.entries(MigTimeEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(MigTimeEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-time": value as MigTimeEnum[]}))}
                 />
                 <FormSelect
                     fluid
                     value={data["migration-secondment"] || ''}
                     label='Secondment'
-                    options={Object.entries(SecondmentEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(SecondmentEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev,
                         "migration-secondment": value as SecondmentEnum
@@ -164,9 +130,7 @@ function MigDetail() {
                     fluid
                     value={data["migration-nat"] || ''}
                     label='Nat'
-                    options={Object.entries(NatEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(NatEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-nat": value as NatEnum}))}
                 />
             </FormGroup>

@@ -6,17 +6,17 @@ import {TaxEnum} from "../enums/TaxEnum";
 import {ArticleEnum} from "../enums/ArticleEnum";
 
 export interface Tax {
-    _id?: {'$oid': string} | string; // Adjust based on the actual structure of your `_id` field
+    _id?: {'$oid': string} | string;
     title: string;
-    date: string; // Consider using the `Date` type if you plan to manipulate the date
+    date: string;
     content: string;
-    "tax-covered": CoveredEnum;
-    "tax-article": ArticleEnum;
+    "tax-covered": CoveredEnum[];
+    "tax-article": ArticleEnum[];
     "tax-out_value": OutEnum;
     "tax-in_value": InEnum;
     "tax-empl": EmplEnum;
     "tax-tax": TaxEnum;
-    source: Array<[string, string]> | string[]; // Adjust based on the actual structure of your `source` field
+    source: Array<[string, string]>;
     md5_hash: string;
-    validated: string | boolean; // Use `boolean` if this field represents a boolean value, string if it's just a string representation
+    validated: string | boolean;
 }

@@ -1,13 +1,13 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {createObject, getById, updateObject} from "../../api/api";
+import { getById } from "../../api/api";
 import {Tax} from "../../dtos/tax";
 import {
+    Button,
     Form,
-    FormButton,
     FormGroup,
     FormInput,
-    FormSelect,
+    FormSelect, Message,
 } from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
@@ -16,11 +16,15 @@ import {InEnum} from "../../enums/InEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
 import {TaxEnum} from "../../enums/TaxEnum";
 import ReactQuill from "react-quill";
+import {getFormOptions, performAction} from "../../utils/detailPageUtil";
 
 function TaxDetail() {
     const {id} = useParams();
     const navigate = useNavigate(); // For navigation
     const [data, setData] = useState<Tax>({} as Tax);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
+
 
     useEffect(() => {
         if (id !== "new" && id) {
@@ -28,25 +32,19 @@ function TaxDetail() {
                 setData(result as Tax);
             }).catch((error) => {
                 console.error("Failed to fetch data:", error);
+                navigate('/tax');
             });
-        } else if (id === "new") {
-            setData({} as Tax);
         } else {
-            navigate('/tax');
+            setData({} as Tax)
         }
     }, [id, navigate]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (id === "new") {
-            // Implement object creation logic
-            await createTaxObject(data)
-        } else if (id) {
-            // Implement update logic
-            await updateTaxObject(id, data)
-        } else {
-            navigate('/tax');
-        }
+
+        performAction(id, data, navigate, setSuccess, setError, 'taxStaging', 'tax').then(() => {
+            console.log(success, error)
+        })
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,24 +52,8 @@ function TaxDetail() {
         setData(prev => ({...prev, [name]: value}));
     };
 
-    const createTaxObject = async (data: Tax) => {
-        createObject(data,'taxStaging').then((result) => {
-            console.log("TaxEnum created:", result);
-        }).catch((error) => {
-            console.error("Failed to create TaxEnum:", error);
-        });
-    }
-
-    const updateTaxObject = async (id: string, data: Tax) => {
-        updateObject(id, data,'taxStaging').then((result) => {
-            console.log("TaxEnum updated:", result);
-        }).catch((error) => {
-            console.error("Failed to update TaxEnum:", error);
-        });
-    }
-
     return (
-        <Form onSubmit={handleSubmit} style={{padding: '3em'}}>
+        <Form onSubmit={handleSubmit} error={error} success={success}>
 
             <FormGroup widths='equal'>
                 <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
@@ -81,33 +63,28 @@ function TaxDetail() {
             <FormGroup inline widths='equal'>
                 <FormSelect
                     fluid
+                    multiple={true}
                     name="tax-covered"
                     label='Covered'
-                    value={data["tax-covered"] || ''}
-                    options={Object.entries(CoveredEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
-                    placeholder='Covered'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-covered": value as CoveredEnum}))}
+                    value={data["tax-covered"] || []}
+                    options={getFormOptions(CoveredEnum)}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-covered": value as CoveredEnum[]}))}
                 />
                 <FormSelect
                     fluid
                     name="tax-article"
-                    value={data["tax-article"] || ''}
                     label='Article'
-                    options={Object.entries(ArticleEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-article": value as ArticleEnum}))}
+                    multiple={true}
+                    value={data["tax-article"] || []}
+                    options={getFormOptions(ArticleEnum)}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-article": value as ArticleEnum[]}))}
                 />
                 <FormSelect
                     fluid
                     name="tax-out_value"
                     value={data["tax-out_value"] || ''}
                     label='Out Value'
-                    options={Object.entries(OutEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(OutEnum)}
                     placeholder='Out Value'
                     onChange={(e, {value}) => setData(prev => ({...prev, "tax-out_value": value as OutEnum}))}
                 />
@@ -129,9 +106,7 @@ function TaxDetail() {
                     name="tax-empl"
                     value={data["tax-empl"] || ''}
                     label='Empl'
-                    options={Object.entries(EmplEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(EmplEnum)}
                     placeholder='Empl'
                     onChange={(e, {value}) => setData(prev => ({...prev, "tax-empl": value as EmplEnum}))}
                 />
@@ -140,9 +115,7 @@ function TaxDetail() {
                     name="tax-tax"
                     value={data["tax-tax"] || ''}
                     label='Tax'
-                    options={Object.entries(TaxEnum).map(([key, value]) => {
-                        return {text: value, value: value, key: key}
-                    })}
+                    options={getFormOptions(TaxEnum)}
                     placeholder='Tax'
                     onChange={(e, {value}) => setData(prev => ({...prev, "tax-tax": value as TaxEnum}))}
                 />
@@ -151,7 +124,20 @@ function TaxDetail() {
                 <ReactQuill theme="snow" value={data.content}
                             onChange={(value) => setData(prev => ({...prev, content: value}))}/>
             </FormGroup>
-            <FormButton type="submit">Submit</FormButton>
+            <Message
+                hidden={!success}
+                success
+                header='Success'
+                content='Your submission was successful'
+            />
+            <Message
+                hidden={!error}
+                error
+                header='Error'
+                content='There was an error with your submission. Please try again.'
+            />
+            <Button positive type="submit">Submit</Button>
+            <Button negative onClick={() => navigate('/tax')}>Cancel</Button>
         </Form>
     );
 }

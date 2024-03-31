@@ -13,11 +13,11 @@ export interface SocSec {
     "ssc-covered": CoveredEnum[];
     "ssc-article": ArticleEnum[];
     "ssc-statute": string[];
-    "ssc-out_value": OutEnum[];
-    "ssc-in_value": InEnum[];
-    "ssc-empl": EmplEnum[];
-    "ssc-if_empl0_eq_empl1": Empl0EQEmpl1Enum[];
-    source: string[]; // Assuming the source is an array of strings based on the empty array provided
+    "ssc-out_value": OutEnum;
+    "ssc-in_value": InEnum;
+    "ssc-empl": EmplEnum;
+    "ssc-if_empl0_eq_empl1": Empl0EQEmpl1Enum;
+    source: Array<[string, string]>;
     md5_hash: string;
-    validated: boolean; // Assuming this should be a boolean based on the context ("false" can be converted to boolean false)
+    validated: boolean;
 }

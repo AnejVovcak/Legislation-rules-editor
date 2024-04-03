@@ -28,21 +28,7 @@ export const getJWT = async (loginDto: Login) => {
     return response.data;
 }
 
-export const queryTax = async (queryDto: MongoRequest): Promise<Tax[]> => {
-    const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
-        headers: headers,
-    });
-    return response.data.documents;
-};
-
-export const querySocSec = async (queryDto: MongoRequest): Promise<SocSec[]> => {
-    const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
-        headers: headers,
-    });
-    return response.data.documents;
-}
-
-export const queryMig = async (queryDto: MongoRequest): Promise<Mig[]> => {
+export const getAllDocuments = async (queryDto: MongoRequest): Promise<Mig[]|SocSec[]|Tax[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
     });
@@ -69,7 +55,7 @@ export const createObject = async (data: Tax | Mig | SocSec, collectionName: str
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
         collection: collectionName,
-        document: data,
+        document: {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}
     }, {
         headers: headers,
     });
@@ -86,7 +72,7 @@ export const updateObject = async (id: string, data: Tax | Mig | SocSec, collect
         filter: {
             _id: {"$oid": id},
         },
-        update: {"$set": data}
+        update: {"$set": {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}}
     }, {
         headers: headers,
     });
@@ -97,7 +83,6 @@ export const updateObject = async (id: string, data: Tax | Mig | SocSec, collect
 axios.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
-    const originalRequest = error.config;
     if (error.response.status === 401) {
         //reroute to login page
         window.location.href = '/login';

@@ -22,7 +22,8 @@ function Login() {
             console.log("JWT token:", data);
             //save access_token to local storage
             localStorage.setItem('access_token', data.access_token);
-            //redirect to home page
+            localStorage.setItem('email', email)
+            //redirect to previous page
             window.location.href = '/';
         }).catch((error) => {
             console.error("Failed to login:", error);

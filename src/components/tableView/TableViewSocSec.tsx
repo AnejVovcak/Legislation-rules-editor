@@ -1,19 +1,19 @@
 import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
 import {MongoRequest} from "../../dtos/mongo-request";
-import {querySocSec} from "../../api/api";
 import {SocSec} from "../../dtos/socSec";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
 import {InEnum} from "../../enums/InEnum";
 import {OutEnum} from "../../enums/OutEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
-import {TaxEnum} from "../../enums/TaxEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
 import TableFilters from "../tableFilters/TableFilters";
 import {useNavigate} from "react-router-dom";
 import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
 import {StatueEnum} from "../../enums/StatueEnum";
+import {getAllDocuments} from "../../api/api";
+import {CollectionEnum} from "../../enums/CollectionEnum";
 
 function TableViewSocSec() {
 //data of type TaxEnum[] to store the fetched data
@@ -24,7 +24,7 @@ function TableViewSocSec() {
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: "socSecStaging",
+        collection: CollectionEnum.SOC_SEC,
     }
 
     const fieldsConfig = [
@@ -43,8 +43,8 @@ function TableViewSocSec() {
 
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
-        querySocSec(getRequestWithFilter(request, filters)).then((result) => {
-            setData(result);
+        getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
+            setData(result as SocSec[]);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
@@ -73,6 +73,7 @@ function TableViewSocSec() {
                         <TableHeaderCell>STATUTE</TableHeaderCell>
                         <TableHeaderCell>EMPL</TableHeaderCell>
                         <TableHeaderCell>IF EMPL0 EQ EMPL1</TableHeaderCell>
+                        <TableHeaderCell>LAST UPDATED</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 
@@ -96,6 +97,10 @@ function TableViewSocSec() {
                             ))}</td>
                             <td>{item.empl}</td>
                             <td>{item.if_empl0_eq_empl1}</td>
+                            <td>
+                                <div>{item.last_modified_by}</div>
+                                <div>{new Date(item.last_modified).toLocaleString()}</div>
+                            </td>
                         </tr>
                     ))}
                 </TableBody>

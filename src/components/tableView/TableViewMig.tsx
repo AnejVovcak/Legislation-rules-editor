@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {MongoRequest} from "../../dtos/mongo-request";
-import {queryMig} from "../../api/api";
+import {getAllDocuments} from "../../api/api";
 import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 import {Mig} from "../../dtos/mig";
 import {useNavigate} from "react-router-dom";
@@ -15,6 +15,7 @@ import {OutTitleEnum} from "../../enums/OutTitleEnum";
 import {MigTimeEnum} from "../../enums/MigTimeEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
 import TableFilters from "../tableFilters/TableFilters";
+import {CollectionEnum} from "../../enums/CollectionEnum";
 
 function TableViewMig() {
 
@@ -26,7 +27,7 @@ function TableViewMig() {
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: "migStaging",
+        collection: CollectionEnum.MIG
     }
 
     const fieldsConfig = [
@@ -47,8 +48,8 @@ function TableViewMig() {
 
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
-        queryMig(getRequestWithFilter(request, filters)).then((result) => {
-            setData(result);
+        getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
+            setData(result as Mig[]);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
@@ -80,6 +81,7 @@ function TableViewMig() {
                         <TableHeaderCell>OUT TITLE</TableHeaderCell>
                         <TableHeaderCell>SECONDMENT</TableHeaderCell>
                         <TableHeaderCell>TIME</TableHeaderCell>
+                        <TableHeaderCell>LAST UPDATED</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 
@@ -103,6 +105,10 @@ function TableViewMig() {
                             <td>{item.time.map((time, index) => (
                                 <div key={index}>{time}</div>
                             ))}</td>
+                            <td>
+                                <div>{item.last_modified_by}</div>
+                                <div>{new Date(item.last_modified).toLocaleString()}</div>
+                            </td>
                         </tr>
                     ))}
                 </TableBody>

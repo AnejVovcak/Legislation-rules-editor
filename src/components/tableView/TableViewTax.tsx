@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
-import {queryTax} from "../../api/api";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {Tax} from "../../dtos/tax";
 import {useNavigate} from "react-router-dom";
@@ -12,6 +11,8 @@ import {OutEnum} from "../../enums/OutEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
 import {TaxEnum} from "../../enums/TaxEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
+import {getAllDocuments} from "../../api/api";
+import {CollectionEnum} from "../../enums/CollectionEnum";
 
 function TableViewTax() {
 
@@ -32,7 +33,7 @@ function TableViewTax() {
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: "taxStaging",
+        collection: CollectionEnum.TAX
     }
 
     useEffect(() => {
@@ -41,8 +42,8 @@ function TableViewTax() {
 
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
-        queryTax(getRequestWithFilter(request, filters)).then((result) => {
-            setData(result);
+        getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
+            setData(result as Tax[]);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
@@ -71,6 +72,7 @@ function TableViewTax() {
                         <TableHeaderCell>COVERED</TableHeaderCell>
                         <TableHeaderCell>EMPL</TableHeaderCell>
                         <TableHeaderCell>TAX</TableHeaderCell>
+                        <TableHeaderCell>LAST UPDATED</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 
@@ -91,6 +93,10 @@ function TableViewTax() {
                             ))}</td>
                             <td>{item.empl}</td>
                             <td>{item.tax}</td>
+                            <td>
+                                <div>{item.last_modified_by}</div>
+                                <div>{new Date(item.last_modified).toLocaleString()}</div>
+                            </td>
                         </tr>
                     ))}
                 </TableBody>

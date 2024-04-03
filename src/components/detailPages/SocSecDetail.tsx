@@ -53,12 +53,10 @@ function SocSecDetail() {
         <Form onSubmit={handleSubmit} error={error} success={success}>
 
             <FormGroup widths='equal'>
-                <FormGroup widths='equal'>
-                    <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
-                               onChange={(e) => setData(prev => ({
-                                   ...prev, title: e.target.value
-                               }))}/>
-                </FormGroup>
+                <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
+                           onChange={(e) => setData(prev => ({
+                               ...prev, title: e.target.value
+                           }))}/>
             </FormGroup>
 
             <FormGroup inline widths='equal'>

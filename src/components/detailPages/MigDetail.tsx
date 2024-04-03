@@ -1,10 +1,9 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {createObject, getById, updateObject} from "../../api/api";
+import { getById } from "../../api/api";
 import {
     Button,
     Form,
-    FormButton,
     FormGroup,
     FormInput,
     FormSelect, Message,
@@ -64,20 +63,21 @@ function MigDetail() {
                 <FormSelect
                     fluid
                     label='Covered'
-                    value={data["migration-covered"] || ''}
+                    value={data.covered || ''}
                     options={getFormOptions(CoveredEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-covered": value as CoveredEnum}))}
                 />
                 <FormSelect
                     fluid
-                    value={data["migration-article"] || ''}
+                    value={data.article || []}
                     label='Article'
+                    multiple={true}
                     options={getFormOptions(ArticleEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-article": value as ArticleEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-article": value as ArticleEnum[]}))}
                 />
                 <FormSelect
                     fluid
-                    value={data["migration-out_value"] || ''}
+                    value={data.out_value || ''}
                     label='Out Value'
                     options={getFormOptions(OutEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-out_value": value as OutEnum}))}
@@ -87,13 +87,13 @@ function MigDetail() {
                 <FormSelect
                     fluid
                     label='In Value'
-                    value={data["migration-in_value"] || ''}
+                    value={data.in_value || ''}
                     options={getFormOptions(InEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-in_value": value as InEnum}))}
                 />
                 <FormSelect
                     fluid
-                    value={data["migration-out_title"] || ''}
+                    value={data.out_title || ''}
                     label='Out Title'
                     options={getFormOptions(OutTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
@@ -103,7 +103,7 @@ function MigDetail() {
                 />
                 <FormSelect
                     fluid
-                    value={data["migration-in_title"] || ''}
+                    value={data.in_title || ''}
                     label='In Title'
                     options={getFormOptions(InTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-in_title": value as InTitleEnum}))}
@@ -113,14 +113,14 @@ function MigDetail() {
                 <FormSelect
                     fluid
                     multiple={true}
-                    value={data["migration-time"] || []}
+                    value={data.time || []}
                     label='Time'
                     options={getFormOptions(MigTimeEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-time": value as MigTimeEnum[]}))}
                 />
                 <FormSelect
                     fluid
-                    value={data["migration-secondment"] || ''}
+                    value={data.secondment || ''}
                     label='Secondment'
                     options={getFormOptions(SecondmentEnum)}
                     onChange={(e, {value}) => setData(prev => ({
@@ -130,7 +130,7 @@ function MigDetail() {
                 />
                 <FormSelect
                     fluid
-                    value={data["migration-nat"] || ''}
+                    value={data.nat || ''}
                     label='Nat'
                     options={getFormOptions(NatEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "migration-nat": value as NatEnum}))}

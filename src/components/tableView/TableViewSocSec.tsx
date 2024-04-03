@@ -12,6 +12,8 @@ import {TaxEnum} from "../../enums/TaxEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
 import TableFilters from "../tableFilters/TableFilters";
 import {useNavigate} from "react-router-dom";
+import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
+import {StatueEnum} from "../../enums/StatueEnum";
 
 function TableViewSocSec() {
 //data of type TaxEnum[] to store the fetched data
@@ -26,12 +28,13 @@ function TableViewSocSec() {
     }
 
     const fieldsConfig = [
-        {fieldName: 'ssc-covered', enumType: CoveredEnum},
-        {fieldName: 'ssc-article', enumType: ArticleEnum},
-        {fieldName: 'ssc-in_value', enumType: InEnum},
-        {fieldName: 'ssc-out_value', enumType: OutEnum},
-        {fieldName: 'ssc-empl', enumType: EmplEnum},
-        {fieldName: 'ssc-tax', enumType: TaxEnum}
+        {fieldName: 'in_value', enumType: InEnum},
+        {fieldName: 'out_value', enumType: OutEnum},
+        {fieldName: 'covered', enumType: CoveredEnum},
+        {fieldName: 'article', enumType: ArticleEnum},
+        {fieldName: 'statute', enumType: StatueEnum},
+        {fieldName: 'empl', enumType: EmplEnum},
+        {fieldName: 'if_empl0_eq_empl1', enumType: Empl0EQEmpl1Enum}
     ]
 
     useEffect(() => {
@@ -61,13 +64,13 @@ function TableViewSocSec() {
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell>Content</TableHeaderCell>
+                        <TableHeaderCell>TITLE</TableHeaderCell>
+                        <TableHeaderCell>CONTENT</TableHeaderCell>
+                        <TableHeaderCell>IN</TableHeaderCell>
+                        <TableHeaderCell>OUT</TableHeaderCell>
                         <TableHeaderCell>COVERED</TableHeaderCell>
                         <TableHeaderCell>ARTICLE</TableHeaderCell>
                         <TableHeaderCell>STATUTE</TableHeaderCell>
-                        <TableHeaderCell>IN</TableHeaderCell>
-                        <TableHeaderCell>OUT</TableHeaderCell>
                         <TableHeaderCell>EMPL</TableHeaderCell>
                         <TableHeaderCell>IF EMPL0 EQ EMPL1</TableHeaderCell>
                     </TableRow>
@@ -80,15 +83,19 @@ function TableViewSocSec() {
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}
                             <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                            <td>{item["ssc-covered"]}</td>
-                            <td>{item["ssc-article"].map((article, index) => (
+                            <td>{item.in_value}</td>
+                            <td>{item.out_value}</td>
+                            <td>{item.covered.map((time, index) => (
+                                <div key={index}>{time}</div>
+                            ))}</td>
+                            <td>{item.article.map((article, index) => (
                                 <div style={{backgroundColor: "lightblue"}} key={index}>{article}</div>
                             ))}</td>
-                            <td>{item["ssc-statute"]}</td>
-                            <td>{item["ssc-in_value"]}</td>
-                            <td>{item["ssc-out_value"]}</td>
-                            <td>{item["ssc-empl"]}</td>
-                            <td>{item["ssc-if_empl0_eq_empl1"]}</td>
+                            <td>{item.statute.map((time, index) => (
+                                <div key={index}>{time}</div>
+                            ))}</td>
+                            <td>{item.empl}</td>
+                            <td>{item.if_empl0_eq_empl1}</td>
                         </tr>
                     ))}
                 </TableBody>

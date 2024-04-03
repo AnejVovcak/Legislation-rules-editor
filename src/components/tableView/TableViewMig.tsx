@@ -30,15 +30,15 @@ function TableViewMig() {
     }
 
     const fieldsConfig = [
-        {fieldName: 'migration-covered', enumType: CoveredEnum},
-        {fieldName: 'migration-article', enumType: ArticleEnum},
-        {fieldName: 'migration-in_value', enumType: InEnum},
-        {fieldName: 'migration-out_value', enumType: OutEnum},
-        {fieldName: 'migration-secondment', enumType: SecondmentEnum},
-        {fieldName: 'migration-nat', enumType: NatEnum},
-        {fieldName: 'migration-in_title', enumType: InTitleEnum},
-        {fieldName: 'migration-out_title', enumType: OutTitleEnum},
-        {fieldName: 'migration-time', enumType: MigTimeEnum}
+        {fieldName: 'covered', enumType: CoveredEnum},
+        {fieldName: 'article', enumType: ArticleEnum},
+        {fieldName: 'in_value', enumType: InEnum},
+        {fieldName: 'out_value', enumType: OutEnum},
+        {fieldName: 'secondment', enumType: SecondmentEnum},
+        {fieldName: 'nat', enumType: NatEnum},
+        {fieldName: 'in_title', enumType: InTitleEnum},
+        {fieldName: 'out_title', enumType: OutTitleEnum},
+        {fieldName: 'time', enumType: MigTimeEnum}
     ]
 
     useEffect(() => {
@@ -69,17 +69,17 @@ function TableViewMig() {
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell>Content</TableHeaderCell>
-                        <TableHeaderCell>COVERED</TableHeaderCell>
-                        <TableHeaderCell>ARTICLE</TableHeaderCell>
+                        <TableHeaderCell>TITLE</TableHeaderCell>
+                        <TableHeaderCell>CONTENT</TableHeaderCell>
                         <TableHeaderCell>IN</TableHeaderCell>
                         <TableHeaderCell>OUT</TableHeaderCell>
+                        <TableHeaderCell>ARTICLE</TableHeaderCell>
+                        <TableHeaderCell>COVERED</TableHeaderCell>
                         <TableHeaderCell>IN TITLE</TableHeaderCell>
+                        <TableHeaderCell>NAT</TableHeaderCell>
                         <TableHeaderCell>OUT TITLE</TableHeaderCell>
                         <TableHeaderCell>SECONDMENT</TableHeaderCell>
-                        <TableHeaderCell>NAT</TableHeaderCell>
-                        <TableHeaderCell>Time</TableHeaderCell>
+                        <TableHeaderCell>TIME</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 
@@ -90,15 +90,17 @@ function TableViewMig() {
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}
                             <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                            <td>{item["migration-covered"]}</td>
-                            <td>{item["migration-article"]}</td>
-                            <td>{item["migration-in_value"]}</td>
-                            <td>{item["migration-out_value"]}</td>
-                            <td>{item["migration-in_title"]}</td>
-                            <td>{item["migration-out_title"]}</td>
-                            <td>{item["migration-secondment"]}</td>
-                            <td>{item["migration-nat"]}</td>
-                            <td>{item["migration-time"].map((time, index) => (
+                            <td>{item.in_value}</td>
+                            <td>{item.out_value}</td>
+                            <td>{item.article.map((time, index) => (
+                                <div key={index}>{time}</div>
+                            ))}</td>
+                            <td>{item.covered}</td>
+                            <td>{item.in_title}</td>
+                            <td>{item.nat}</td>
+                            <td>{item.out_title}</td>
+                            <td>{item.secondment}</td>
+                            <td>{item.time.map((time, index) => (
                                 <div key={index}>{time}</div>
                             ))}</td>
                         </tr>

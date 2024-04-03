@@ -66,7 +66,7 @@ function TaxDetail() {
                     multiple={true}
                     name="tax-covered"
                     label='Covered'
-                    value={data["tax-covered"] || []}
+                    value={data.covered || []}
                     options={getFormOptions(CoveredEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "tax-covered": value as CoveredEnum[]}))}
                 />
@@ -75,14 +75,14 @@ function TaxDetail() {
                     name="tax-article"
                     label='Article'
                     multiple={true}
-                    value={data["tax-article"] || []}
+                    value={data.article || []}
                     options={getFormOptions(ArticleEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "tax-article": value as ArticleEnum[]}))}
                 />
                 <FormSelect
                     fluid
                     name="tax-out_value"
-                    value={data["tax-out_value"] || ''}
+                    value={data.out_value || ''}
                     label='Out Value'
                     options={getFormOptions(OutEnum)}
                     placeholder='Out Value'
@@ -93,7 +93,7 @@ function TaxDetail() {
                 <FormSelect
                     fluid
                     name="tax-in_value"
-                    value={data["tax-in_value"] || ''}
+                    value={data.in_value || ''}
                     label='In Value'
                     options={getFormOptions(InEnum)}
                     placeholder='In Value'
@@ -102,7 +102,7 @@ function TaxDetail() {
                 <FormSelect
                     fluid
                     name="tax-empl"
-                    value={data["tax-empl"] || ''}
+                    value={data.empl || ''}
                     label='Empl'
                     options={getFormOptions(EmplEnum)}
                     placeholder='Empl'
@@ -111,7 +111,7 @@ function TaxDetail() {
                 <FormSelect
                     fluid
                     name="tax-tax"
-                    value={data["tax-tax"] || ''}
+                    value={data.tax || ''}
                     label='Tax'
                     options={getFormOptions(TaxEnum)}
                     placeholder='Tax'

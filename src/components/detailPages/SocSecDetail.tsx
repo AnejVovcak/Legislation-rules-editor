@@ -67,7 +67,7 @@ function SocSecDetail() {
                     multiple={true}
                     name="ssc-covered"
                     label='Covered'
-                    value={data["ssc-covered"] || []}
+                    value={data.covered || []}
                     options={getFormOptions(CoveredEnum)}
                     onChange={(e, {value}) =>
                         setData(prev => ({...prev, "ssc-covered": value as CoveredEnum[]}))}
@@ -77,7 +77,7 @@ function SocSecDetail() {
                     name="ssc-article"
                     label='Article'
                     multiple={true}
-                    value={data["ssc-article"] || []}
+                    value={data.article || []}
                     options={getFormOptions(ArticleEnum)}
                     onChange={(e, {value}) =>
                         setData(prev => ({...prev, "ssc-article": value as ArticleEnum[]}))}
@@ -85,7 +85,7 @@ function SocSecDetail() {
                 <FormSelect
                     fluid
                     name="ssc-statute"
-                    value={data["ssc-statute"] || []}
+                    value={data.statute || []}
                     label='Statute'
                     multiple={true}
                     options={getFormOptions(OutEnum)}
@@ -97,7 +97,7 @@ function SocSecDetail() {
                 <FormSelect
                     fluid
                     name="ssc-out_value"
-                    value={data["ssc-out_value"] || ''}
+                    value={data.out_value || ''}
                     label='Out Value'
                     options={getFormOptions(OutEnum)}
                     onChange={(e, {value}) =>
@@ -106,7 +106,7 @@ function SocSecDetail() {
                 <FormSelect
                     fluid
                     name="ssc-in_value"
-                    value={data["ssc-in_value"] || ''}
+                    value={data.in_value || ''}
                     label='In Value'
                     options={getFormOptions(InEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "ssc-in_value": value as InEnum}))}
@@ -114,7 +114,7 @@ function SocSecDetail() {
                 <FormSelect
                     fluid
                     name="ssc-empl"
-                    value={data["ssc-empl"] || ''}
+                    value={data.empl || ''}
                     label='Empl'
                     options={getFormOptions(EmplEnum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "ssc-empl": value as EmplEnum}))}
@@ -122,7 +122,7 @@ function SocSecDetail() {
                 <FormSelect
                     fluid
                     name="ssc-if_empl0_eq_empl1"
-                    value={data["ssc-if_empl0_eq_empl1"] || ''}
+                    value={data.if_empl0_eq_empl1 || ''}
                     label='If Empl0 Eq Empl1'
                     options={getFormOptions(Empl0EQEmpl1Enum)}
                     onChange={(e, {value}) => setData(prev => ({...prev, "ssc-if_empl0_eq_empl1": value as Empl0EQEmpl1Enum}))}

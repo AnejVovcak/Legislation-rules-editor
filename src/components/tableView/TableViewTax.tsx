@@ -21,12 +21,12 @@ function TableViewTax() {
     const [filters, setFilters] = useState<Record<string, string[]>>({});
 
     const fieldsConfig = [
-        {fieldName: 'tax-covered', enumType: CoveredEnum},
-        {fieldName: 'tax-article', enumType: ArticleEnum},
-        {fieldName: 'tax-in_value', enumType: InEnum},
-        {fieldName: 'tax-out_value', enumType: OutEnum},
-        {fieldName: 'tax-empl', enumType: EmplEnum},
-        {fieldName: 'tax-tax', enumType: TaxEnum}
+        {fieldName: 'in_value', enumType: InEnum},
+        {fieldName: 'out_value', enumType: OutEnum},
+        {fieldName: 'covered', enumType: CoveredEnum},
+        {fieldName: 'article', enumType: ArticleEnum},
+        {fieldName: 'empl', enumType: EmplEnum},
+        {fieldName: 'tax', enumType: TaxEnum}
     ]
 
     const request: MongoRequest = {
@@ -63,12 +63,12 @@ function TableViewTax() {
             <Table celled selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell>Text</TableHeaderCell>
-                        <TableHeaderCell>COVERED</TableHeaderCell>
-                        <TableHeaderCell>ARTICLE</TableHeaderCell>
+                        <TableHeaderCell>TITLE</TableHeaderCell>
+                        <TableHeaderCell>CONTENT</TableHeaderCell>
                         <TableHeaderCell>IN</TableHeaderCell>
                         <TableHeaderCell>OUT</TableHeaderCell>
+                        <TableHeaderCell>ARTICLE</TableHeaderCell>
+                        <TableHeaderCell>COVERED</TableHeaderCell>
                         <TableHeaderCell>EMPL</TableHeaderCell>
                         <TableHeaderCell>TAX</TableHeaderCell>
                     </TableRow>
@@ -81,12 +81,16 @@ function TableViewTax() {
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}
                             <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                            <td>{item["tax-covered"]}</td>
-                            <td>{item["tax-article"]}</td>
-                            <td>{item["tax-in_value"]}</td>
-                            <td>{item["tax-out_value"]}</td>
-                            <td>{item["tax-empl"]}</td>
-                            <td>{item["tax-tax"]}</td>
+                            <td>{item.in_value}</td>
+                            <td>{item.out_value}</td>
+                            <td>{item.article.map((time, index) => (
+                                <div key={index}>{time}</div>
+                            ))}</td>
+                            <td>{item.covered.map((time, index) => (
+                                <div key={index}>{time}</div>
+                            ))}</td>
+                            <td>{item.empl}</td>
+                            <td>{item.tax}</td>
                         </tr>
                     ))}
                 </TableBody>

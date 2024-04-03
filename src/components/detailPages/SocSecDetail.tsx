@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import { getById } from "../../api/api";
+import {getById} from "../../api/api";
 import {
     Button,
     Form,
@@ -33,10 +33,11 @@ function SocSecDetail() {
                 setData(result as SocSec);
             }).catch((error) => {
                 console.error("Failed to fetch data:", error);
-                navigate('/tax');
+                navigate('/socSec');
             });
         } else {
             setData({} as SocSec)
+            setData(prev => ({...prev, article: [], covered: [], statute: []}))
         }
     }, [id, navigate]);
 
@@ -48,89 +49,95 @@ function SocSecDetail() {
         })
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
-        setData(prev => ({...prev, [name]: value}));
-    };
-
     return (
         <Form onSubmit={handleSubmit} error={error} success={success}>
 
             <FormGroup widths='equal'>
-                <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
-                           onChange={handleChange}/>
+                <FormGroup widths='equal'>
+                    <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
+                               onChange={(e) => setData(prev => ({
+                                   ...prev, title: e.target.value
+                               }))}/>
+                </FormGroup>
             </FormGroup>
 
             <FormGroup inline widths='equal'>
                 <FormSelect
                     fluid
                     multiple={true}
-                    name="ssc-covered"
                     label='Covered'
                     value={data.covered || []}
                     options={getFormOptions(CoveredEnum)}
                     onChange={(e, {value}) =>
-                        setData(prev => ({...prev, "ssc-covered": value as CoveredEnum[]}))}
+                        setData(prev => ({...prev, covered: value as CoveredEnum[]}))}
                 />
                 <FormSelect
                     fluid
-                    name="ssc-article"
                     label='Article'
                     multiple={true}
                     value={data.article || []}
                     options={getFormOptions(ArticleEnum)}
                     onChange={(e, {value}) =>
-                        setData(prev => ({...prev, "ssc-article": value as ArticleEnum[]}))}
+                        setData(prev => ({
+                            ...prev, article: value as ArticleEnum[]
+                        }))}
                 />
                 <FormSelect
                     fluid
-                    name="ssc-statute"
                     value={data.statute || []}
-                    label='Statute'
+                    label='Statue'
                     multiple={true}
-                    options={getFormOptions(OutEnum)}
+                    options={getFormOptions(StatueEnum)}
                     onChange={(e, {value}) =>
-                        setData(prev => ({...prev, "ssc-statute": value as StatueEnum[]}))}
+                        setData(prev => ({
+                            ...prev, statute: value as StatueEnum[]
+                        }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
                 <FormSelect
                     fluid
-                    name="ssc-out_value"
                     value={data.out_value || ''}
                     label='Out Value'
                     options={getFormOptions(OutEnum)}
                     onChange={(e, {value}) =>
-                        setData(prev => ({...prev, "tax-in_value": value as OutEnum}))}
+                        setData(prev => ({
+                            ...prev, out_value: value as OutEnum
+                        }))}
                 />
                 <FormSelect
                     fluid
-                    name="ssc-in_value"
                     value={data.in_value || ''}
                     label='In Value'
                     options={getFormOptions(InEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "ssc-in_value": value as InEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, in_value: value as InEnum
+                    }))}
                 />
-                <FormSelect
+                < FormSelect
                     fluid
-                    name="ssc-empl"
                     value={data.empl || ''}
                     label='Empl'
                     options={getFormOptions(EmplEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "ssc-empl": value as EmplEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, empl: value as EmplEnum
+                    }))}
                 />
                 <FormSelect
                     fluid
-                    name="ssc-if_empl0_eq_empl1"
                     value={data.if_empl0_eq_empl1 || ''}
                     label='If Empl0 Eq Empl1'
                     options={getFormOptions(Empl0EQEmpl1Enum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "ssc-if_empl0_eq_empl1": value as Empl0EQEmpl1Enum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, if_empl0_eq_empl1: value as Empl0EQEmpl1Enum
+                    }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
                 <ReactQuill theme="snow" value={data.content}
-                            onChange={(value) => setData(prev => ({...prev, content: value}))}/>
+                            onChange={(value) => setData(prev => ({
+                                ...prev, content: value
+                            }))}/>
             </FormGroup>
             <Message
                 hidden={!success}

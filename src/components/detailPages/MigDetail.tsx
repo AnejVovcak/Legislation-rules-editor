@@ -38,8 +38,7 @@ function MigDetail() {
             });
         } else {
             setData({} as Mig)
-            //set migration-time to empty array
-            setData(prev => ({...prev, "migration-time": []}))
+            setData(prev => ({...prev, time: [],article: []}))
         }
     }, [id, navigate]);
 
@@ -56,7 +55,9 @@ function MigDetail() {
 
             <FormGroup widths='equal'>
                 <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
-                           onChange={(e) => setData(prev => ({...prev, title: e.target.value}))}/>
+                           onChange={(e) => setData(prev => ({
+                               ...prev, title: e.target.value
+                           }))}/>
             </FormGroup>
 
             <FormGroup inline widths='equal'>
@@ -65,7 +66,9 @@ function MigDetail() {
                     label='Covered'
                     value={data.covered || ''}
                     options={getFormOptions(CoveredEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-covered": value as CoveredEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, covered: value as CoveredEnum
+                    }))}
                 />
                 <FormSelect
                     fluid
@@ -73,14 +76,18 @@ function MigDetail() {
                     label='Article'
                     multiple={true}
                     options={getFormOptions(ArticleEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-article": value as ArticleEnum[]}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, article: value as ArticleEnum[]
+                    }))}
                 />
                 <FormSelect
                     fluid
                     value={data.out_value || ''}
                     label='Out Value'
                     options={getFormOptions(OutEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-out_value": value as OutEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, out_value: value as OutEnum
+                    }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
@@ -89,7 +96,9 @@ function MigDetail() {
                     label='In Value'
                     value={data.in_value || ''}
                     options={getFormOptions(InEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-in_value": value as InEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, in_value: value as InEnum
+                    }))}
                 />
                 <FormSelect
                     fluid
@@ -98,7 +107,7 @@ function MigDetail() {
                     options={getFormOptions(OutTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev,
-                        "migration-out_title": value as OutTitleEnum
+                        out_title: value as OutTitleEnum
                     }))}
                 />
                 <FormSelect
@@ -106,7 +115,9 @@ function MigDetail() {
                     value={data.in_title || ''}
                     label='In Title'
                     options={getFormOptions(InTitleEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-in_title": value as InTitleEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, in_title: value as InTitleEnum
+                    }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
@@ -116,7 +127,9 @@ function MigDetail() {
                     value={data.time || []}
                     label='Time'
                     options={getFormOptions(MigTimeEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-time": value as MigTimeEnum[]}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, time: value as MigTimeEnum[]
+                    }))}
                 />
                 <FormSelect
                     fluid
@@ -125,7 +138,7 @@ function MigDetail() {
                     options={getFormOptions(SecondmentEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev,
-                        "migration-secondment": value as SecondmentEnum
+                        secondment: value as SecondmentEnum
                     }))}
                 />
                 <FormSelect
@@ -133,12 +146,16 @@ function MigDetail() {
                     value={data.nat || ''}
                     label='Nat'
                     options={getFormOptions(NatEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "migration-nat": value as NatEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, nat: value as NatEnum
+                    }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
                 <ReactQuill theme="snow" value={data.content}
-                            onChange={(value) => setData(prev => ({...prev, content: value}))}/>
+                            onChange={(value) => setData(prev => ({
+                                ...prev, content: value
+                            }))}/>
             </FormGroup>
 
             <Message

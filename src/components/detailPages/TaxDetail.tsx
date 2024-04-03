@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import { getById } from "../../api/api";
+import {getById} from "../../api/api";
 import {Tax} from "../../dtos/tax";
 import {
     Button,
@@ -36,6 +36,7 @@ function TaxDetail() {
             });
         } else {
             setData({} as Tax)
+            setData(prev => ({...prev, article: [], covered: []}))
         }
     }, [id, navigate]);
 
@@ -47,75 +48,74 @@ function TaxDetail() {
         })
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
-        setData(prev => ({...prev, [name]: value}));
-    };
-
     return (
         <Form onSubmit={handleSubmit} error={error} success={success}>
 
             <FormGroup widths='equal'>
                 <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
-                           onChange={handleChange}/>
+                           onChange={(e) => setData(prev => ({
+                               ...prev, title: e.target.value
+                           }))}/>
             </FormGroup>
 
             <FormGroup inline widths='equal'>
                 <FormSelect
                     fluid
                     multiple={true}
-                    name="tax-covered"
                     label='Covered'
                     value={data.covered || []}
                     options={getFormOptions(CoveredEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-covered": value as CoveredEnum[]}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, covered: value as CoveredEnum[]
+                    }))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-article"
                     label='Article'
                     multiple={true}
                     value={data.article || []}
                     options={getFormOptions(ArticleEnum)}
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-article": value as ArticleEnum[]}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, article: value as ArticleEnum[]
+                    }))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-out_value"
                     value={data.out_value || ''}
                     label='Out Value'
                     options={getFormOptions(OutEnum)}
-                    placeholder='Out Value'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-out_value": value as OutEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, out_value: value as OutEnum
+                    }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
                 <FormSelect
                     fluid
-                    name="tax-in_value"
                     value={data.in_value || ''}
                     label='In Value'
                     options={getFormOptions(InEnum)}
-                    placeholder='In Value'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-in_value": value as InEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, in_value: value as InEnum
+                    }))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-empl"
                     value={data.empl || ''}
                     label='Empl'
                     options={getFormOptions(EmplEnum)}
-                    placeholder='Empl'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-empl": value as EmplEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, empl: value as EmplEnum
+                    }))}
                 />
                 <FormSelect
                     fluid
-                    name="tax-tax"
                     value={data.tax || ''}
                     label='Tax'
                     options={getFormOptions(TaxEnum)}
-                    placeholder='Tax'
-                    onChange={(e, {value}) => setData(prev => ({...prev, "tax-tax": value as TaxEnum}))}
+                    onChange={(e, {value}) => setData(prev => ({
+                        ...prev, tax: value as TaxEnum
+                    }))}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>

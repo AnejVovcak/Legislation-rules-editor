@@ -16,6 +16,8 @@ import {MigTimeEnum} from "../../enums/MigTimeEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
 import TableFilters from "../tableFilters/TableFilters";
 import {CollectionEnum} from "../../enums/CollectionEnum";
+import {handleSort} from "../../utils/tableSortUtil";
+import renderTableHeaderCell from "./TableHeaderUtil";
 
 type MigKeys = keyof Mig; // Type representing keys of Mig interface
 
@@ -26,7 +28,7 @@ function TableViewMig() {
     const [data, setData] = useState<Mig[]>([]);
     const navigate = useNavigate(); // For navigation
     const [filters, setFilters] = useState<Record<string, string[]>>({});
-    const [column, setColumn] = useState<string>('');
+    const [column, setColumn] = useState<MigKeys>('title');
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
 
 
@@ -65,17 +67,13 @@ function TableViewMig() {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
     }, [filters]); // Re-fetch data whenever filters change
 
-    const handleSort = (clickedColumn: MigKeys) => () => {
-        if (column !== clickedColumn) {
-            setColumn(clickedColumn);
-            setData(data.sort((a, b) => a[clickedColumn]! > b[clickedColumn]! ? 1 : -1));
-            setDirection('ascending');
-        } else {
-            setData(data.reverse());
-            setDirection(direction === 'ascending' ? 'descending' : 'ascending');
-        }
+    const handleSortClick = (clickedColumn: MigKeys) => () => {
+        return handleSort(clickedColumn, data, setData, column, setColumn, direction, setDirection);
     };
 
+    const renderTableHeaderCellCaller = (label: string, key: MigKeys) => {
+        return renderTableHeaderCell(label, key, column, direction, handleSortClick);
+    }
 
     return (
         <div>
@@ -88,54 +86,18 @@ function TableViewMig() {
             <Table celled sortable selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell
-                            sorted={column === 'title' ? direction : undefined}
-                            onClick={handleSort('title')}
-                        >TITLE</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'content' ? direction : undefined}
-                            onClick={handleSort('content')}
-                        >CONTENT</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'in_value' ? direction : undefined}
-                            onClick={handleSort('in_value')}
-                        >IN</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'out_value' ? direction : undefined}
-                            onClick={handleSort('out_value')}
-                        >OUT</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'article' ? direction : undefined}
-                            onClick={handleSort('article')}
-                        >ARTICLE</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'covered' ? direction : undefined}
-                            onClick={handleSort('covered')}
-                        >COVERED</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'in_title' ? direction : undefined}
-                            onClick={handleSort('in_title')}
-                        >IN TITLE</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'nat' ? direction : undefined}
-                            onClick={handleSort('nat')}
-                        >NAT</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'out_title' ? direction : undefined}
-                            onClick={handleSort('out_title')}
-                        >OUT TITLE</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'secondment' ? direction : undefined}
-                            onClick={handleSort('secondment')}
-                        >SECONDMENT</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'time' ? direction : undefined}
-                            onClick={handleSort('time')}
-                        >TIME</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'last_modified' ? direction : undefined}
-                            onClick={handleSort('last_modified')}
-                        >LAST UPDATED</TableHeaderCell>
+                        {renderTableHeaderCellCaller('TITLE', 'title')}
+                        {renderTableHeaderCellCaller('CONTENT', 'content')}
+                        {renderTableHeaderCellCaller('IN', 'in_value')}
+                        {renderTableHeaderCellCaller('OUT', 'out_value')}
+                        {renderTableHeaderCellCaller('ARTICLE', 'article')}
+                        {renderTableHeaderCellCaller('COVERED', 'covered')}
+                        {renderTableHeaderCellCaller('IN TITLE', 'in_title')}
+                        {renderTableHeaderCellCaller('NAT', 'nat')}
+                        {renderTableHeaderCellCaller('OUT TITLE', 'out_title')}
+                        {renderTableHeaderCellCaller('SECONDMENT', 'secondment')}
+                        {renderTableHeaderCellCaller('TIME', 'time')}
+                        {renderTableHeaderCellCaller('LAST MODIFIED', 'last_modified')}
                     </TableRow>
                 </TableHeader>
 

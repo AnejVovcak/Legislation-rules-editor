@@ -13,6 +13,8 @@ import {TaxEnum} from "../../enums/TaxEnum";
 import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
 import {getAllDocuments} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
+import {handleSort} from "../../utils/tableSortUtil";
+import renderTableHeaderCell from "./TableHeaderUtil";
 
 type TaxKeys = keyof Tax; // Type representing keys of Tax interface
 
@@ -22,7 +24,7 @@ function TableViewTax() {
     const [data, setData] = useState<Tax[]>([]);
     const navigate = useNavigate(); // For navigation
     const [filters, setFilters] = useState<Record<string, string[]>>({});
-    const [column, setColumn] = useState<string>('');
+    const [column, setColumn] = useState<TaxKeys>('title');
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
 
     const fieldsConfig = [
@@ -44,17 +46,6 @@ function TableViewTax() {
         fetchData()
     }, []); // Empty dependency array means this effect runs once on mount
 
-    const handleSort = (clickedColumn: TaxKeys) => () => {
-        if (column !== clickedColumn) {
-            setColumn(clickedColumn);
-            setData(data.sort((a, b) => a[clickedColumn]! > b[clickedColumn]! ? 1 : -1));
-            setDirection('ascending');
-        } else {
-            setData(data.reverse());
-            setDirection(direction === 'ascending' ? 'descending' : 'ascending');
-        }
-    };
-
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
         getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
@@ -68,6 +59,14 @@ function TableViewTax() {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
     }, [filters]); // Re-fetch data whenever filters change
 
+    const handleSortClick = (clickedColumn: TaxKeys) => () => {
+        return handleSort(clickedColumn, data, setData, column, setColumn, direction, setDirection);
+    };
+
+    const renderTableHeaderCellCaller = (label: string, key: TaxKeys) => {
+        return renderTableHeaderCell(label, key, column, direction, handleSortClick);
+    }
+
     return (
         <div>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -79,42 +78,15 @@ function TableViewTax() {
             <Table celled sortable selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell
-                            sorted={column === 'title' ? direction : undefined}
-                            onClick={handleSort('title')}
-                        >TITLE</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'content' ? direction : undefined}
-                            onClick={handleSort('content')}
-                        >CONTENT</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'in_value' ? direction : undefined}
-                            onClick={handleSort('in_value')}
-                        >IN</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'out_value' ? direction : undefined}
-                            onClick={handleSort('out_value')}
-                        >OUT</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'article' ? direction : undefined}
-                            onClick={handleSort('article')}
-                        >ARTICLE</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'covered' ? direction : undefined}
-                            onClick={handleSort('covered')}
-                        >COVERED</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'empl' ? direction : undefined}
-                            onClick={handleSort('empl')}
-                        >EMPL</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'tax' ? direction : undefined}
-                            onClick={handleSort('tax')}
-                        >TAX</TableHeaderCell>
-                        <TableHeaderCell
-                            sorted={column === 'last_modified' ? direction : undefined}
-                            onClick={handleSort('last_modified')}
-                        >LAST UPDATED</TableHeaderCell>
+                        {renderTableHeaderCellCaller('Title', 'title')}
+                        {renderTableHeaderCellCaller('Content', 'content')}
+                        {renderTableHeaderCellCaller('In Value', 'in_value')}
+                        {renderTableHeaderCellCaller('Out Value', 'out_value')}
+                        {renderTableHeaderCellCaller('Article', 'article')}
+                        {renderTableHeaderCellCaller('Covered', 'covered')}
+                        {renderTableHeaderCellCaller('Empl', 'empl')}
+                        {renderTableHeaderCellCaller('Tax', 'tax')}
+                        {renderTableHeaderCellCaller('Last Modified', 'last_modified')}
                     </TableRow>
                 </TableHeader>
 

@@ -15,11 +15,15 @@ import {StatueEnum} from "../../enums/StatueEnum";
 import {getAllDocuments} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 
+type SocSecKeys = keyof SocSec; // Type representing keys of SocSec interface
+
 function TableViewSocSec() {
 //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<SocSec[]>([]);
     const navigate = useNavigate(); // For navigation
     const [filters, setFilters] = useState<Record<string, string[]>>({});
+    const [column, setColumn] = useState<string>('');
+    const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
@@ -54,6 +58,17 @@ function TableViewSocSec() {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
     }, [filters]); // Re-fetch data whenever filters change
 
+    const handleSort = (clickedColumn: SocSecKeys) => () => {
+        if (column !== clickedColumn) {
+            setColumn(clickedColumn);
+            setData(data.sort((a, b) => a[clickedColumn]! > b[clickedColumn]! ? 1 : -1));
+            setDirection('ascending');
+        } else {
+            setData(data.reverse());
+            setDirection(direction === 'ascending' ? 'descending' : 'ascending');
+        }
+    };
+
     return (
         <div>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -61,19 +76,49 @@ function TableViewSocSec() {
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
                 <Button onClick={() => navigate('/socSec/new')}>Add new</Button>
             </div>
-            <Table celled selectable>
+            <Table celled sortable selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell>TITLE</TableHeaderCell>
-                        <TableHeaderCell>CONTENT</TableHeaderCell>
-                        <TableHeaderCell>IN</TableHeaderCell>
-                        <TableHeaderCell>OUT</TableHeaderCell>
-                        <TableHeaderCell>COVERED</TableHeaderCell>
-                        <TableHeaderCell>ARTICLE</TableHeaderCell>
-                        <TableHeaderCell>STATUTE</TableHeaderCell>
-                        <TableHeaderCell>EMPL</TableHeaderCell>
-                        <TableHeaderCell>IF EMPL0 EQ EMPL1</TableHeaderCell>
-                        <TableHeaderCell>LAST UPDATED</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'title' ? direction : undefined}
+                            onClick={handleSort('title')}
+                        >TITLE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'content' ? direction : undefined}
+                            onClick={handleSort('content')}
+                        >CONTENT</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'in_value' ? direction : undefined}
+                            onClick={handleSort('in_value')}
+                        >IN</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'out_value' ? direction : undefined}
+                            onClick={handleSort('out_value')}
+                        >OUT</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'covered' ? direction : undefined}
+                            onClick={handleSort('covered')}
+                        >COVERED</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'article' ? direction : undefined}
+                            onClick={handleSort('article')}
+                        >ARTICLE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'statute' ? direction : undefined}
+                            onClick={handleSort('statute')}
+                        >STATUTE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'empl' ? direction : undefined}
+                            onClick={handleSort('empl')}
+                        >EMPL</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'if_empl0_eq_empl1' ? direction : undefined}
+                            onClick={handleSort('if_empl0_eq_empl1')}
+                        >IF EMPL0 EQ EMPL1</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'last_modified' ? direction : undefined}
+                            onClick={handleSort('last_modified')}
+                        >LAST UPDATED</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 

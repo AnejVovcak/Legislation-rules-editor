@@ -17,12 +17,18 @@ import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterU
 import TableFilters from "../tableFilters/TableFilters";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 
+type MigKeys = keyof Mig; // Type representing keys of Mig interface
+
+
 function TableViewMig() {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Mig[]>([]);
     const navigate = useNavigate(); // For navigation
     const [filters, setFilters] = useState<Record<string, string[]>>({});
+    const [column, setColumn] = useState<string>('');
+    const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
+
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
@@ -59,6 +65,18 @@ function TableViewMig() {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
     }, [filters]); // Re-fetch data whenever filters change
 
+    const handleSort = (clickedColumn: MigKeys) => () => {
+        if (column !== clickedColumn) {
+            setColumn(clickedColumn);
+            setData(data.sort((a, b) => a[clickedColumn]! > b[clickedColumn]! ? 1 : -1));
+            setDirection('ascending');
+        } else {
+            setData(data.reverse());
+            setDirection(direction === 'ascending' ? 'descending' : 'ascending');
+        }
+    };
+
+
     return (
         <div>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -67,21 +85,57 @@ function TableViewMig() {
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
                 <Button onClick={() => navigate('/mig/new')}>Add new</Button>
             </div>
-            <Table celled selectable>
+            <Table celled sortable selectable>
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderCell>TITLE</TableHeaderCell>
-                        <TableHeaderCell>CONTENT</TableHeaderCell>
-                        <TableHeaderCell>IN</TableHeaderCell>
-                        <TableHeaderCell>OUT</TableHeaderCell>
-                        <TableHeaderCell>ARTICLE</TableHeaderCell>
-                        <TableHeaderCell>COVERED</TableHeaderCell>
-                        <TableHeaderCell>IN TITLE</TableHeaderCell>
-                        <TableHeaderCell>NAT</TableHeaderCell>
-                        <TableHeaderCell>OUT TITLE</TableHeaderCell>
-                        <TableHeaderCell>SECONDMENT</TableHeaderCell>
-                        <TableHeaderCell>TIME</TableHeaderCell>
-                        <TableHeaderCell>LAST UPDATED</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'title' ? direction : undefined}
+                            onClick={handleSort('title')}
+                        >TITLE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'content' ? direction : undefined}
+                            onClick={handleSort('content')}
+                        >CONTENT</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'in_value' ? direction : undefined}
+                            onClick={handleSort('in_value')}
+                        >IN</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'out_value' ? direction : undefined}
+                            onClick={handleSort('out_value')}
+                        >OUT</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'article' ? direction : undefined}
+                            onClick={handleSort('article')}
+                        >ARTICLE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'covered' ? direction : undefined}
+                            onClick={handleSort('covered')}
+                        >COVERED</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'in_title' ? direction : undefined}
+                            onClick={handleSort('in_title')}
+                        >IN TITLE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'nat' ? direction : undefined}
+                            onClick={handleSort('nat')}
+                        >NAT</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'out_title' ? direction : undefined}
+                            onClick={handleSort('out_title')}
+                        >OUT TITLE</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'secondment' ? direction : undefined}
+                            onClick={handleSort('secondment')}
+                        >SECONDMENT</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'time' ? direction : undefined}
+                            onClick={handleSort('time')}
+                        >TIME</TableHeaderCell>
+                        <TableHeaderCell
+                            sorted={column === 'last_modified' ? direction : undefined}
+                            onClick={handleSort('last_modified')}
+                        >LAST UPDATED</TableHeaderCell>
                     </TableRow>
                 </TableHeader>
 

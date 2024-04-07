@@ -104,7 +104,7 @@ function TableViewSocSec() {
                                 <div key={index}>{time}</div>
                             ))}</td>
                             <td>{item.article.map((article, index) => (
-                                <div style={{backgroundColor: "lightblue"}} key={index}>{article}</div>
+                                <div key={index}>{article}</div>
                             ))}</td>
                             <td>{item.statute.map((time, index) => (
                                 <div key={index}>{time}</div>

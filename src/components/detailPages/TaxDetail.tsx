@@ -17,6 +17,7 @@ import {EmplEnum} from "../../enums/EmplEnum";
 import {TaxEnum} from "../../enums/TaxEnum";
 import ReactQuill from "react-quill";
 import {getFormOptions, performAction} from "../../utils/detailPageUtil";
+import Sources from "./Sources";
 
 function TaxDetail() {
     const {id} = useParams();
@@ -122,6 +123,7 @@ function TaxDetail() {
                 <ReactQuill theme="snow" value={data.content}
                             onChange={(value) => setData(prev => ({...prev, content: value}))}/>
             </FormGroup>
+            <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
             <Message
                 hidden={!success}
                 success

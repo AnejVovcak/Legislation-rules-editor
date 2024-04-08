@@ -20,6 +20,7 @@ import {OutTitleEnum} from "../../enums/OutTitleEnum";
 import {InTitleEnum} from "../../enums/InTitleEnum";
 import {MigTimeEnum} from "../../enums/MigTimeEnum";
 import {getFormOptions, performAction} from "../../utils/detailPageUtil";
+import Sources from "./Sources";
 
 function MigDetail() {
     const {id} = useParams();
@@ -158,6 +159,7 @@ function MigDetail() {
                             }))}/>
             </FormGroup>
 
+            <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
             <Message
                 hidden={!success}
                 success

@@ -18,6 +18,7 @@ import {getFormOptions, performAction} from "../../utils/detailPageUtil";
 import {SocSec} from "../../dtos/socSec";
 import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
 import {StatueEnum} from "../../enums/StatueEnum";
+import Sources from "./Sources";
 
 function SocSecDetail() {
     const {id} = useParams();
@@ -137,6 +138,7 @@ function SocSecDetail() {
                                 ...prev, content: value
                             }))}/>
             </FormGroup>
+            <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
             <Message
                 hidden={!success}
                 success

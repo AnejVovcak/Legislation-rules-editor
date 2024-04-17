@@ -33,6 +33,17 @@ function MigDetail() {
         if (id !== "new" && id) {
             getById(id, 'migStaging').then((result) => {
                 setData(result as Mig);
+                //parse result.content
+                // change <span class=\"tooltip\">aaa<span class=\"tooltip-content\">bbb</span></span>
+                // to <href=\"bbb\">aaa</a>
+                // it is a string
+                const content = result.content;
+                const regex = /<span class="tooltip">(.*?)<span class="tooltip-content">(.*?)<\/span><\/span>/g;
+                const subst = `<a href="[info]$2">$1</a>`;
+                const newContent = content.replace(regex, subst);
+                setData(prev => ({...prev, content: newContent}));
+
+
             }).catch((error) => {
                 console.error("Failed to fetch data:", error);
                 navigate('/mig');
@@ -43,8 +54,19 @@ function MigDetail() {
         }
     }, [id, navigate]);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {      
         event.preventDefault();
+
+        //parse data.content
+        // change <a href="[info]bbb">aaa</a> to <span class="tooltip">aaa<span class="tooltip-content">bbb</span></span>
+        // only if there is a href="[info] in the content
+        // it is a string
+        const content = data.content;
+        const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
+        const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
+        const newContent = content.replace(regex, subst);
+        setData(prev => ({...prev, content: newContent}));
+
         performAction(id, data, navigate, setSuccess, setError, 'migStaging', 'mig').then(() => {
             console.log(success, error)
         })
@@ -152,6 +174,7 @@ function MigDetail() {
                     }))}
                 />
             </FormGroup>
+            For info on request use the same tool as for links, just put the text instead of a link, and in front of the text put [info]
             <FormGroup inline widths='equal'>
                 <ReactQuill theme="snow" value={data.content}
                             onChange={(value) => setData(prev => ({

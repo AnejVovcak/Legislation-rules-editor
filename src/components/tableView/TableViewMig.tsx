@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {getAllDocuments} from "../../api/api";
-import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
+import {Button, Table, TableBody, TableHeader, TableRow} from "semantic-ui-react";
 import {Mig} from "../../dtos/mig";
 import {useNavigate} from "react-router-dom";
 import {CoveredEnum} from "../../enums/CoveredEnum";
@@ -22,7 +22,7 @@ import renderTableHeaderCell from "./TableHeaderUtil";
 type MigKeys = keyof Mig; // Type representing keys of Mig interface
 
 
-function TableViewMig() {
+function TableViewMig({isProduction}: { isProduction: boolean }) {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Mig[]>([]);
@@ -35,7 +35,7 @@ function TableViewMig() {
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: CollectionEnum.MIG
+        collection: isProduction ? CollectionEnum.MIG_PRODUCTION : CollectionEnum.MIG_STAGING,
     }
 
     const fieldsConfig = [
@@ -81,7 +81,8 @@ function TableViewMig() {
 
                 <TableFilters fieldsConfig={fieldsConfig}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
-                <Button onClick={() => navigate('/mig/new')}>Add new</Button>
+                <Button onClick={() =>
+                    isProduction ? {} : navigate('/mig/new')}>Add new</Button>
             </div>
             <Table celled sortable selectable>
                 <TableHeader>
@@ -103,7 +104,8 @@ function TableViewMig() {
 
                 <TableBody>
                     {data.map((item, index) => (
-                        <tr key={index} onClick={() => navigate(`/mig/${item._id as string}`)}>
+                        <tr key={index} onClick={() =>
+                            isProduction ? {} : navigate(`/mig/${item._id as string}`)}>
                             {/* Render table cells as per your data structure */}
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Table, TableBody, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
+import {Button, Table, TableBody, TableHeader, TableRow} from "semantic-ui-react";
 import {MongoRequest} from "../../dtos/mongo-request";
 import {Tax} from "../../dtos/tax";
 import {useNavigate} from "react-router-dom";
@@ -18,7 +18,7 @@ import renderTableHeaderCell from "./TableHeaderUtil";
 
 type TaxKeys = keyof Tax; // Type representing keys of Tax interface
 
-function TableViewTax() {
+function TableViewTax({isProduction}: { isProduction: boolean }) {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<Tax[]>([]);
@@ -39,7 +39,7 @@ function TableViewTax() {
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
-        collection: CollectionEnum.TAX
+        collection: isProduction ? CollectionEnum.TAX_PRODUCTION : CollectionEnum.TAX_STAGING,
     }
 
     useEffect(() => {
@@ -73,7 +73,8 @@ function TableViewTax() {
 
                 <TableFilters fieldsConfig={fieldsConfig}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
-                <Button onClick={() => navigate('/tax/new')}>Add new</Button>
+                <Button onClick={() =>
+                    isProduction ? {} : navigate('/tax/new')}>Add new</Button>
             </div>
             <Table celled sortable selectable>
                 <TableHeader>
@@ -92,7 +93,8 @@ function TableViewTax() {
 
                 <TableBody>
                     {data.map((item, index) => (
-                        <tr key={index} onClick={() => navigate(`/tax/${item._id as string}`)}>
+                        <tr key={index} onClick={() =>
+                            isProduction ? {} : navigate(`/tax/${item._id as string}`)}>
                             {/* Render table cells as per your data structure */}
                             <td>{item.title}</td>
                             {/*content is a html text, parse it to show it in a readable way*/}

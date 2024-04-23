@@ -16,6 +16,7 @@ import {getAllDocuments} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import {handleSort} from "../../utils/tableSortUtil";
 import renderTableHeaderCell from "./TableHeaderUtil";
+import ProductionToastr from "./ProductionToastr";
 
 type SocSecKeys = keyof SocSec;
 
@@ -70,6 +71,7 @@ function TableViewSocSec({isProduction}: { isProduction: boolean }) {
 
     return (
         <div>
+            {isProduction && <ProductionToastr />}
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                 <TableFilters fieldsConfig={fieldsConfig}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>

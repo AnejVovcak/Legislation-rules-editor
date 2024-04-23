@@ -15,6 +15,7 @@ import {getAllDocuments} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import {handleSort} from "../../utils/tableSortUtil";
 import renderTableHeaderCell from "./TableHeaderUtil";
+import ProductionToastr from "./ProductionToastr";
 
 type TaxKeys = keyof Tax; // Type representing keys of Tax interface
 
@@ -69,6 +70,7 @@ function TableViewTax({isProduction}: { isProduction: boolean }) {
 
     return (
         <div>
+            {isProduction && <ProductionToastr />}
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
 
                 <TableFilters fieldsConfig={fieldsConfig}

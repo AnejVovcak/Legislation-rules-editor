@@ -10,42 +10,74 @@ export default class Header extends Component {
     //check the route and set the active item
     componentDidMount() {
         const path = window.location.pathname;
-        if (path === '/mig') {
-            this.setState({activeItem: 'mig'});
-        } else if (path === '/socSec') {
-            this.setState({activeItem: 'socSec'});
-        } else if (path === '/tax') {
-            this.setState({activeItem: 'tax'});
+        switch (path) {
+            case '/mig':
+                this.setState({activeItem: 'mig'});
+                break;
+            case '/socSec':
+                this.setState({activeItem: 'socSec'});
+                break;
+            case '/tax':
+                this.setState({activeItem: 'tax'});
+                break;
+            case '/migProd':
+                this.setState({activeItem: 'migProd'});
+                break;
+            case '/socSecProd':
+                this.setState({activeItem: 'socSecProd'});
+                break;
+            case '/taxProd':
+                this.setState({activeItem: 'taxProd'});
+                break;
         }
     }
 
     render() {
         const {activeItem} = this.state
         return (
-            <header style={{ padding: '3rem', backgroundColor: '#f0f0f0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <header style={{padding: '1rem', backgroundColor: '#f0f0f0'}}>
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                     <div>
                         <Link to={'/'}>
-                            <h1 style={{ margin: 0 }}>Legislation rules editor</h1>
+                            <h1 style={{margin: 0}}>Legislation rules editor</h1>
                         </Link>
                     </div>
-                    <Menu secondary>
-                        <MenuItem
-                            name='migration'
-                            active={activeItem === 'mig'}
-                            href={'/mig'}
-                        />
-                        <MenuItem
-                            name='social security'
-                            active={activeItem === 'socSec'}
-                            href={'/socSec'}
-                        />
-                        <MenuItem
-                            name='tax'
-                            active={activeItem === 'tax'}
-                            href={'/tax'}
-                        />
-                    </Menu>
+                    <div>
+                        <Menu secondary>
+                            <MenuItem
+                                name='migration'
+                                active={activeItem === 'mig'}
+                                href={'/mig'}
+                            />
+                            <MenuItem
+                                name='social security'
+                                active={activeItem === 'socSec'}
+                                href={'/socSec'}
+                            />
+                            <MenuItem
+                                name='tax'
+                                active={activeItem === 'tax'}
+                                href={'/tax'}
+                            />
+                        </Menu>
+                        <Menu secondary>
+                            <MenuItem
+                                name='migration ⚠️'
+                                active={activeItem === 'migProd'}
+                                href={'/migProd'}
+                            />
+                            <MenuItem
+                                name='social security ⚠️'
+                                active={activeItem === 'socSecProd'}
+                                href={'/socSecProd'}
+                            />
+                            <MenuItem
+                                name='tax ⚠️'
+                                active={activeItem === 'taxProd'}
+                                href={'/taxProd'}
+                            />
+                        </Menu>
+                    </div>
                 </div>
             </header>
         );

@@ -18,6 +18,9 @@ import TableFilters from "../tableFilters/TableFilters";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import {handleSort} from "../../utils/tableSortUtil";
 import renderTableHeaderCell from "./TableHeaderUtil";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ProductionToastr from "./ProductionToastr";
 
 type MigKeys = keyof Mig; // Type representing keys of Mig interface
 
@@ -77,6 +80,7 @@ function TableViewMig({isProduction}: { isProduction: boolean }) {
 
     return (
         <div>
+            {isProduction && <ProductionToastr />}
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
 
                 <TableFilters fieldsConfig={fieldsConfig}

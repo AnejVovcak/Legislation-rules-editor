@@ -1,0 +1,7 @@
+export enum SourceTrackingEnum {
+    LEGAL_ACT = 'LEGAL_ACT',
+    FORM = 'FORM',
+    CONTACT = 'CONTACT',
+    OFFICIAL_WEBSITE = 'OFFICIAL_WEBSITE',
+    UNOFFICIAL_WEBSITE = 'UNOFFICIAL_WEBSITE',
+}

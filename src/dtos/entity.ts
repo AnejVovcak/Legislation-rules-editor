@@ -1,10 +1,12 @@
 import {OutEnum} from "../enums/OutEnum";
 import {InEnum} from "../enums/InEnum";
+import {SourceTrackingEnum} from "../enums/SourceTrackingEnum";
 
 export interface Source {
     source: string;
     xpath: string;
     md5_hash: string;
+    type: SourceTrackingEnum;
 }
 
 export interface Entity {

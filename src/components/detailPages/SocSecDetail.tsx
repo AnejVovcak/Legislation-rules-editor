@@ -14,11 +14,12 @@ import {OutEnum} from "../../enums/OutEnum";
 import {InEnum} from "../../enums/InEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
 import ReactQuill from "react-quill";
-import {getFormOptions, performAction} from "../../utils/detailPageUtil";
+import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
 import {SocSec} from "../../dtos/socSec";
 import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
 import {StatueEnum} from "../../enums/StatueEnum";
 import Sources from "./Sources";
+import {CollectionEnum} from "../../enums/CollectionEnum";
 
 function SocSecDetail() {
     const {id} = useParams();
@@ -53,26 +54,17 @@ function SocSecDetail() {
         }
     }, [id, navigate]);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handleSubmitWrapper = async () => {
+        handleSubmit(data,setData, id, navigate, setSuccess, setError, 'socSecStaging', 'socSec')
+    };
 
-        //parse data.content
-        // change <a href="[info]bbb">aaa</a> to <span class="tooltip">aaa<span class="tooltip-content">bbb</span></span>
-        // only if there is a href="[info] in the content
-        // it is a string
-        const content = data.content;
-        const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
-        const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
-        const newContent = content.replace(regex, subst);
-        setData(prev => ({...prev, content: newContent}));
-
-        performAction(id, data, navigate, setSuccess, setError, 'socSecStaging', 'socSec').then(() => {
-            console.log(success, error)
-        })
+    const handleProductionPush = async () => {
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.SOC_SEC_STAGING, 'socSec')
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.SOC_SEC_PRODUCTION, 'socSec')
     };
 
     return (
-        <Form onSubmit={handleSubmit} error={error} success={success}>
+        <Form error={error} success={success}>
 
             <FormGroup widths='equal'>
                 <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
@@ -173,8 +165,9 @@ function SocSecDetail() {
                 header='Error'
                 content='There was an error with your submission. Please try again.'
             />
-            <Button positive type="submit">Submit</Button>
+            <Button positive onClick={handleSubmitWrapper}>Submit</Button>
             <Button negative onClick={() => navigate('/socSec')}>Cancel</Button>
+            {id !== "new" && id && <Button negative onClick={handleProductionPush}>Push on production</Button>}
         </Form>
     );
 }

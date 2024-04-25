@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import { getById } from "../../api/api";
+import {getById} from "../../api/api";
 import {
     Button,
     Form,
@@ -19,8 +19,9 @@ import {NatEnum} from "../../enums/NatEnum";
 import {OutTitleEnum} from "../../enums/OutTitleEnum";
 import {InTitleEnum} from "../../enums/InTitleEnum";
 import {MigTimeEnum} from "../../enums/MigTimeEnum";
-import {getFormOptions, performAction} from "../../utils/detailPageUtil";
+import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
+import {CollectionEnum} from "../../enums/CollectionEnum";
 
 function MigDetail() {
     const {id} = useParams();
@@ -50,31 +51,22 @@ function MigDetail() {
             });
         } else {
             setData({} as Mig)
-            setData(prev => ({...prev, time: [],article: []}))
+            setData(prev => ({...prev, time: [], article: []}))
         }
     }, [id, navigate]);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {      
-        event.preventDefault();
+    const handleSubmitWrapper = async () => {
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.MIG_STAGING, 'mig')
+    };
 
-        //parse data.content
-        // change <a href="[info]bbb">aaa</a> to <span class="tooltip">aaa<span class="tooltip-content">bbb</span></span>
-        // only if there is a href="[info] in the content
-        // it is a string
-        const content = data.content;
-        const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
-        const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
-        const newContent = content.replace(regex, subst);
-        setData(prev => ({...prev, content: newContent}));
-
-        performAction(id, data, navigate, setSuccess, setError, 'migStaging', 'mig').then(() => {
-            console.log(success, error)
-        })
+    const handleProductionPush = async () => {
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.MIG_STAGING, 'mig')
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.MIG_PRODUCTION, 'mig')
     };
 
 
     return (
-        <Form onSubmit={handleSubmit} error={error} success={success}>
+        <Form error={error} success={success}>
 
             <FormGroup widths='equal'>
                 <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
@@ -174,7 +166,8 @@ function MigDetail() {
                     }))}
                 />
             </FormGroup>
-            For info on request use the same tool as for links, just put the text instead of a link, and in front of the text put [info]
+            For info on request use the same tool as for links, just put the text instead of a link, and in front of the
+            text put [info]
             <FormGroup inline widths='equal'>
                 <ReactQuill theme="snow" value={data.content}
                             onChange={(value) => setData(prev => ({
@@ -182,7 +175,7 @@ function MigDetail() {
                             }))}/>
             </FormGroup>
 
-            <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
+            <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
             <Message
                 hidden={!success}
                 success
@@ -195,9 +188,9 @@ function MigDetail() {
                 header='Error'
                 content='There was an error with your submission. Please try again.'
             />
-            <Button positive type='submit'>Submit</Button>
+            <Button positive onClick={handleSubmitWrapper}>Submit</Button>
             <Button negative onClick={() => navigate('/mig')}>Cancel</Button>
-
+            {id !== "new" && id && <Button negative onClick={handleProductionPush}>Push on production</Button>}
         </Form>
     );
 }

@@ -11,13 +11,32 @@ import Login from "./components/login/Login";
 import 'react-quill/dist/quill.snow.css';
 import MigDetail from "./components/detailPages/MigDetail";
 import SocSecDetail from "./components/detailPages/SocSecDetail";
+import {columnsMig, fieldsConfigMig} from "./components/tableView/configObjects";
+import {CollectionEnum} from "./enums/CollectionEnum";
+import {DataType} from "./enums/DataType";
+import {Mig} from "./dtos/mig";
 
 function App() {
+
     return (
         <Routes>
             <Route path="/" element={<Layout><MainPage /></Layout>} />
-            <Route path="/mig" element={<Layout><TableViewMig isProduction={false}/></Layout>} />
-            <Route path="/migProd" element={<Layout><TableViewMig isProduction={true}/></Layout>} />
+            <Route path="/mig" element={<Layout><TableViewMig<Mig>
+                dataType={DataType.MIG}
+                isProduction={false}
+                columns={columnsMig}
+                filterFields={fieldsConfigMig}
+                newObjectUrl={'/mig/new'}
+                collection={CollectionEnum.MIG_STAGING}
+            /></Layout>} />
+            <Route path="/migProd" element={<Layout><TableViewMig
+                dataType={DataType.MIG}
+                isProduction={true}
+                columns={columnsMig}
+                filterFields={fieldsConfigMig}
+                newObjectUrl={'/mig/new'}
+                collection={CollectionEnum.MIG_PRODUCTION}
+            /></Layout>} />
             <Route path="/socSec" element={<Layout><TableViewSocSec isProduction={false}/></Layout>} />
             <Route path="/socSecProd" element={<Layout><TableViewSocSec isProduction={true}/></Layout>} />
             <Route path="/tax" element={<Layout><TableViewTax isProduction={false}/></Layout>} />

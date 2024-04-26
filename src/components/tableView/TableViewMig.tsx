@@ -18,7 +18,6 @@ import TableFilters from "../tableFilters/TableFilters";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import {handleSort} from "../../utils/tableSortUtil";
 import renderTableHeaderCell from "./TableHeaderUtil";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProductionToastr from "./ProductionToastr";
 
@@ -33,6 +32,7 @@ function TableViewMig({isProduction}: { isProduction: boolean }) {
     const [filters, setFilters] = useState<Record<string, string[]>>({});
     const [column, setColumn] = useState<MigKeys>('title');
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
+    const [isFirstSorted, setIsFirstSorted] = useState<boolean>(false);
 
 
     const request: MongoRequest = {
@@ -57,6 +57,15 @@ function TableViewMig({isProduction}: { isProduction: boolean }) {
         fetchData()
     }, []); // Empty dependency array means this effect runs once on mount
 
+    useEffect(() => {
+        // Sort only once
+        if (!isFirstSorted && data.length > 0) {
+            setData(handleSort('title', data, column, setColumn, direction, setDirection, true));
+            setIsFirstSorted(true);
+        }
+    }, [data, isFirstSorted]);
+
+
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
         getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
@@ -71,7 +80,7 @@ function TableViewMig({isProduction}: { isProduction: boolean }) {
     }, [filters]); // Re-fetch data whenever filters change
 
     const handleSortClick = (clickedColumn: MigKeys) => () => {
-        return handleSort(clickedColumn, data, setData, column, setColumn, direction, setDirection);
+        setData(handleSort(clickedColumn, data, column, setColumn, direction, setDirection));
     };
 
     const renderTableHeaderCellCaller = (label: string, key: MigKeys) => {
@@ -80,7 +89,7 @@ function TableViewMig({isProduction}: { isProduction: boolean }) {
 
     return (
         <div>
-            {isProduction && <ProductionToastr />}
+            {isProduction && <ProductionToastr/>}
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
 
                 <TableFilters fieldsConfig={fieldsConfig}

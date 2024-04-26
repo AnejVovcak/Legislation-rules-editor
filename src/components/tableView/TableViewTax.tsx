@@ -27,6 +27,7 @@ function TableViewTax({isProduction}: { isProduction: boolean }) {
     const [filters, setFilters] = useState<Record<string, string[]>>({});
     const [column, setColumn] = useState<TaxKeys>('title');
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
+    const [isFirstSorted, setIsFirstSorted] = useState<boolean>(false);
 
     const fieldsConfig = [
         {fieldName: 'in_value', enumType: InEnum},
@@ -47,6 +48,14 @@ function TableViewTax({isProduction}: { isProduction: boolean }) {
         fetchData()
     }, []); // Empty dependency array means this effect runs once on mount
 
+    useEffect(() => {
+        // Sort only once
+        if (!isFirstSorted && data.length > 0) {
+            setData(handleSort('title', data, column, setColumn, direction, setDirection, true));
+            setIsFirstSorted(true);
+        }
+    }, [data, isFirstSorted]);
+
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
         getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
@@ -61,7 +70,7 @@ function TableViewTax({isProduction}: { isProduction: boolean }) {
     }, [filters]); // Re-fetch data whenever filters change
 
     const handleSortClick = (clickedColumn: TaxKeys) => () => {
-        return handleSort(clickedColumn, data, setData, column, setColumn, direction, setDirection);
+        setData(handleSort(clickedColumn, data, column, setColumn, direction, setDirection))
     };
 
     const renderTableHeaderCellCaller = (label: string, key: TaxKeys) => {

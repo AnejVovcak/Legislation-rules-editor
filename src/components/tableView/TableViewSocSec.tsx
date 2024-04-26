@@ -27,6 +27,7 @@ function TableViewSocSec({isProduction}: { isProduction: boolean }) {
     const [filters, setFilters] = useState<Record<string, string[]>>({});
     const [column, setColumn] = useState<SocSecKeys>('title');
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
+    const [isFirstSorted, setIsFirstSorted] = useState<boolean>(false);
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
@@ -48,6 +49,14 @@ function TableViewSocSec({isProduction}: { isProduction: boolean }) {
         fetchData()
     }, []); // Empty dependency array means this effect runs once on mount
 
+    useEffect(() => {
+        // Sort only once
+        if (!isFirstSorted && data.length > 0) {
+            setData(handleSort('title', data, column, setColumn, direction, setDirection, true));
+            setIsFirstSorted(true);
+        }
+    }, [data, isFirstSorted]);
+
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
         getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
@@ -62,7 +71,7 @@ function TableViewSocSec({isProduction}: { isProduction: boolean }) {
     }, [filters]); // Re-fetch data whenever filters change
 
     const handleSortClick = (clickedColumn: SocSecKeys) => () => {
-        return handleSort(clickedColumn, data, setData, column, setColumn, direction, setDirection);
+        setData(handleSort(clickedColumn, data, column, setColumn, direction, setDirection))
     };
 
     const renderTableHeaderCellCaller = (label: string, key: SocSecKeys) => {
@@ -71,7 +80,7 @@ function TableViewSocSec({isProduction}: { isProduction: boolean }) {
 
     return (
         <div>
-            {isProduction && <ProductionToastr />}
+            {isProduction && <ProductionToastr/>}
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                 <TableFilters fieldsConfig={fieldsConfig}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>

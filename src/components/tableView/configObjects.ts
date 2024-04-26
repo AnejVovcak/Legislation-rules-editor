@@ -12,9 +12,12 @@ import {SocSec} from "../../dtos/socSec";
 import {StatueEnum} from "../../enums/StatueEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
 import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
+import {TaxEnum} from "../../enums/TaxEnum";
+import {Tax} from "../../dtos/tax";
 
 type MigKeys = keyof Mig
 type SocSecKeys = keyof SocSec
+type TaxKeys = keyof Tax
 
 export const fieldsConfigMig = [
     {fieldName: 'covered', enumType: CoveredEnum},
@@ -36,6 +39,15 @@ export const fieldsConfigSocSec = [
     {fieldName: 'statute', enumType: StatueEnum},
     {fieldName: 'empl', enumType: EmplEnum},
     {fieldName: 'if_empl0_eq_empl1', enumType: Empl0EQEmpl1Enum}
+]
+
+export const fieldsConfigTax = [
+    {fieldName: 'in_value', enumType: InEnum},
+    {fieldName: 'out_value', enumType: OutEnum},
+    {fieldName: 'covered', enumType: CoveredEnum},
+    {fieldName: 'article', enumType: ArticleEnum},
+    {fieldName: 'empl', enumType: EmplEnum},
+    {fieldName: 'tax', enumType: TaxEnum}
 ]
 
 export const columnsMig : {label:string, key:MigKeys}[] = [
@@ -63,5 +75,17 @@ export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
     {label: 'STATUTE', key: 'statute'},
     {label: 'EMPL', key: 'empl'},
     {label: 'IF EMPL0 EQ EMPL1', key: 'if_empl0_eq_empl1'},
-    {label: 'LAST UPDATED', key: 'last_modified'}
+    {label: 'LAST MODIFIED', key: 'last_modified'}
 ]
+
+export const columnsTax: { label: string, key: TaxKeys }[] = [
+    {label: 'TITLE', key: 'title'},
+    {label: 'CONTENT', key: 'content'},
+    {label: 'IN', key: 'in_value'},
+    {label: 'OUT', key: 'out_value'},
+    {label: 'ARTICLE', key: 'article'},
+    {label: 'COVERED', key: 'covered'},
+    {label: 'EMPL', key: 'empl'},
+    {label: 'TAX', key: 'tax'},
+    {label: 'LAST MODIFIED', key: 'last_modified'}
+];

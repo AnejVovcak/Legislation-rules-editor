@@ -13,6 +13,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProductionToastr from "./ProductionToastr";
 import {DataType} from "../../enums/DataType";
 import MigBody from "./tableBodies/MigBody";
+import SocSecBody from "./tableBodies/SocSecBody";
+import TaxBody from "./tableBodies/TaxBody";
+import {SocSec} from "../../dtos/socSec";
+import {Tax} from "../../dtos/tax";
 
 type TableViewMigProps <T> = {
     dataType: DataType;
@@ -23,7 +27,7 @@ type TableViewMigProps <T> = {
     collection: CollectionEnum;
 }
 
-function TableViewMig<T>({dataType, isProduction, filterFields, columns, newObjectUrl, collection}: TableViewMigProps<T>) {
+function TableView<T>({dataType, isProduction, filterFields, columns, newObjectUrl, collection}: TableViewMigProps<T>) {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<T[]>([]);
@@ -90,9 +94,11 @@ function TableViewMig<T>({dataType, isProduction, filterFields, columns, newObje
                     </TableRow>
                 </TableHeader>
                 {dataType === DataType.MIG && <MigBody data={data as unknown as Mig[]} isProduction={isProduction}/>}
+                {dataType === DataType.SOC_SEC && <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction}/>}
+                {dataType === DataType.TAX && <TaxBody data={data as unknown as Tax[]} isProduction={isProduction}/>}
             </Table>
         </div>
     );
 }
 
-export default TableViewMig;
+export default TableView;

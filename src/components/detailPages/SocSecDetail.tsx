@@ -20,6 +20,7 @@ import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
 import {StatueEnum} from "../../enums/StatueEnum";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
+import TextEditor from "./textEditor/TextEditor";
 
 function SocSecDetail() {
     const {id} = useParams();
@@ -147,10 +148,11 @@ function SocSecDetail() {
             </FormGroup>
             For info on request use the same tool as for links, just put the text instead of a link, and in front of the text put [info]
             <FormGroup inline widths='equal'>
-                <ReactQuill theme="snow" value={data.content}
+                <TextEditor value={data.content}
                             onChange={(value) => setData(prev => ({
                                 ...prev, content: value
-                            }))}/>
+                            }))}
+                />
             </FormGroup>
             <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
             <Message

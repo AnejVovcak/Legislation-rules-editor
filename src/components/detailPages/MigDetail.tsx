@@ -22,6 +22,7 @@ import {MigTimeEnum} from "../../enums/MigTimeEnum";
 import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
+import TextEditor from "./textEditor/TextEditor";
 
 function MigDetail() {
     const {id} = useParams();
@@ -169,10 +170,11 @@ function MigDetail() {
             For info on request use the same tool as for links, just put the text instead of a link, and in front of the
             text put [info]
             <FormGroup inline widths='equal'>
-                <ReactQuill theme="snow" value={data.content}
-                            onChange={(value) => setData(prev => ({
-                                ...prev, content: value
-                            }))}/>
+                <TextEditor value={data.content}
+                        onChange={(value) => setData(prev => ({
+                            ...prev, content: value
+                        }))}
+                />
             </FormGroup>
 
             <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>

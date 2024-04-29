@@ -11,7 +11,9 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
         <TableBody>
             {data.map((item, index) => (
                 <tr key={index} onClick={() =>
-                    isProduction ? {} : navigate(`/mig/${item._id as string}`)}>
+                    //isProduction ? {} : navigate(`/mig/${item._id as string}`)}>
+                    //open in new page
+                    isProduction   ? {} : window.open(`/mig/${item._id as string}`, "_blank")}>
                     {/* Render table cells as per your data structure */}
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}

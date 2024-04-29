@@ -11,7 +11,9 @@ function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolea
         <TableBody>
             {data.map((item, index) => (
                 <tr key={index} onClick={() =>
-                    isProduction ? {} : navigate(`/socSec/${item._id as string}`)}>
+                    //isProduction ? {} : navigate(`/socSec/${item._id as string}`)}>
+                    //open in new page
+                    isProduction   ? {} : window.open(`/socSec/${item._id as string}`, "_blank")}>
                     {/* Render table cells as per your data structure */}
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}

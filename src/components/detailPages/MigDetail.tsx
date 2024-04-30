@@ -1,18 +1,17 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getById} from "../../api/api";
 import {
     Button,
     Form,
     FormGroup,
     FormInput,
-    FormSelect, Message,
+    FormSelect, Message, Modal, ModalActions, ModalContent, ModalHeader,
 } from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
 import {OutEnum} from "../../enums/OutEnum";
 import {InEnum} from "../../enums/InEnum";
-import ReactQuill from "react-quill";
 import {Mig} from "../../dtos/mig";
 import {SecondmentEnum} from "../../enums/SecondmentEnum";
 import {NatEnum} from "../../enums/NatEnum";
@@ -23,6 +22,7 @@ import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
+import ModalWarning from "./ModalWarning";
 
 function MigDetail() {
     const {id} = useParams();
@@ -30,6 +30,7 @@ function MigDetail() {
     const [data, setData] = useState<Mig>({} as Mig);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         if (id !== "new" && id) {
@@ -171,9 +172,9 @@ function MigDetail() {
             text put [info]
             <FormGroup inline widths='equal'>
                 <TextEditor value={data.content}
-                        onChange={(value) => setData(prev => ({
-                            ...prev, content: value
-                        }))}
+                            onChange={(value) => setData(prev => ({
+                                ...prev, content: value
+                            }))}
                 />
             </FormGroup>
 
@@ -192,7 +193,10 @@ function MigDetail() {
             />
             <Button positive onClick={handleSubmitWrapper}>Submit</Button>
             <Button negative onClick={() => navigate('/mig')}>Cancel</Button>
-            {id !== "new" && id && <Button negative onClick={handleProductionPush}>Push on production</Button>}
+            {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
+                Push on production
+            </Button>}
+            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen} handleProductionPush={handleProductionPush}/>
         </Form>
     );
 }

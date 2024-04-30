@@ -20,6 +20,7 @@ import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
+import ModalWarning from "./ModalWarning";
 
 function TaxDetail() {
     const {id} = useParams();
@@ -27,6 +28,7 @@ function TaxDetail() {
     const [data, setData] = useState<Tax>({} as Tax);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -157,7 +159,8 @@ function TaxDetail() {
             />
             <Button positive onClick={handleSubmitWrapper}>Submit</Button>
             <Button negative onClick={() => navigate('/tax')}>Cancel</Button>
-            {id !== "new" && id && <Button negative onClick={handleProductionPush}>Push on production</Button>}
+            {id !== "new" && id && <Button negative onClick={()=>setModalOpen(true)}>Push on production</Button>}
+            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen} handleProductionPush={handleProductionPush}/>
         </Form>
     );
 }

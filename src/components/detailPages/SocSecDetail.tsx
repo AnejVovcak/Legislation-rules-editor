@@ -21,6 +21,7 @@ import {StatueEnum} from "../../enums/StatueEnum";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
+import ModalWarning from "./ModalWarning";
 
 function SocSecDetail() {
     const {id} = useParams();
@@ -28,6 +29,7 @@ function SocSecDetail() {
     const [data, setData] = useState<SocSec>({} as SocSec);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -169,7 +171,8 @@ function SocSecDetail() {
             />
             <Button positive onClick={handleSubmitWrapper}>Submit</Button>
             <Button negative onClick={() => navigate('/socSec')}>Cancel</Button>
-            {id !== "new" && id && <Button negative onClick={handleProductionPush}>Push on production</Button>}
+            {id !== "new" && id && <Button negative onClick={()=>setModalOpen(true)}>Push on production</Button>}
+            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen} handleProductionPush={handleProductionPush}/>
         </Form>
     );
 }

@@ -5,8 +5,6 @@ import React from "react";
 
 function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolean }) {
 
-    const navigate = useNavigate(); // For navigation
-
     return (
         <TableBody>
             {data.map((item, index) => (

@@ -4,9 +4,6 @@ import {TableBody} from "semantic-ui-react";
 import {useNavigate} from "react-router-dom";
 
 function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
-
-    const navigate = useNavigate(); // For navigation
-
     return (
         <TableBody>
             {data.map((item, index) => (

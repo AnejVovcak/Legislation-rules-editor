@@ -5,8 +5,6 @@ import {Tax} from "../../../dtos/tax";
 
 function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
 
-    const navigate = useNavigate(); // For navigation
-
     return (
         <TableBody>
             {data.map((item, index) => (

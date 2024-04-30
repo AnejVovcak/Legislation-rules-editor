@@ -7,6 +7,7 @@ export interface Source {
     xpath: string;
     md5_hash: string;
     type: SourceTrackingEnum;
+    validated: boolean;
 }
 
 export interface Entity {
@@ -17,7 +18,6 @@ export interface Entity {
     out_value: OutEnum;
     title: string;
     source: Source[],
-    validated: boolean;
     last_modified: string;
     last_modified_by: string;
 }

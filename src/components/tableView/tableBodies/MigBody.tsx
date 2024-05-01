@@ -2,6 +2,7 @@ import {Mig} from "../../../dtos/mig";
 import React from "react";
 import {TableBody} from "semantic-ui-react";
 import SemanticLabel from "./SemanticLabel";
+import truncateHtml from "../../../utils/tableViewBodyUtil";
 
 function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
     return (
@@ -14,7 +15,7 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
                     {/* Render table cells as per your data structure */}
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
-                    <td dangerouslySetInnerHTML={{__html: item.content}}/>
+                    <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content,500)}}/>
                     <td><SemanticLabel value={item.in_value}/></td>
                     <td><SemanticLabel value={item.out_value}/></td>
                     <td>{item.article.map((article, index) => (
@@ -35,6 +36,10 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>
+                    </td>
+                    <td>
+                        {/*emojis from https://emojipedia.org/*/}
+                        {item.published ? '✅' : '❌'}
                     </td>
                 </tr>
             ))}

@@ -20,4 +20,5 @@ export interface Entity {
     source: Source[],
     last_modified: string;
     last_modified_by: string;
+    published: boolean;
 }

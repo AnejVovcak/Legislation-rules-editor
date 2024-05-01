@@ -62,7 +62,8 @@ export const columnsMig : {label:string, key:MigKeys}[] = [
     {label: 'OUT TITLE', key: 'out_title'},
     {label: 'SECONDMENT', key: 'secondment'},
     {label: 'TIME', key: 'time'},
-    {label: 'LAST MODIFIED', key: 'last_modified'}
+    {label: 'LAST MODIFIED', key: 'last_modified'},
+    {label: 'PUBLISHED', key: 'published'}
 ];
 
 export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
@@ -75,7 +76,8 @@ export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
     {label: 'STATUTE', key: 'statute'},
     {label: 'EMPL', key: 'empl'},
     {label: 'IF EMPL0 EQ EMPL1', key: 'if_empl0_eq_empl1'},
-    {label: 'LAST MODIFIED', key: 'last_modified'}
+    {label: 'LAST MODIFIED', key: 'last_modified'},
+    {label: 'PUBLISHED', key: 'published'}
 ]
 
 export const columnsTax: { label: string, key: TaxKeys }[] = [
@@ -87,5 +89,6 @@ export const columnsTax: { label: string, key: TaxKeys }[] = [
     {label: 'COVERED', key: 'covered'},
     {label: 'EMPL', key: 'empl'},
     {label: 'TAX', key: 'tax'},
-    {label: 'LAST MODIFIED', key: 'last_modified'}
+    {label: 'LAST MODIFIED', key: 'last_modified'},
+    {label: 'PUBLISHED', key: 'published'}
 ];

@@ -174,9 +174,12 @@ function TaxDetail() {
                         Push on production
                     </Button>}
                 </div>
-                <div style={{fontStyle: 'italic', color: 'grey'}}>
-                    <div>last modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
-                </div>
+                {id && id !== "new" &&
+                    <div style={{fontStyle: 'italic', color: 'grey'}}>
+                        <div>last
+                            modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
+                    </div>
+                }
             </div>
             <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
                           handleProductionPush={handleProductionPush}/>

@@ -18,11 +18,11 @@ import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 
-type TableViewMigProps <T> = {
+type TableViewMigProps<T> = {
     dataType: DataType;
     isProduction: boolean;
     filterFields: { fieldName: string, enumType: any }[];
-    columns: { label: string, key: keyof T}[];
+    columns: { label: string, key: keyof T }[];
     newObjectUrl: string;
     collection: CollectionEnum;
 }
@@ -31,7 +31,6 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<T[]>([]);
-    const navigate = useNavigate(); // For navigation
     const [filters, setFilters] = useState<Record<string, string[]>>({});
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
@@ -82,8 +81,14 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
                 <TableFilters fieldsConfig={filterFields}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
-                <Button onClick={() =>
-                    isProduction ? {} : navigate(newObjectUrl)}>Add new</Button>
+                {!isProduction &&
+                    <Button
+                        className="fixed-button"
+                        primary
+                        size='large'
+                        onClick={() =>
+                            window.open(newObjectUrl)}>Add new</Button>
+                }
             </div>
             <Table celled sortable selectable>
                 <TableHeader>
@@ -94,7 +99,8 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
                     </TableRow>
                 </TableHeader>
                 {dataType === DataType.MIG && <MigBody data={data as unknown as Mig[]} isProduction={isProduction}/>}
-                {dataType === DataType.SOC_SEC && <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction}/>}
+                {dataType === DataType.SOC_SEC &&
+                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction}/>}
                 {dataType === DataType.TAX && <TaxBody data={data as unknown as Tax[]} isProduction={isProduction}/>}
             </Table>
         </div>

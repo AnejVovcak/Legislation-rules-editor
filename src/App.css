@@ -50,3 +50,10 @@
 .ui.table thead th{
   border-bottom: 2px solid #ccc !important; /* Using !important to ensure override */
 }
+
+.fixed-button {
+  position: fixed;
+  bottom: 20px;   /* Distance from the bottom of the viewport */
+  right: 20px;    /* Distance from the right side of the viewport */
+  z-index: 1000;  /* Ensure it sits on top of other content */
+}

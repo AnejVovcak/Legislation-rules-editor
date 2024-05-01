@@ -58,7 +58,7 @@ function SocSecDetail() {
     }, [id, navigate]);
 
     const handleSubmitWrapper = async () => {
-        handleSubmit(data,setData, id, navigate, setSuccess, setError, 'socSecStaging', 'socSec')
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, 'socSecStaging', 'socSec')
     };
 
     const handleProductionPush = async () => {
@@ -160,7 +160,8 @@ function SocSecDetail() {
                     }))}
                 />
             </FormGroup>
-            For info on request use the same tool as for links, just put the text instead of a link, and in front of the text put [info]
+            For info on request use the same tool as for links, just put the text instead of a link, and in front of the
+            text put [info]
             <FormGroup inline widths='equal'>
                 <TextEditor value={data.content}
                             onChange={(value) => setData(prev => ({
@@ -168,7 +169,7 @@ function SocSecDetail() {
                             }))}
                 />
             </FormGroup>
-            <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
+            <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
             <Message
                 hidden={!success}
                 success
@@ -189,9 +190,12 @@ function SocSecDetail() {
                         Push on production
                     </Button>}
                 </div>
-                <div style={{fontStyle: 'italic', color: 'grey'}}>
-                    <div>last modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
-                </div>
+                {id && id !== "new" &&
+                    <div style={{fontStyle: 'italic', color: 'grey'}}>
+                        <div>last
+                            modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
+                    </div>
+                }
             </div>
             <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
                           handleProductionPush={handleProductionPush}/>

@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {ReactNode, useEffect, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {getById} from "../../api/api";
 import {Tax} from "../../dtos/tax";
 import {
@@ -144,7 +144,8 @@ function TaxDetail() {
                     }))}
                 />
             </FormGroup>
-            For info on request use the same tool as for links, just put the text instead of a link, and in front of the text put [info]
+            For info on request use the same tool as for links, just put the text instead of a link, and in front of the
+            text put [info]
             <FormGroup inline widths='equal'>
                 <TextEditor value={data.content}
                             onChange={(value) => setData(prev => ({
@@ -152,7 +153,7 @@ function TaxDetail() {
                             }))}
                 />
             </FormGroup>
-            <Sources sources={data.source || []} setSources={(newSources) => setData({ ...data, source: newSources })} />
+            <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
             <Message
                 hidden={!success}
                 success
@@ -165,10 +166,18 @@ function TaxDetail() {
                 header='Error'
                 content='There was an error with your submission. Please try again.'
             />
-            <Button positive onClick={handleSubmitWrapper}>Submit</Button>
-            <Button negative onClick={() => navigate('/tax')}>Cancel</Button>
-            {id !== "new" && id && <Button negative onClick={()=>setModalOpen(true)}>Push on production</Button>}
-            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen} handleProductionPush={handleProductionPush}/>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div>
+                    <Button positive onClick={handleSubmitWrapper}>Submit</Button>
+                    <Button negative onClick={() => navigate('/tax')}>Cancel</Button>
+                    {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
+                        Push on production
+                    </Button>}
+                </div>
+                <div style={{fontStyle: 'italic', color: 'grey'}}>
+                    <div>last modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
+                </div>
+            </div>
         </Form>
     );
 }

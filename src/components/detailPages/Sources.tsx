@@ -27,7 +27,7 @@ const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (s
     };
 
     return (
-        <>
+        <div style={{marginBottom: '20px'}}>
             {sources.map((source, index) => (
                 <FormGroup key={index} widths='equal' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <FormInput
@@ -60,7 +60,7 @@ const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (s
                 </FormGroup>
             ))}
             <Button type="button" onClick={addSource}>Add Source</Button>
-        </>
+        </div>
     );
 };
 

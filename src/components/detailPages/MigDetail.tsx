@@ -200,11 +200,19 @@ function MigDetail() {
                 header='Error'
                 content='There was an error with your submission. Please try again.'
             />
-            <Button positive onClick={handleSubmitWrapper}>Submit</Button>
-            <Button negative onClick={() => navigate('/mig')}>Cancel</Button>
-            {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
-                Push on production
-            </Button>}
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div>
+                    <Button positive onClick={handleSubmitWrapper}>Submit</Button>
+                    <Button negative onClick={() => navigate('/mig')}>Cancel</Button>
+                    {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
+                        Push on production
+                    </Button>}
+                </div>
+                <div style={{fontStyle: 'italic', color: 'grey'}}>
+                    <div>last modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
+                </div>
+            </div>
+
             <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
                           handleProductionPush={handleProductionPush}/>
         </Form>

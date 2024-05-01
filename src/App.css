@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.ui.table tr td{
+  border-bottom: 2px solid #ccc !important; /* Using !important to ensure override */
+}
+
+.ui.table{
+  border-left: 2px solid #ccc !important; /* Using !important to ensure override */
+  border-right: 2px solid #ccc !important; /* Using !important to ensure override */
+  border-top: 2px solid #ccc !important; /* Using !important to ensure override */
+}
+
+.ui.table thead th{
+  border-bottom: 2px solid #ccc !important; /* Using !important to ensure override */
+}

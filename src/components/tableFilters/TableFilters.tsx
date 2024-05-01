@@ -1,5 +1,6 @@
 import {Dropdown} from "semantic-ui-react";
-import {Tax} from "../../dtos/tax";
+import {ReactNode} from "react";
+import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 interface TableFilterProps {
     fieldsConfig: {fieldName: string,enumType: Record<string, string>}[];
@@ -7,10 +8,6 @@ interface TableFilterProps {
 }
 
 const TableFilter = ({ fieldsConfig, onFilterChange }: TableFilterProps) => {
-    const getDropdownOptions = (enumObj: Record<string, string>) => {
-        const values = Object.values(enumObj);
-        return values.map(value => ({ key: value, text: value, value }));
-    };
 
     return (
         <div style={{
@@ -26,8 +23,12 @@ const TableFilter = ({ fieldsConfig, onFilterChange }: TableFilterProps) => {
                     <Dropdown
                         selection
                         multiple
-                        options={getDropdownOptions(field.enumType)}
+                        options={SemanticColorUtil.getDropdownOptions(field.enumType)}
                         onChange={(e, {value}) => onFilterChange(field.fieldName, value as string)}
+                        renderLabel={(label) => ({
+                            color: label.color as string,
+                            content: label.text as ReactNode,
+                        })}
                     />
                 </div>
             ))}

@@ -1,7 +1,7 @@
-import {useNavigate} from "react-router-dom";
 import {TableBody} from "semantic-ui-react";
 import React from "react";
 import {Tax} from "../../../dtos/tax";
+import SemanticLabel from "./SemanticLabel";
 
 function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
 
@@ -16,16 +16,20 @@ function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                    <td>{item.in_value}</td>
-                    <td>{item.out_value}</td>
-                    <td>{item.article.map((time, index) => (
-                        <div key={index}>{time}</div>
+                    <td><SemanticLabel value={item.in_value}/></td>
+                    <td><SemanticLabel value={item.out_value}/></td>
+                    <td>{item.article.map((article, index) => (
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={article} key={index}/>
+                        </div>
                     ))}</td>
-                    <td>{item.covered.map((time, index) => (
-                        <div key={index}>{time}</div>
+                    <td>{item.covered.map((covered, index) => (
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={covered} key={index}/>
+                        </div>
                     ))}</td>
-                    <td>{item.empl}</td>
-                    <td>{item.tax}</td>
+                    <td><SemanticLabel value={item.empl}/></td>
+                    <td><SemanticLabel value={item.tax}/></td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

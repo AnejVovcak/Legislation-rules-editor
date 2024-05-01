@@ -1,7 +1,7 @@
 import {Mig} from "../../../dtos/mig";
 import React from "react";
 import {TableBody} from "semantic-ui-react";
-import {useNavigate} from "react-router-dom";
+import SemanticLabel from "./SemanticLabel";
 
 function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
     return (
@@ -10,23 +10,27 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
                 <tr key={index} onClick={() =>
                     //isProduction ? {} : navigate(`/mig/${item._id as string}`)}>
                     //open in new page
-                    isProduction   ? {} : window.open(`/mig/${item._id as string}`, "_blank")}>
+                    isProduction ? {} : window.open(`/mig/${item._id as string}`, "_blank")}>
                     {/* Render table cells as per your data structure */}
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: item.content}}/>
-                    <td>{item.in_value}</td>
-                    <td>{item.out_value}</td>
-                    <td>{item.article.map((time, index) => (
-                        <div key={index}>{time}</div>
+                    <td><SemanticLabel value={item.in_value}/></td>
+                    <td><SemanticLabel value={item.out_value}/></td>
+                    <td>{item.article.map((article, index) => (
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={article} key={index}/>
+                        </div>
                     ))}</td>
-                    <td>{item.covered}</td>
-                    <td>{item.in_title}</td>
-                    <td>{item.nat}</td>
-                    <td>{item.out_title}</td>
-                    <td>{item.secondment}</td>
+                    <td><SemanticLabel value={item.covered}/></td>
+                    <td><SemanticLabel value={item.in_title}/></td>
+                    <td><SemanticLabel value={item.nat}/></td>
+                    <td><SemanticLabel value={item.out_title}/></td>
+                    <td><SemanticLabel value={item.secondment}/></td>
                     <td>{item.time.map((time, index) => (
-                        <div key={index}>{time}</div>
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={time} key={index}/>
+                        </div>
                     ))}</td>
                     <td>
                         <div>{item.last_modified_by}</div>

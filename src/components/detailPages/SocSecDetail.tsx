@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {getById} from "../../api/api";
 import {
     Button,
@@ -13,8 +13,7 @@ import {ArticleEnum} from "../../enums/ArticleEnum";
 import {OutEnum} from "../../enums/OutEnum";
 import {InEnum} from "../../enums/InEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
-import ReactQuill from "react-quill";
-import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
+import {handleSubmit} from "../../utils/detailPageUtil";
 import {SocSec} from "../../dtos/socSec";
 import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
 import {StatueEnum} from "../../enums/StatueEnum";
@@ -22,6 +21,7 @@ import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
 import ModalWarning from "./ModalWarning";
+import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 function SocSecDetail() {
     const {id} = useParams();
@@ -82,31 +82,43 @@ function SocSecDetail() {
                     multiple={true}
                     label='Covered'
                     value={data.covered || []}
-                    options={getFormOptions(CoveredEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(CoveredEnum)}
                     onChange={(e, {value}) =>
                         setData(prev => ({...prev, covered: value as CoveredEnum[]}))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
                 <FormSelect
                     fluid
                     label='Article'
                     multiple={true}
                     value={data.article || []}
-                    options={getFormOptions(ArticleEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(ArticleEnum)}
                     onChange={(e, {value}) =>
                         setData(prev => ({
                             ...prev, article: value as ArticleEnum[]
                         }))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
                 <FormSelect
                     fluid
                     value={data.statute || []}
                     label='Statue'
                     multiple={true}
-                    options={getFormOptions(StatueEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(StatueEnum)}
                     onChange={(e, {value}) =>
                         setData(prev => ({
                             ...prev, statute: value as StatueEnum[]
                         }))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
             </FormGroup>
             <FormGroup inline widths='equal'>
@@ -114,7 +126,7 @@ function SocSecDetail() {
                     fluid
                     value={data.out_value || ''}
                     label='Out Value'
-                    options={getFormOptions(OutEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(OutEnum)}
                     onChange={(e, {value}) =>
                         setData(prev => ({
                             ...prev, out_value: value as OutEnum
@@ -124,7 +136,7 @@ function SocSecDetail() {
                     fluid
                     value={data.in_value || ''}
                     label='In Value'
-                    options={getFormOptions(InEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(InEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, in_value: value as InEnum
                     }))}
@@ -133,7 +145,7 @@ function SocSecDetail() {
                     fluid
                     value={data.empl || ''}
                     label='Empl'
-                    options={getFormOptions(EmplEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(EmplEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, empl: value as EmplEnum
                     }))}
@@ -142,7 +154,7 @@ function SocSecDetail() {
                     fluid
                     value={data.if_empl0_eq_empl1 || ''}
                     label='If Empl0 Eq Empl1'
-                    options={getFormOptions(Empl0EQEmpl1Enum)}
+                    options={SemanticColorUtil.getDropdownOptions(Empl0EQEmpl1Enum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, if_empl0_eq_empl1: value as Empl0EQEmpl1Enum
                     }))}

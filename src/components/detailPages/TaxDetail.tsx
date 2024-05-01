@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {getById} from "../../api/api";
 import {Tax} from "../../dtos/tax";
 import {
@@ -15,12 +15,12 @@ import {OutEnum} from "../../enums/OutEnum";
 import {InEnum} from "../../enums/InEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
 import {TaxEnum} from "../../enums/TaxEnum";
-import ReactQuill from "react-quill";
-import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
+import { handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
 import ModalWarning from "./ModalWarning";
+import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 function TaxDetail() {
     const {id} = useParams();
@@ -82,26 +82,34 @@ function TaxDetail() {
                     multiple={true}
                     label='Covered'
                     value={data.covered || []}
-                    options={getFormOptions(CoveredEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(CoveredEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, covered: value as CoveredEnum[]
                     }))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
                 <FormSelect
                     fluid
                     label='Article'
                     multiple={true}
                     value={data.article || []}
-                    options={getFormOptions(ArticleEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(ArticleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, article: value as ArticleEnum[]
                     }))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
                 <FormSelect
                     fluid
                     value={data.out_value || ''}
                     label='Out Value'
-                    options={getFormOptions(OutEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(OutEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, out_value: value as OutEnum
                     }))}
@@ -112,7 +120,7 @@ function TaxDetail() {
                     fluid
                     value={data.in_value || ''}
                     label='In Value'
-                    options={getFormOptions(InEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(InEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, in_value: value as InEnum
                     }))}
@@ -121,7 +129,7 @@ function TaxDetail() {
                     fluid
                     value={data.empl || ''}
                     label='Empl'
-                    options={getFormOptions(EmplEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(EmplEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, empl: value as EmplEnum
                     }))}
@@ -130,7 +138,7 @@ function TaxDetail() {
                     fluid
                     value={data.tax || ''}
                     label='Tax'
-                    options={getFormOptions(TaxEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(TaxEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, tax: value as TaxEnum
                     }))}

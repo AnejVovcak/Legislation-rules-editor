@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, FormField, FormGroup, FormInput, FormSelect, Radio} from "semantic-ui-react";
 import {Source} from "../../dtos/entity";
-import {getFormOptions} from "../../utils/detailPageUtil";
 import {SourceTrackingEnum} from "../../enums/SourceTrackingEnum";
+import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 type SourceFieldTypes = keyof Source;
 
@@ -46,7 +46,7 @@ const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (s
                         fluid
                         label='Type'
                         value={source.type || ''}
-                        options={getFormOptions(SourceTrackingEnum)}
+                        options={SemanticColorUtil.getDropdownOptions(SourceTrackingEnum)}
                         onChange={(e, {value}) => handleSourceChange(index, 'type', value as SourceTrackingEnum)}
                     />
                     <FormField>

@@ -37,12 +37,6 @@ export async function saveObject
     }
 }
 
-export function getFormOptions(dataEnum: Record<string, string>) {
-    return Object.entries(dataEnum).map(([key, value]) => {
-        return {text: value, value: value, key: key}
-    });
-}
-
 export function handleSubmit<T>(data: Mig | SocSec | Tax,
                                       setData: React.Dispatch<React.SetStateAction<T>>,
                                       id: string | undefined,

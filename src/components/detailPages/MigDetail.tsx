@@ -1,12 +1,12 @@
 import {useNavigate, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {getById} from "../../api/api";
 import {
     Button,
     Form,
     FormGroup,
     FormInput,
-    FormSelect, Message, Modal, ModalActions, ModalContent, ModalHeader,
+    FormSelect, Message,
 } from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
@@ -18,11 +18,12 @@ import {NatEnum} from "../../enums/NatEnum";
 import {OutTitleEnum} from "../../enums/OutTitleEnum";
 import {InTitleEnum} from "../../enums/InTitleEnum";
 import {MigTimeEnum} from "../../enums/MigTimeEnum";
-import {getFormOptions, handleSubmit} from "../../utils/detailPageUtil";
+import {handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
 import ModalWarning from "./ModalWarning";
+import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 function MigDetail() {
     const {id} = useParams();
@@ -82,7 +83,7 @@ function MigDetail() {
                     fluid
                     label='Covered'
                     value={data.covered || ''}
-                    options={getFormOptions(CoveredEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(CoveredEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, covered: value as CoveredEnum
                     }))}
@@ -92,16 +93,20 @@ function MigDetail() {
                     value={data.article || []}
                     label='Article'
                     multiple={true}
-                    options={getFormOptions(ArticleEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(ArticleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, article: value as ArticleEnum[]
                     }))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
                 <FormSelect
                     fluid
                     value={data.out_value || ''}
                     label='Out Value'
-                    options={getFormOptions(OutEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(OutEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, out_value: value as OutEnum
                     }))}
@@ -112,7 +117,7 @@ function MigDetail() {
                     fluid
                     label='In Value'
                     value={data.in_value || ''}
-                    options={getFormOptions(InEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(InEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, in_value: value as InEnum
                     }))}
@@ -121,7 +126,7 @@ function MigDetail() {
                     fluid
                     value={data.out_title || ''}
                     label='Out Title'
-                    options={getFormOptions(OutTitleEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(OutTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev,
                         out_title: value as OutTitleEnum
@@ -131,7 +136,7 @@ function MigDetail() {
                     fluid
                     value={data.in_title || ''}
                     label='In Title'
-                    options={getFormOptions(InTitleEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(InTitleEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, in_title: value as InTitleEnum
                     }))}
@@ -143,16 +148,20 @@ function MigDetail() {
                     multiple={true}
                     value={data.time || []}
                     label='Time'
-                    options={getFormOptions(MigTimeEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(MigTimeEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, time: value as MigTimeEnum[]
                     }))}
+                    renderLabel={(label) => ({
+                        color: label.color as string,
+                        content: label.text as ReactNode,
+                    })}
                 />
                 <FormSelect
                     fluid
                     value={data.secondment || ''}
                     label='Secondment'
-                    options={getFormOptions(SecondmentEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(SecondmentEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev,
                         secondment: value as SecondmentEnum
@@ -162,7 +171,7 @@ function MigDetail() {
                     fluid
                     value={data.nat || ''}
                     label='Nat'
-                    options={getFormOptions(NatEnum)}
+                    options={SemanticColorUtil.getDropdownOptions(NatEnum)}
                     onChange={(e, {value}) => setData(prev => ({
                         ...prev, nat: value as NatEnum
                     }))}
@@ -196,7 +205,8 @@ function MigDetail() {
             {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
                 Push on production
             </Button>}
-            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen} handleProductionPush={handleProductionPush}/>
+            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
+                          handleProductionPush={handleProductionPush}/>
         </Form>
     );
 }

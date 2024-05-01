@@ -15,7 +15,7 @@ import {OutEnum} from "../../enums/OutEnum";
 import {InEnum} from "../../enums/InEnum";
 import {EmplEnum} from "../../enums/EmplEnum";
 import {TaxEnum} from "../../enums/TaxEnum";
-import { handleSubmit} from "../../utils/detailPageUtil";
+import {handleSubmit} from "../../utils/detailPageUtil";
 import Sources from "./Sources";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
@@ -58,7 +58,7 @@ function TaxDetail() {
     }, [id, navigate]);
 
     const handleSubmitWrapper = async () => {
-        handleSubmit(data,setData, id, navigate, setSuccess, setError, CollectionEnum.TAX_STAGING, 'tax')
+        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.TAX_STAGING, 'tax')
     };
 
     const handleProductionPush = async () => {
@@ -178,6 +178,8 @@ function TaxDetail() {
                     <div>last modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
                 </div>
             </div>
+            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
+                          handleProductionPush={handleProductionPush}/>
         </Form>
     );
 }

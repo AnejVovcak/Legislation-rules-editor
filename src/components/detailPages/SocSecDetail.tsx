@@ -193,6 +193,8 @@ function SocSecDetail() {
                     <div>last modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
                 </div>
             </div>
+            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
+                          handleProductionPush={handleProductionPush}/>
         </Form>
     );
 }

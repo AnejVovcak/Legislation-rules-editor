@@ -39,7 +39,7 @@ export default class Header extends Component {
                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                     <div>
                         <Link to={'/'}>
-                            <h1 style={{margin: 0}}>Legislation rules editor</h1>
+                            <h1 style={{margin: 0}}>Backoffice</h1>
                         </Link>
                     </div>
                     <div>

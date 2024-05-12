@@ -24,7 +24,7 @@ export async function saveObject
     }
 }
 
-export async function handleSubmit<T>(data: Mig | SocSec | Tax,
+export async function handleSubmit<T>(data: Mig|SocSec|Tax,
                                       setData: React.Dispatch<React.SetStateAction<T>>,
                                       id: string | undefined,
                                       collectionName: string,): Promise<boolean> {

@@ -4,20 +4,19 @@ import {Route, Routes} from 'react-router-dom';
 import MainPage from "./components/layouts/MainPage";
 import TableView from "./components/tableView/TableView";
 import Layout from "./components/layouts/Layout";
-import TaxDetail from "./components/detailPages/TaxDetail";
 import Login from "./components/login/Login";
 import 'react-quill/dist/quill.snow.css';
-import MigDetail from "./components/detailPages/MigDetail";
-import SocSecDetail from "./components/detailPages/SocSecDetail";
 import {
     columnsMig,
-    columnsSocSec, columnsTax,
+    columnsSocSec,
+    columnsTax,
     fieldsConfigMig,
     fieldsConfigSocSec,
     fieldsConfigTax
 } from "./components/tableView/configObjects";
 import {CollectionEnum} from "./enums/CollectionEnum";
 import {DataType} from "./enums/DataType";
+import DetailPage from "./components/detailPages/DetailPage";
 
 function App() {
 
@@ -89,9 +88,15 @@ function App() {
                         collection={CollectionEnum.TAX_PRODUCTION}
                     />
                 </Layout>}/>
-            <Route path="/tax/:id" element={<Layout><TaxDetail/></Layout>}/>
-            <Route path="/mig/:id" element={<Layout><MigDetail/></Layout>}/>
-            <Route path="/socSec/:id" element={<Layout><SocSecDetail/></Layout>}/>
+            <Route path="/tax/:id" element={<Layout><DetailPage dataType={DataType.TAX}
+                                                                collectionProduction={CollectionEnum.TAX_PRODUCTION}
+                                                                collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
+            <Route path="/mig/:id" element={<Layout><DetailPage dataType={DataType.MIG}
+                                                                collectionProduction={CollectionEnum.MIG_PRODUCTION}
+                                                                collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
+            <Route path="/socSec/:id" element={<Layout><DetailPage dataType={DataType.SOC_SEC}
+                                                                   collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
+                                                                   collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
             <Route path="/login" element={<Login></Login>}/>
         </Routes>
     );

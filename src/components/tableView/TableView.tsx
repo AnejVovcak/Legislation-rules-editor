@@ -17,7 +17,7 @@ import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 
-type TableViewMigProps<T> = {
+type TableViewProps<T> = {
     dataType: DataType;
     isProduction: boolean;
     filterFields: { fieldName: string, enumType: any }[];
@@ -26,7 +26,7 @@ type TableViewMigProps<T> = {
     collection: CollectionEnum;
 }
 
-function TableView<T>({dataType, isProduction, filterFields, columns, newObjectUrl, collection}: TableViewMigProps<T>) {
+function TableView<T>({dataType, isProduction, filterFields, columns, newObjectUrl, collection}: TableViewProps<T>) {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<T[]>([]);

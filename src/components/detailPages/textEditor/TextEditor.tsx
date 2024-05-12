@@ -7,7 +7,7 @@ export function TextEditor ({onChange, value}: {onChange: (value: any) => void, 
         onChange(content);
     };
     return (
-        <div className="text-editor">
+        <div className="text-editor" style={{width: '100%'}}>
             <EditorToolbar />
             <ReactQuill
                 theme="snow"

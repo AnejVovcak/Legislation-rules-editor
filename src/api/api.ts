@@ -28,7 +28,7 @@ export const getJWT = async (loginDto: Login) => {
     return response.data;
 }
 
-export const getAllDocuments = async (queryDto: MongoRequest): Promise<Mig[]|SocSec[]|Tax[]> => {
+export const getAllDocuments = async (queryDto: MongoRequest): Promise<Mig[] | SocSec[] | Tax[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
     });
@@ -55,7 +55,12 @@ export const createObject = async (data: Tax | Mig | SocSec, collectionName: str
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
         collection: collectionName,
-        document: {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}
+        document: {
+            ...data,
+            last_modified: new Date(),
+            last_modified_by: localStorage.getItem('email'),
+            _id: data._id ? {"$oid": data._id} : undefined
+        }
     }, {
         headers: headers,
     });

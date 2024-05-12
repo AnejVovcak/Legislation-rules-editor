@@ -34,6 +34,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [onProduction, setOnProduction] = useState(false);
 
     useEffect(() => {
         if (id !== "new" && id) {
@@ -60,28 +61,51 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             if (dataType === DataType.TAX)
                 setData(prev => ({...prev, article: [], covered: []}))
         }
+
+        //check if object exists in production
+        if (id && id !== "new") {
+            getById(id, collectionProduction).then((result) => {
+                if (result) {
+                    setOnProduction(true);
+                } else {
+                    setOnProduction(false);
+                }
+                console.log("onProduction", onProduction)
+            });
+        }
     }, [id, navigate]);
 
-    const handleSubmitWrapper = (collection: CollectionEnum) => {
-        handleSubmit(data, setData, id, collection).then((result) => {
-            //show success or error message
-            if (result) {
+    const handleSubmitWrapper = (collection: CollectionEnum, published: boolean, production: boolean): Promise<boolean> => {
+        return handleSubmit({
+            ...data,
+            published: published
+        }, setData, id, collection, published && !onProduction && production);
+    }
+
+    const handleProductionPush = async () => {
+        if (await handleSubmitWrapper(collectionProduction, true, true)) {
+            if (await handleSubmitWrapper(collectionStaging, true, false)) {
                 setSuccess(true);
                 setTimeout(() => {
                     window.close();
                 }, 1500);
             } else {
                 setError(true);
-                setTimeout(() => {
-                    setError(false);
-                }, 3000);
             }
-        })
+        } else {
+            setError(true);
+        }
     };
 
-    const handleProductionPush = async () => {
-        handleSubmitWrapper(collectionStaging)
-        handleSubmitWrapper(collectionProduction)
+    const handleStagingPush = async () => {
+        if (await handleSubmitWrapper(collectionStaging, false, false)) {
+            setSuccess(true);
+            setTimeout(() => {
+                window.close();
+            }, 1500);
+        } else {
+            setError(true);
+        }
     };
 
 
@@ -97,11 +121,13 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             {dataType === DataType.MIG &&
                 <MigForm data={data as Mig} setData={setData as React.Dispatch<React.SetStateAction<Mig>>}/>}
             {dataType === DataType.SOC_SEC &&
-                <SocSecForm data={data as SocSec} setData={setData as React.Dispatch<React.SetStateAction<SocSec>>}/>}
+                <SocSecForm data={data as SocSec}
+                            setData={setData as React.Dispatch<React.SetStateAction<SocSec>>}/>}
             {dataType === DataType.TAX &&
                 <TaxForm data={data as Tax} setData={setData as React.Dispatch<React.SetStateAction<Tax>>}/>}
 
-            For info on request use the same tool as for links, just put the text instead of a link, and in front of the
+            For info on request use the same tool as for links, just put the text instead of a link, and in front of
+            the
             text put [info]
             <FormGroup inline>
                 <TextEditor
@@ -112,12 +138,13 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                 />
             </FormGroup>
 
-            <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
+            <Sources sources={data.source || []}
+                     setSources={(newSources) => setData({...data, source: newSources})}/>
             {success && <SuccessToastr/>}
             {error && <ErrorToastr/>}
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div>
-                    <Button positive onClick={() => handleSubmitWrapper(collectionStaging)}>Submit</Button>
+                    <Button positive onClick={() => handleStagingPush()}>Save</Button>
                     <Button negative onClick={() => window.close()}>Cancel</Button>
                     {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
                         Push on production

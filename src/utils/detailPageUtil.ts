@@ -5,11 +5,11 @@ import {Mig} from "../dtos/mig";
 
 export async function saveObject
 (id: string | undefined, data: Tax | Mig | SocSec,
- collectionName: string):Promise<boolean>
-{
+ collectionName: string,
+ newOnProduction: boolean): Promise<boolean> {
 
     try {
-        if (id === "new") {
+        if (id === "new" || newOnProduction) {
             await createObject(data, collectionName);
             return true;
         } else if (id) {
@@ -24,15 +24,16 @@ export async function saveObject
     }
 }
 
-export async function handleSubmit<T>(data: Mig|SocSec|Tax,
+export async function handleSubmit<T>(data: Mig | SocSec | Tax,
                                       setData: React.Dispatch<React.SetStateAction<T>>,
                                       id: string | undefined,
-                                      collectionName: string,): Promise<boolean> {
+                                      collectionName: string,
+                                      newOnProduction: boolean): Promise<boolean> {
     const content = data.content;
     const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
     const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
     const newContent = content.replace(regex, subst);
     console.log(newContent)
     setData(prev => ({...prev, content: newContent}));
-    return await saveObject(id, data, collectionName);
+    return await saveObject(id, data, collectionName, newOnProduction);
 }

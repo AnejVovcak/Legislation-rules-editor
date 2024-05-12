@@ -6,7 +6,7 @@ import {
     Form,
     FormGroup,
     FormInput,
-    FormSelect, Message,
+    FormSelect,
 } from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
@@ -22,6 +22,8 @@ import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
 import ModalWarning from "./ModalWarning";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
+import SuccessToastr from "../toastrs/SuccessToastr";
+import ErrorToastr from "../toastrs/ErrorToastr";
 
 function SocSecDetail() {
     const {id} = useParams();
@@ -36,11 +38,6 @@ function SocSecDetail() {
         if (id !== "new" && id) {
             getById(id, 'socSecStaging').then((result) => {
                 setData(result as SocSec);
-
-                //parse result.content
-                // change <span class=\"tooltip\">aaa<span class=\"tooltip-content\">bbb</span></span>
-                // to <href=\"bbb\">aaa</a>
-                // it is a string
                 const content = result.content;
                 const regex = /<span class="tooltip">(.*?)<span class="tooltip-content">(.*?)<\/span><\/span>/g;
                 const subst = `<a href="[info]$2">$1</a>`;
@@ -57,13 +54,26 @@ function SocSecDetail() {
         }
     }, [id, navigate]);
 
-    const handleSubmitWrapper = async () => {
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, 'socSecStaging', 'socSec')
+    const handleSubmitWrapper = (collection: CollectionEnum) => {
+        handleSubmit(data, setData, id, collection).then((result) => {
+            //show success or error message
+            if (result) {
+                setSuccess(true);
+                setTimeout(() => {
+                    window.close();
+                }, 1500);
+            } else {
+                setError(true);
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+            }
+        })
     };
 
     const handleProductionPush = async () => {
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.SOC_SEC_STAGING, 'socSec')
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.SOC_SEC_PRODUCTION, 'socSec')
+        handleSubmitWrapper(CollectionEnum.SOC_SEC_STAGING)
+        handleSubmitWrapper(CollectionEnum.SOC_SEC_PRODUCTION)
     };
 
     return (
@@ -170,22 +180,12 @@ function SocSecDetail() {
                 />
             </FormGroup>
             <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
-            <Message
-                hidden={!success}
-                success
-                header='Success'
-                content='Your submission was successful'
-            />
-            <Message
-                hidden={!error}
-                error
-                header='Error'
-                content='There was an error with your submission. Please try again.'
-            />
+            {success && <SuccessToastr/>}
+            {error && <ErrorToastr/>}
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div>
-                    <Button positive onClick={handleSubmitWrapper}>Submit</Button>
-                    <Button negative onClick={() => navigate('/socSec')}>Cancel</Button>
+                    <Button positive onClick={()=>handleSubmitWrapper(CollectionEnum.SOC_SEC_STAGING)}>Submit</Button>
+                    <Button negative onClick={() => window.close()}>Cancel</Button>
                     {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
                         Push on production
                     </Button>}

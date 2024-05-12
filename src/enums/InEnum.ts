@@ -1,5 +1,6 @@
 export enum InEnum {
     AllCountries = 'ALL COUNTRIES',
+    AllEU = 'ALL EU',
     Belgium = 'BEL',
     Portugal = 'POR',
     Romania = 'ROM',

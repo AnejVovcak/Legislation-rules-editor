@@ -1,10 +1,9 @@
 import React, {useEffect} from "react";
 import {toast, ToastContainer} from "react-toastify";
-import success = toast.success;
 
-const ProductionToastr = () => {
+const ErrorToastr = () => {
     useEffect(() => {
-        toast.warn("This is production environment! Editing and adding elements is disabled!");
+        toast.error("Error! Data not saved!");
     }, []);
     return <ToastContainer position="bottom-right"
                            closeOnClick={false}
@@ -14,4 +13,4 @@ const ProductionToastr = () => {
                            closeButton={false}/>
 }
 
-export default ProductionToastr;
+export default ErrorToastr;

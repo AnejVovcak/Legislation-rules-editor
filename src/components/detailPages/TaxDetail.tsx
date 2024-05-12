@@ -7,7 +7,7 @@ import {
     Form,
     FormGroup,
     FormInput,
-    FormSelect, Message,
+    FormSelect,
 } from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
@@ -21,6 +21,8 @@ import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
 import ModalWarning from "./ModalWarning";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
+import SuccessToastr from "../toastrs/SuccessToastr";
+import ErrorToastr from "../toastrs/ErrorToastr";
 
 function TaxDetail() {
     const {id} = useParams();
@@ -36,10 +38,6 @@ function TaxDetail() {
             getById(id, 'taxStaging').then((result) => {
                 setData(result as Tax);
 
-                //parse result.content
-                // change <span class=\"tooltip\">aaa<span class=\"tooltip-content\">bbb</span></span>
-                // to <href=\"bbb\">aaa</a>
-                // it is a string
                 const content = result.content;
                 const regex = /<span class="tooltip">(.*?)<span class="tooltip-content">(.*?)<\/span><\/span>/g;
                 const subst = `<a href="[info]$2">$1</a>`;
@@ -57,13 +55,26 @@ function TaxDetail() {
         }
     }, [id, navigate]);
 
-    const handleSubmitWrapper = async () => {
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.TAX_STAGING, 'tax')
+    const handleSubmitWrapper = (collection: CollectionEnum) => {
+        handleSubmit(data, setData, id, collection).then((result) => {
+            //show success or error message
+            if (result) {
+                setSuccess(true);
+                setTimeout(() => {
+                    window.close();
+                }, 1500);
+            } else {
+                setError(true);
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+            }
+        })
     };
 
-    const handleProductionPush = async () => {
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.TAX_STAGING, 'tax')
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.TAX_PRODUCTION, 'tax')
+    const handleProductionPush = () => {
+        handleSubmitWrapper(CollectionEnum.TAX_STAGING)
+        handleSubmitWrapper(CollectionEnum.TAX_PRODUCTION)
     };
 
     return (
@@ -154,22 +165,12 @@ function TaxDetail() {
                 />
             </FormGroup>
             <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
-            <Message
-                hidden={!success}
-                success
-                header='Success'
-                content='Your submission was successful'
-            />
-            <Message
-                hidden={!error}
-                error
-                header='Error'
-                content='There was an error with your submission. Please try again.'
-            />
+            {success && <SuccessToastr/>}
+            {error && <ErrorToastr/>}
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div>
-                    <Button positive onClick={handleSubmitWrapper}>Submit</Button>
-                    <Button negative onClick={() => navigate('/tax')}>Cancel</Button>
+                    <Button positive onClick={()=>handleSubmitWrapper(CollectionEnum.TAX_STAGING)}>Submit</Button>
+                    <Button negative onClick={() => window.close()}>Cancel</Button>
                     {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
                         Push on production
                     </Button>}

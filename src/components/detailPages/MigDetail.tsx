@@ -1,13 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {ReactNode, useEffect, useState} from "react";
 import {getById} from "../../api/api";
-import {
-    Button,
-    Form,
-    FormGroup,
-    FormInput,
-    FormSelect, Message,
-} from "semantic-ui-react";
+import {Button, Form, FormGroup, FormInput, FormSelect,} from "semantic-ui-react";
 import {CoveredEnum} from "../../enums/CoveredEnum";
 import {ArticleEnum} from "../../enums/ArticleEnum";
 import {OutEnum} from "../../enums/OutEnum";
@@ -24,6 +18,8 @@ import {CollectionEnum} from "../../enums/CollectionEnum";
 import TextEditor from "./textEditor/TextEditor";
 import ModalWarning from "./ModalWarning";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
+import SuccessToastr from "../toastrs/SuccessToastr";
+import ErrorToastr from "../toastrs/ErrorToastr";
 
 function MigDetail() {
     const {id} = useParams();
@@ -37,10 +33,6 @@ function MigDetail() {
         if (id !== "new" && id) {
             getById(id, 'migStaging').then((result) => {
                 setData(result as Mig);
-                //parse result.content
-                // change <span class=\"tooltip\">aaa<span class=\"tooltip-content\">bbb</span></span>
-                // to <href=\"bbb\">aaa</a>
-                // it is a string
                 const content = result.content;
                 const regex = /<span class="tooltip">(.*?)<span class="tooltip-content">(.*?)<\/span><\/span>/g;
                 const subst = `<a href="[info]$2">$1</a>`;
@@ -58,13 +50,26 @@ function MigDetail() {
         }
     }, [id, navigate]);
 
-    const handleSubmitWrapper = async () => {
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.MIG_STAGING, 'mig')
+    const handleSubmitWrapper = (collection: CollectionEnum) => {
+        handleSubmit(data, setData, id, collection).then((result) => {
+            //show success or error message
+            if (result) {
+                setSuccess(true);
+                setTimeout(() => {
+                    window.close();
+                }, 1500);
+            } else {
+                setError(true);
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+            }
+        })
     };
 
     const handleProductionPush = async () => {
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.MIG_STAGING, 'mig')
-        handleSubmit(data, setData, id, navigate, setSuccess, setError, CollectionEnum.MIG_PRODUCTION, 'mig')
+        handleSubmitWrapper(CollectionEnum.MIG_STAGING)
+        handleSubmitWrapper(CollectionEnum.MIG_PRODUCTION)
     };
 
 
@@ -188,22 +193,12 @@ function MigDetail() {
             </FormGroup>
 
             <Sources sources={data.source || []} setSources={(newSources) => setData({...data, source: newSources})}/>
-            <Message
-                hidden={!success}
-                success
-                header='Success'
-                content='Your submission was successful'
-            />
-            <Message
-                hidden={!error}
-                error
-                header='Error'
-                content='There was an error with your submission. Please try again.'
-            />
+            {success && <SuccessToastr/>}
+            {error && <ErrorToastr/>}
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div>
-                    <Button positive onClick={handleSubmitWrapper}>Submit</Button>
-                    <Button negative onClick={() => navigate('/mig')}>Cancel</Button>
+                    <Button positive onClick={()=>handleSubmitWrapper(CollectionEnum.MIG_STAGING)}>Submit</Button>
+                    <Button negative onClick={() => window.close()}>Cancel</Button>
                     {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
                         Push on production
                     </Button>}

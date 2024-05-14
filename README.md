@@ -1,46 +1,55 @@
-# Getting Started with Create React App
+# Legislation-rules-editor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+**Legislation-rules-editor** is a React-based frontend application designed to streamline the process of editing and categorizing legal texts. Developed as part of a broader project involving both computer engineers and legal experts, this tool serves as an in-house solution for our legal team. The application connects to a MongoDB database using MongoDB Atlas Data API and employs MongoDB for authentication, using email and password.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **User Authentication**: Secure login system with email and password, leveraging MongoDB for authentication.
+- **Edit and Categorize Legal Text**: Designed specifically for legal experts to edit and categorize legal documents efficiently.
+- **Staging and Production Environments**: Users work on a staging database and can push changes to the production environment after review.
+- **Deployment**: The application is deployed on Firebase with CI/CD managed by GitHub Actions.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technology Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Frontend**: React
+- **Database**: MongoDB (via MongoDB Atlas Data API)
+- **Authentication**: MongoDB (email and password)
+- **Deployment**: Firebase
+- **CI/CD**: GitHub Actions
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Clone the repository**:
+   ```sh
+   git clone https://github.com/yourusername/Legislation-rules-editor.git
+   cd Legislation-rules-editor
+   ```
 
-### `npm run build`
+2. **Install dependencies**:
+   ```sh
+   npm install
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Run the application**:
+   ```sh
+   npm start
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Login**: Users can log in using their email and password.
+2. **Edit Legal Text**: Navigate to the editor interface to modify and categorize legal documents.
+3. **Staging to Production**: After making changes in the staging environment, users can push updates to the production database.
 
-### `npm run eject`
+## Deployment
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The application is deployed on Firebase. Continuous integration and deployment are managed using GitHub Actions. Every push to the main branch triggers the CI/CD pipeline, which deploys the latest changes to Firebase.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Team
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+This project was a collaborative effort between our team of developers and legal experts. The primary contributors to the development of the Legislation-rules-editor include:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Anej Vovčak** - Developer
+- **Jakob Gospodarič** - Developer

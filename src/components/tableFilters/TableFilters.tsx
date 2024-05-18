@@ -24,6 +24,7 @@ const TableFilter = ({ fieldsConfig, onFilterChange }: TableFilterProps) => {
                     <Dropdown
                         selection
                         multiple
+                        search
                         options={SemanticColorUtil.getDropdownOptions(fieldsConfig, field._id)}
                         onChange={(e, {value}) => onFilterChange(field._id, value as string[])}
                         renderLabel={(label) => ({

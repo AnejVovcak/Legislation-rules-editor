@@ -85,6 +85,23 @@ export const updateObject = async (id: string, data: Tax | Mig | SocSec, collect
     return response.data;
 }
 
+export const updateEnumObject = async (id: string, data: EnumValue, newValue:string) => {
+    data.values.push(newValue);
+    //remove _id from data
+    const response = await axios.post(API_BASE_URL + Actions.UPDATE, {
+        dataSource: "LawBrainerTest",
+        database: "lawBrainer",
+        collection: "enums",
+        filter: {
+            _id: id,
+        },
+        update: {"$set": {...data}}
+    }, {
+        headers: headers,
+    });
+    return response.data;
+}
+
 //for all requests check if they get 401 and if so refresh token
 axios.interceptors.response.use((response) => {
     return response;

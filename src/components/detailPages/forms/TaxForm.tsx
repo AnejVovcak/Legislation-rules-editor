@@ -1,18 +1,12 @@
-import React, {ReactNode} from "react";
-import {FormGroup, FormSelect} from "semantic-ui-react";
-import {SemanticColorUtil} from "../../../utils/semanticColorUtil";
-import {EmplEnum} from "../../../enums/EmplEnum";
-import {CoveredEnum} from "../../../enums/CoveredEnum";
-import {ArticleEnum} from "../../../enums/ArticleEnum";
-import {OutEnum} from "../../../enums/OutEnum";
-import {InEnum} from "../../../enums/InEnum";
+import React from "react";
+import {FormGroup} from "semantic-ui-react";
 import {Tax} from "../../../dtos/tax";
-import {TaxEnum} from "../../../enums/TaxEnum";
 import {EnumValue} from "../../../enums/EnumValue";
+import DropdownSelect from "../../dropdown/DropdownSelect";
 
 function TaxForm({data, setData, fieldsConfig}: {
     data: Tax,
-    setData: React.Dispatch<React.SetStateAction<Tax>>,
+    setData: React.Dispatch<React.SetStateAction<any>>,
     fieldsConfig: EnumValue[]
 }) {
 
@@ -21,71 +15,51 @@ function TaxForm({data, setData, fieldsConfig}: {
             {fieldsConfig && fieldsConfig.length > 0 &&
                 <>
                     <FormGroup inline widths='equal'>
-                        <FormSelect
-                            fluid
+                        <DropdownSelect
+                            data={data}
+                            setData={setData}
+                            fieldKey="covered"
+                            label="Covered"
                             multiple={true}
-                            label='Covered'
-                            value={data.covered || []}
-                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'covered')}
-                            onChange={(e, {value}) => setData(prev => ({
-                                ...prev, covered: value as CoveredEnum[]
-                            }))}
-                            renderLabel={(label) => ({
-                                color: label.color as string,
-                                content: label.text as ReactNode,
-                            })}
+                            fieldsConfig={fieldsConfig}
                         />
-                        <FormSelect
-                            fluid
-                            label='Article'
+                        <DropdownSelect
+                            data={data}
+                            setData={setData}
+                            fieldKey="article"
+                            label="Article"
                             multiple={true}
-                            value={data.article || []}
-                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'article')}
-                            onChange={(e, {value}) => setData(prev => ({
-                                ...prev, article: value as ArticleEnum[]
-                            }))}
-                            renderLabel={(label) => ({
-                                color: label.color as string,
-                                content: label.text as ReactNode,
-                            })}
+                            fieldsConfig={fieldsConfig}
                         />
-                        <FormSelect
-                            fluid
-                            value={data.out_value || ''}
-                            label='Out'
-                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'out_value')}
-                            onChange={(e, {value}) => setData(prev => ({
-                                ...prev, out_value: value as OutEnum
-                            }))}
+                        <DropdownSelect
+                            data={data}
+                            setData={setData}
+                            fieldKey="out_value"
+                            label="Out"
+                            fieldsConfig={fieldsConfig}
                         />
                     </FormGroup>
                     <FormGroup inline widths='equal'>
-                        <FormSelect
-                            fluid
-                            value={data.in_value || ''}
-                            label='In'
-                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'in_value')}
-                            onChange={(e, {value}) => setData(prev => ({
-                                ...prev, in_value: value as InEnum
-                            }))}
+                        <DropdownSelect
+                            data={data}
+                            setData={setData}
+                            fieldKey="in_value"
+                            label="In"
+                            fieldsConfig={fieldsConfig}
                         />
-                        <FormSelect
-                            fluid
-                            value={data.empl || ''}
-                            label='Empl'
-                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'empl')}
-                            onChange={(e, {value}) => setData(prev => ({
-                                ...prev, empl: value as EmplEnum
-                            }))}
+                        <DropdownSelect
+                            data={data}
+                            setData={setData}
+                            fieldKey="empl"
+                            label="Empl"
+                            fieldsConfig={fieldsConfig}
                         />
-                        <FormSelect
-                            fluid
-                            value={data.tax || ''}
-                            label='Tax'
-                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'tax')}
-                            onChange={(e, {value}) => setData(prev => ({
-                                ...prev, tax: value as TaxEnum
-                            }))}
+                        <DropdownSelect
+                            data={data}
+                            setData={setData}
+                            fieldKey="tax"
+                            label="Tax"
+                            fieldsConfig={fieldsConfig}
                         />
                     </FormGroup>
                 </>

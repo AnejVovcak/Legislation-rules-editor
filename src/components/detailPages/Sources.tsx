@@ -3,10 +3,15 @@ import {Button, FormField, FormGroup, FormInput, FormSelect, Radio} from "semant
 import {Source} from "../../dtos/entity";
 import {SourceTrackingEnum} from "../../enums/SourceTrackingEnum";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
+import {EnumValue} from "../../enums/EnumValue";
 
 type SourceFieldTypes = keyof Source;
 
-const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (sources: Source[]) => void }) => {
+const SourcesInput = ({sources, setSources, sourceEnum}: {
+    sources: Source[],
+    setSources: (sources: Source[]) => void,
+    sourceEnum: EnumValue
+}) => {
     const handleSourceChange = <T extends SourceFieldTypes>(index: number, field: T, value: Source[T]) => {
         const newSources = [...sources];
         newSources[index][field] = value;
@@ -15,7 +20,13 @@ const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (s
 
 
     const addSource = () => {
-        const newSource: Source = {source: '', xpath: '', md5_hash: '', type: SourceTrackingEnum.OFFICIAL_WEBSITE, validated: false};
+        const newSource: Source = {
+            source: '',
+            xpath: '',
+            md5_hash: '',
+            type: SourceTrackingEnum.OFFICIAL_WEBSITE,
+            validated: false
+        };
         const newSources = [...sources, newSource];
         setSources(newSources);
     };
@@ -28,8 +39,9 @@ const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (s
 
     return (
         <div style={{marginBottom: '20px'}}>
-            {sources.map((source, index) => (
-                <FormGroup key={index} widths='equal' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {sourceEnum && sources.map((source, index) => (
+                <FormGroup key={index} widths='equal'
+                           style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <FormInput
                         label="Source"
                         placeholder="Source"
@@ -46,7 +58,7 @@ const SourcesInput = ({sources, setSources}: { sources: Source[], setSources: (s
                         fluid
                         label='Type'
                         value={source.type || ''}
-                        options={SemanticColorUtil.getDropdownOptions(SourceTrackingEnum)}
+                        options={SemanticColorUtil.getDropdownOptions([sourceEnum], 'Source')}
                         onChange={(e, {value}) => handleSourceChange(index, 'type', value as SourceTrackingEnum)}
                     />
                     <FormField>

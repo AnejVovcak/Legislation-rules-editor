@@ -1,4 +1,6 @@
-export class SemanticColorUtil{
+import {EnumValue} from "../enums/EnumValue";
+
+export class SemanticColorUtil {
     static semanticColors = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
 
     static getColorIndex = (value: string) => {
@@ -15,17 +17,22 @@ export class SemanticColorUtil{
         return `ui ${SemanticColorUtil.semanticColors[colorIndex]} label`;
     };
 
-    static getDropdownOptions = (enumObj: Record<string, string>) => {
-        const values = Object.values(enumObj);
-        return values.map((value) => {
+    static getDropdownOptionsUtil = (enumValues: string[]) => {
+        // const values = Object.values(enumObj);
+        return enumValues.map((value) => {
             const colorIndex = SemanticColorUtil.getColorIndex(value);
             return {
                 key: value,
                 text: value,
                 value: value,
                 color: SemanticColorUtil.semanticColors[colorIndex],
-                label: { color: SemanticColorUtil.semanticColors[colorIndex], empty: true, circular: true },
+                label: {color: SemanticColorUtil.semanticColors[colorIndex], empty: true, circular: true},
             };
         });
+    };
+
+    static getDropdownOptions = (fieldsConfig: EnumValue[], enumName: string) => {
+        // const values = Object.values(enumObj);
+        return SemanticColorUtil.getDropdownOptionsUtil(fieldsConfig.find(value => value._id === enumName)!.values);
     };
 }

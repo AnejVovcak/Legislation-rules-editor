@@ -4,6 +4,7 @@ import {Tax} from "../dtos/tax";
 import {SocSec} from "../dtos/socSec";
 import {Mig} from "../dtos/mig";
 import {Login} from "../dtos/login";
+import {EnumValue} from "../enums/EnumValue";
 
 const API_BASE_URL = 'https://eu-central-1.aws.data.mongodb-api.com/app/data-xjdlx/endpoint/data/v1/action/';
 const JWT_BASE_URL = 'https://services.cloud.mongodb.com/api/client/v2.0/app/data-xjdlx/auth/providers/local-userpass/login';
@@ -28,7 +29,7 @@ export const getJWT = async (loginDto: Login) => {
     return response.data;
 }
 
-export const getAllDocuments = async (queryDto: MongoRequest): Promise<Mig[] | SocSec[] | Tax[]> => {
+export const getAllDocuments = async (queryDto: MongoRequest): Promise<Mig[] | SocSec[] | Tax[] | EnumValue[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND, queryDto, {
         headers: headers,
     });

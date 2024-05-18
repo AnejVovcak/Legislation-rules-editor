@@ -1,7 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Mig} from "../../dtos/mig";
-import {getById} from "../../api/api";
+import {getAllDocuments, getById} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import {handleSubmit} from "../../utils/detailPageUtil";
 import {Button, Form, FormGroup, FormInput} from "semantic-ui-react";
@@ -16,6 +16,8 @@ import {SocSec} from "../../dtos/socSec";
 import MigForm from "./forms/MigForm";
 import SocSecForm from "./forms/SocSecForm";
 import TaxForm from "./forms/TaxForm";
+import {EnumValue} from "../../enums/EnumValue";
+import {MongoRequest} from "../../dtos/mongo-request";
 
 type DetailPageProps = {
     dataType: DataType;
@@ -35,6 +37,22 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const [error, setError] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [onProduction, setOnProduction] = useState(false);
+    const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
+
+    const request: MongoRequest = {
+        dataSource: "LawBrainerTest",
+        database: "lawBrainer",
+        collection: "enums"
+    }
+
+    useEffect(() => {
+        getAllDocuments({...request}).then((result) => {
+            setFilterValues((result as unknown as EnumValue[]).filter(
+                (value) => value.domain.includes(dataType)));
+        }).catch((error) => {
+            console.error("Failed to fetch data:", error);
+        });
+    }, []);
 
     useEffect(() => {
         if (id !== "new" && id) {
@@ -119,12 +137,17 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             </FormGroup>
 
             {dataType === DataType.MIG &&
-                <MigForm data={data as Mig} setData={setData as React.Dispatch<React.SetStateAction<Mig>>}/>}
+                <MigForm fieldsConfig={filterValues}
+                         data={data as Mig}
+                         setData={setData as React.Dispatch<React.SetStateAction<Mig>>}/>}
             {dataType === DataType.SOC_SEC &&
-                <SocSecForm data={data as SocSec}
+                <SocSecForm fieldsConfig={filterValues}
+                            data={data as SocSec}
                             setData={setData as React.Dispatch<React.SetStateAction<SocSec>>}/>}
             {dataType === DataType.TAX &&
-                <TaxForm data={data as Tax} setData={setData as React.Dispatch<React.SetStateAction<Tax>>}/>}
+                <TaxForm fieldsConfig={filterValues}
+                         data={data as Tax}
+                         setData={setData as React.Dispatch<React.SetStateAction<Tax>>}/>}
 
             For info on request use the same tool as for links, just put the text instead of a link, and in front of
             the
@@ -139,6 +162,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             </FormGroup>
 
             <Sources sources={data.source || []}
+                     sourceEnum={filterValues.find(value => value._id === 'Source')!}
                      setSources={(newSources) => setData({...data, source: newSources})}/>
             {success && <SuccessToastr/>}
             {error && <ErrorToastr/>}

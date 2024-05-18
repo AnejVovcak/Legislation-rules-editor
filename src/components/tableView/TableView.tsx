@@ -16,6 +16,7 @@ import SocSecBody from "./tableBodies/SocSecBody";
 import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
+import {EnumValue} from "../../enums/EnumValue";
 
 type TableViewProps<T> = {
     dataType: DataType;
@@ -34,13 +35,22 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
     const [isFirstSorted, setIsFirstSorted] = useState<boolean>(false);
-
+    const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
         collection: collection
     }
+
+    useEffect(() => {
+        getAllDocuments({...request, collection: "enums"}).then((result) => {
+            setFilterValues((result as unknown as EnumValue[]).filter(
+                (value) => value.domain.includes(dataType)));
+        }).catch((error) => {
+            console.error("Failed to fetch data:", error);
+        });
+    }, []);
 
     useEffect(() => {
         // Sort only once
@@ -78,7 +88,7 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
             {isProduction && <ProductionToastr/>}
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
 
-                <TableFilters fieldsConfig={filterFields}
+                <TableFilters fieldsConfig={filterValues}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
                 {!isProduction &&
                     <Button

@@ -8,79 +8,88 @@ import {OutEnum} from "../../../enums/OutEnum";
 import {InEnum} from "../../../enums/InEnum";
 import {Tax} from "../../../dtos/tax";
 import {TaxEnum} from "../../../enums/TaxEnum";
+import {EnumValue} from "../../../enums/EnumValue";
 
-function TaxForm({data, setData}: { data: Tax, setData: React.Dispatch<React.SetStateAction<Tax>> }) {
+function TaxForm({data, setData, fieldsConfig}: {
+    data: Tax,
+    setData: React.Dispatch<React.SetStateAction<Tax>>,
+    fieldsConfig: EnumValue[]
+}) {
 
     return (
         <div>
-            <FormGroup inline widths='equal'>
-                <FormSelect
-                    fluid
-                    multiple={true}
-                    label='Covered'
-                    value={data.covered || []}
-                    options={SemanticColorUtil.getDropdownOptions(CoveredEnum)}
-                    onChange={(e, {value}) => setData(prev => ({
-                        ...prev, covered: value as CoveredEnum[]
-                    }))}
-                    renderLabel={(label) => ({
-                        color: label.color as string,
-                        content: label.text as ReactNode,
-                    })}
-                />
-                <FormSelect
-                    fluid
-                    label='Article'
-                    multiple={true}
-                    value={data.article || []}
-                    options={SemanticColorUtil.getDropdownOptions(ArticleEnum)}
-                    onChange={(e, {value}) => setData(prev => ({
-                        ...prev, article: value as ArticleEnum[]
-                    }))}
-                    renderLabel={(label) => ({
-                        color: label.color as string,
-                        content: label.text as ReactNode,
-                    })}
-                />
-                <FormSelect
-                    fluid
-                    value={data.out_value || ''}
-                    label='Out Value'
-                    options={SemanticColorUtil.getDropdownOptions(OutEnum)}
-                    onChange={(e, {value}) => setData(prev => ({
-                        ...prev, out_value: value as OutEnum
-                    }))}
-                />
-            </FormGroup>
-            <FormGroup inline widths='equal'>
-                <FormSelect
-                    fluid
-                    value={data.in_value || ''}
-                    label='In Value'
-                    options={SemanticColorUtil.getDropdownOptions(InEnum)}
-                    onChange={(e, {value}) => setData(prev => ({
-                        ...prev, in_value: value as InEnum
-                    }))}
-                />
-                <FormSelect
-                    fluid
-                    value={data.empl || ''}
-                    label='Empl'
-                    options={SemanticColorUtil.getDropdownOptions(EmplEnum)}
-                    onChange={(e, {value}) => setData(prev => ({
-                        ...prev, empl: value as EmplEnum
-                    }))}
-                />
-                <FormSelect
-                    fluid
-                    value={data.tax || ''}
-                    label='Tax'
-                    options={SemanticColorUtil.getDropdownOptions(TaxEnum)}
-                    onChange={(e, {value}) => setData(prev => ({
-                        ...prev, tax: value as TaxEnum
-                    }))}
-                />
-            </FormGroup>
+            {fieldsConfig && fieldsConfig.length > 0 &&
+                <>
+                    <FormGroup inline widths='equal'>
+                        <FormSelect
+                            fluid
+                            multiple={true}
+                            label='Covered'
+                            value={data.covered || []}
+                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'covered')}
+                            onChange={(e, {value}) => setData(prev => ({
+                                ...prev, covered: value as CoveredEnum[]
+                            }))}
+                            renderLabel={(label) => ({
+                                color: label.color as string,
+                                content: label.text as ReactNode,
+                            })}
+                        />
+                        <FormSelect
+                            fluid
+                            label='Article'
+                            multiple={true}
+                            value={data.article || []}
+                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'article')}
+                            onChange={(e, {value}) => setData(prev => ({
+                                ...prev, article: value as ArticleEnum[]
+                            }))}
+                            renderLabel={(label) => ({
+                                color: label.color as string,
+                                content: label.text as ReactNode,
+                            })}
+                        />
+                        <FormSelect
+                            fluid
+                            value={data.out_value || ''}
+                            label='Out'
+                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'out_value')}
+                            onChange={(e, {value}) => setData(prev => ({
+                                ...prev, out_value: value as OutEnum
+                            }))}
+                        />
+                    </FormGroup>
+                    <FormGroup inline widths='equal'>
+                        <FormSelect
+                            fluid
+                            value={data.in_value || ''}
+                            label='In'
+                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'in_value')}
+                            onChange={(e, {value}) => setData(prev => ({
+                                ...prev, in_value: value as InEnum
+                            }))}
+                        />
+                        <FormSelect
+                            fluid
+                            value={data.empl || ''}
+                            label='Empl'
+                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'empl')}
+                            onChange={(e, {value}) => setData(prev => ({
+                                ...prev, empl: value as EmplEnum
+                            }))}
+                        />
+                        <FormSelect
+                            fluid
+                            value={data.tax || ''}
+                            label='Tax'
+                            options={SemanticColorUtil.getDropdownOptions(fieldsConfig,'tax')}
+                            onChange={(e, {value}) => setData(prev => ({
+                                ...prev, tax: value as TaxEnum
+                            }))}
+                        />
+                    </FormGroup>
+                </>
+            }
         </div>
     );
 }

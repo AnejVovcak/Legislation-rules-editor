@@ -3,10 +3,9 @@ import {MongoRequest} from "../../dtos/mongo-request";
 import {getAllDocuments} from "../../api/api";
 import {Button, Table, TableHeader, TableRow} from "semantic-ui-react";
 import {Mig} from "../../dtos/mig";
-import {getRequestWithFilter, handleFilterChange} from "../../utils/tableFilterUtil";
+import {getRequestWithFilterAndSort, handleFilterChange} from "../../utils/tableFilterUtil";
 import TableFilters from "../tableFilters/TableFilters";
 import {CollectionEnum} from "../../enums/CollectionEnum";
-import {handleSort} from "../../utils/tableSortUtil";
 import renderTableHeaderCell from "./TableHeaderUtil";
 import 'react-toastify/dist/ReactToastify.css';
 import ProductionToastr from "../toastrs/ProductionToastr";
@@ -34,7 +33,6 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     const [filters, setFilters] = useState<Record<string, string[]>>({});
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
-    const [isFirstSorted, setIsFirstSorted] = useState<boolean>(false);
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
 
     const request: MongoRequest = {
@@ -52,19 +50,9 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
         });
     }, []);
 
-    useEffect(() => {
-        // Sort only once
-        if (!isFirstSorted && data.length > 0) {
-            console.log("Sorting data")
-            setData(handleSort('title' as keyof T, data, column, setColumn, direction, setDirection, true));
-            setIsFirstSorted(true);
-        }
-    }, [data, isFirstSorted, column, direction]);
-
-
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
-        getAllDocuments(getRequestWithFilter(request, filters)).then((result) => {
+        getAllDocuments(getRequestWithFilterAndSort(request, filters,column,direction)).then((result) => {
             setData(result as unknown as T[]);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
@@ -73,10 +61,14 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
     useEffect(() => {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
-    }, [filters]); // Re-fetch data whenever filters change
+    }, [filters,column,direction]); // Re-fetch data whenever filters change
 
     const handleSortClick = (clickedColumn: keyof T) => () => {
-        setData(handleSort(clickedColumn, data, column, setColumn, direction, setDirection));
+        if (column !== clickedColumn) {
+            setColumn(clickedColumn);
+        } else {
+            setDirection(direction === 'ascending' ? 'descending' : 'ascending');
+        }
     };
 
     const renderTableHeaderCellCaller = (label: string, key: keyof T) => {

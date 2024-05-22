@@ -113,4 +113,19 @@ axios.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
-
+//delete item from enum collection
+//it gets the item and the field key
+export const deleteEnumObject = async (itemToDelete: string, fieldKey: string) => {
+    const response = await axios.post(API_BASE_URL + Actions.UPDATE, {
+        dataSource: "LawBrainerTest",
+        database: "lawBrainer",
+        collection: "enums",
+        filter: {
+            _id: fieldKey,
+        },
+        update: {"$pull": {values: itemToDelete}}
+    }, {
+        headers: headers,
+    });
+    return response.data;
+}

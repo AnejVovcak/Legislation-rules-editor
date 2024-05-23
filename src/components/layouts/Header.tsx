@@ -1,6 +1,5 @@
-import {Link, useRoutes} from "react-router-dom";
-import {GridColumn, Menu, MenuItem} from "semantic-ui-react";
-import {render} from "@testing-library/react";
+import {Link} from "react-router-dom";
+import {Dropdown, DropdownItem, DropdownMenu, Menu, MenuItem} from "semantic-ui-react";
 import {Component} from "react";
 
 export default class Header extends Component {
@@ -43,39 +42,75 @@ export default class Header extends Component {
                         </Link>
                     </div>
                     <div>
-                        <Menu secondary>
-                            <MenuItem
-                                name='migration'
-                                active={activeItem === 'mig'}
-                                href={'/mig'}
-                            />
-                            <MenuItem
-                                name='social security'
-                                active={activeItem === 'socSec'}
-                                href={'/socSec'}
-                            />
-                            <MenuItem
-                                name='tax'
-                                active={activeItem === 'tax'}
-                                href={'/tax'}
-                            />
-                        {/*</Menu>*/}
                         {/*<Menu secondary>*/}
-                            <MenuItem
-                                name='migration ⚠️'
-                                active={activeItem === 'migProd'}
-                                href={'/migProd'}
-                            />
-                            <MenuItem
-                                name='social security ⚠️'
-                                active={activeItem === 'socSecProd'}
-                                href={'/socSecProd'}
-                            />
-                            <MenuItem
-                                name='tax ⚠️'
-                                active={activeItem === 'taxProd'}
-                                href={'/taxProd'}
-                            />
+                        {/*    <MenuItem*/}
+                        {/*        name='migration'*/}
+                        {/*        active={activeItem === 'mig'}*/}
+                        {/*        href={'/mig'}*/}
+                        {/*    />*/}
+                        {/*    <MenuItem*/}
+                        {/*        name='social security'*/}
+                        {/*        active={activeItem === 'socSec'}*/}
+                        {/*        href={'/socSec'}*/}
+                        {/*    />*/}
+                        {/*    <MenuItem*/}
+                        {/*        name='tax'*/}
+                        {/*        active={activeItem === 'tax'}*/}
+                        {/*        href={'/tax'}*/}
+                        {/*    />*/}
+                        {/*    /!*</Menu>*!/*/}
+                        {/*    /!*<Menu secondary>*!/*/}
+                        {/*    <MenuItem*/}
+                        {/*        name='migration ⚠️'*/}
+                        {/*        active={activeItem === 'migProd'}*/}
+                        {/*        href={'/migProd'}*/}
+                        {/*    />*/}
+                        {/*    <MenuItem*/}
+                        {/*        name='social security ⚠️'*/}
+                        {/*        active={activeItem === 'socSecProd'}*/}
+                        {/*        href={'/socSecProd'}*/}
+                        {/*    />*/}
+                        {/*    <MenuItem*/}
+                        {/*        name='tax ⚠️'*/}
+                        {/*        active={activeItem === 'taxProd'}*/}
+                        {/*        href={'/taxProd'}*/}
+                        {/*    />*/}
+                        {/*</Menu>*/}
+
+                        <Menu horizontal>
+                            <MenuItem href={'/mig'}
+                                      active={activeItem === 'mig'}
+                            >migration</MenuItem>
+                            <MenuItem href={'/socSec'}
+                                      active={activeItem === 'socSec'}
+                            >social security</MenuItem>
+                            <MenuItem href={'/tax'}
+                                      active={activeItem === 'tax'}
+                            >tax</MenuItem>
+
+                            <Dropdown
+                                selection
+                                text='Production ⚠️'
+                                pointing='top'
+                                className='link item'>
+                                <DropdownMenu>
+                                    <DropdownItem
+                                        key='migProd'
+                                        href={'/migProd'}
+                                        active={activeItem === 'migProd'}
+                                    >Migration</DropdownItem>
+                                    <DropdownItem
+                                        key='socSecProd'
+                                        href={'/socSecProd'}
+                                        active={activeItem === 'socSecProd'}
+                                    >Social Security</DropdownItem>
+                                    <DropdownItem
+                                        key='taxProd'
+                                        href={'/taxProd'}
+                                        active={activeItem === 'taxProd'}
+                                    >Tax</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </Menu>
                     </div>
                 </div>

@@ -36,13 +36,18 @@ function MigForm({data, setData, fieldsConfig}: {
                         label="Out"
                         fieldsConfig={fieldsConfig}
                     />
-                </FormGroup>
-                <FormGroup inline widths='equal'>
                     <DropdownSelect
                         data={data}
                         setData={setData}
                         fieldKey="in_value"
                         label="In"
+                        fieldsConfig={fieldsConfig}
+                    />
+                    <DropdownSelect
+                        data={data}
+                        setData={setData}
+                        fieldKey="nat"
+                        label="Nat"
                         fieldsConfig={fieldsConfig}
                     />
                     <DropdownSelect
@@ -59,8 +64,6 @@ function MigForm({data, setData, fieldsConfig}: {
                         label="In Title"
                         fieldsConfig={fieldsConfig}
                     />
-                </FormGroup>
-                <FormGroup inline widths='equal'>
                     <DropdownSelect
                         data={data}
                         setData={setData}
@@ -76,14 +79,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         label="Secondment"
                         fieldsConfig={fieldsConfig}
                     />
-                    <DropdownSelect
-                        data={data}
-                        setData={setData}
-                        fieldKey="nat"
-                        label="Nat"
-                        fieldsConfig={fieldsConfig}
-                    />
-                </FormGroup></>
+                </FormGroup>
+                </>
             }
         </div>
     );

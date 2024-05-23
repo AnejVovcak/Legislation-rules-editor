@@ -129,12 +129,21 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
     return (
         <Form>
-            <FormGroup widths='equal'>
-                <FormInput name="title" fluid label='Title' placeholder='Title' value={data.title || ''}
+            <div style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
+                <FormInput name="title" label='Title' placeholder='Title' value={data.title || ''}
                            onChange={(e) => setData(prev => ({
                                ...prev, title: e.target.value
                            }))}/>
-            </FormGroup>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div>
+                        <Button positive onClick={() => handleStagingPush()}>Save</Button>
+                        <Button negative onClick={() => window.close()}>Cancel</Button>
+                        {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
+                            Publish
+                        </Button>}
+                    </div>
+                </div>
+            </div>
 
             {dataType === DataType.MIG &&
                 <MigForm fieldsConfig={filterValues}
@@ -166,22 +175,12 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                      setSources={(newSources) => setData({...data, source: newSources})}/>
             {success && <SuccessToastr/>}
             {error && <ErrorToastr/>}
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <div>
-                    <Button positive onClick={() => handleStagingPush()}>Save</Button>
-                    <Button negative onClick={() => window.close()}>Cancel</Button>
-                    {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
-                        Push on production
-                    </Button>}
+            {id && id !== "new" &&
+                <div style={{fontStyle: 'italic', color: 'grey', textAlign: 'right'}}>
+                    <div>last
+                        modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
                 </div>
-                {id && id !== "new" &&
-                    <div style={{fontStyle: 'italic', color: 'grey'}}>
-                        <div>last
-                            modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
-                    </div>
-                }
-            </div>
-
+            }
             <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
                           handleProductionPush={handleProductionPush}/>
         </Form>

@@ -13,9 +13,10 @@ const modalWarning = ({modalOpen, setModalOpen, handleProductionPush}: {
             open={modalOpen}
             onClose={() => setModalOpen(false)}
         >
-            <ModalHeader>Push on production</ModalHeader>
+            <ModalHeader>Publish</ModalHeader>
             <ModalContent>
-                <p>Are you sure you want to push this on production?</p>
+                <p>Are you sure you want to publish this on production?
+                    Changes will be visible immediately visible to the public.</p>
             </ModalContent>
             <ModalActions>
                 <Button negative onClick={() => setModalOpen(false)}>

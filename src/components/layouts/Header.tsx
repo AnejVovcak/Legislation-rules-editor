@@ -35,7 +35,7 @@ export default class Header extends Component {
     render() {
         const {activeItem} = this.state
         return (
-            <header style={{padding: '1rem', backgroundColor: '#f0f0f0'}}>
+            <header style={{padding: '1.5rem', backgroundColor: '#f0f0f0'}}>
                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                     <div>
                         <Link to={'/'}>
@@ -59,8 +59,8 @@ export default class Header extends Component {
                                 active={activeItem === 'tax'}
                                 href={'/tax'}
                             />
-                        </Menu>
-                        <Menu secondary>
+                        {/*</Menu>*/}
+                        {/*<Menu secondary>*/}
                             <MenuItem
                                 name='migration ⚠️'
                                 active={activeItem === 'migProd'}

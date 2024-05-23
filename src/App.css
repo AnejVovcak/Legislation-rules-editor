@@ -57,3 +57,8 @@
   right: 20px;    /* Distance from the right side of the viewport */
   z-index: 1000;  /* Ensure it sits on top of other content */
 }
+
+.custom-quill-editor .ql-container {
+  min-height: 300px;
+}
+

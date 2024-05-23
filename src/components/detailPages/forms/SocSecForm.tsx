@@ -39,8 +39,6 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             multiple={true}
                             fieldsConfig={fieldsConfig}
                         />
-                    </FormGroup>
-                    <FormGroup inline widths='equal'>
                         <DropdownSelect
                             data={data}
                             setData={setData}

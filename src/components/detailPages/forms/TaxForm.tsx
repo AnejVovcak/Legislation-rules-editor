@@ -38,8 +38,6 @@ function TaxForm({data, setData, fieldsConfig}: {
                             label="Out"
                             fieldsConfig={fieldsConfig}
                         />
-                    </FormGroup>
-                    <FormGroup inline widths='equal'>
                         <DropdownSelect
                             data={data}
                             setData={setData}

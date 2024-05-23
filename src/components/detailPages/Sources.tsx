@@ -25,7 +25,7 @@ const SourcesInput = ({sources, setSources, sourceEnum}: {
             xpath: '',
             md5_hash: '',
             type: SourceTrackingEnum.OFFICIAL_WEBSITE,
-            validated: false
+            validated: true
         };
         const newSources = [...sources, newSource];
         setSources(newSources);
@@ -58,7 +58,7 @@ const SourcesInput = ({sources, setSources, sourceEnum}: {
                         fluid
                         label='Type'
                         value={source.type || ''}
-                        options={SemanticColorUtil.getDropdownOptions([sourceEnum], 'Source')}
+                        options={SemanticColorUtil.getDropdownOptions([sourceEnum], 'source')}
                         onChange={(e, {value}) => handleSourceChange(index, 'type', value as SourceTrackingEnum)}
                     />
                     <FormField>

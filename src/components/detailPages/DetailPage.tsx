@@ -48,7 +48,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     useEffect(() => {
         getAllDocuments({...request}).then((result) => {
             setFilterValues((result as unknown as EnumValue[]).filter(
-                (value) => value.domain.includes(dataType)));
+                (value) => value.domain.includes(dataType) || value._id === 'source'));
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
@@ -129,6 +129,11 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
     return (
         <Form>
+            <div>
+                {data.source && data.source.map((value) => {
+                    return <div>{value.source}</div>
+                })}
+            </div>
             <div style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
                 <FormInput name="title" label='Title' placeholder='Title' value={data.title || ''}
                            onChange={(e) => setData(prev => ({
@@ -169,10 +174,11 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                     }))}
                 />
             </FormGroup>
-
-            <Sources sources={data.source || []}
-                     sourceEnum={filterValues.find(value => value._id === 'Source')!}
+            {data.source && filterValues &&
+                <Sources sources={data.source || []}
+                     sourceEnum={filterValues.find(value => value._id === 'source')!}
                      setSources={(newSources) => setData({...data, source: newSources})}/>
+            }
             {success && <SuccessToastr/>}
             {error && <ErrorToastr/>}
             {id && id !== "new" &&

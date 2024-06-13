@@ -5,14 +5,23 @@ import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
 function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
+    const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
+        if ((e.target as HTMLInputElement).type !== 'checkbox') {
+            window.open(`/mig/${id}`, "_blank");
+        }
+    };
+
     return (
         <TableBody>
             {data.map((item, index) => (
-                <tr key={index} onClick={() =>
-                    //isProduction ? {} : navigate(`/mig/${item._id as string}`)}>
-                    //open in new page
-                    isProduction ? {} : window.open(`/mig/${item._id as string}`, "_blank")}>
-                    {/* Render table cells as per your data structure */}
+                <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
+                    
+                    {!isProduction && (
+                        <td onClick={(e) => e.stopPropagation()} >
+                            <input type="checkbox" id={item._id as string}/>
+                        </td>
+                    )}
+
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content,500)}}/>

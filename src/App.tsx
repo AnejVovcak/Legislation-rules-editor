@@ -28,7 +28,10 @@ function App() {
                     <TableView
                         dataType={DataType.MIG}
                         isProduction={false}
-                        columns={columnsMig}
+                        //add column for select at the beginning
+                        columns={
+                            [{label: 'SELECT', key: 'select'}, ...columnsMig]
+                        }
                         filterFields={fieldsConfigMig}
                         newObjectUrl={'/mig/new'}
                         collection={CollectionEnum.MIG_STAGING}
@@ -49,7 +52,9 @@ function App() {
                     <TableView
                         dataType={DataType.SOC_SEC}
                         isProduction={false}
-                        columns={columnsSocSec}
+                        columns={
+                            [{label: 'SELECT', key: 'select'}, ...columnsSocSec]
+                        }
                         filterFields={fieldsConfigSocSec}
                         newObjectUrl={'/socSec/new'}
                         collection={CollectionEnum.SOC_SEC_STAGING}
@@ -71,7 +76,9 @@ function App() {
                     <TableView
                         dataType={DataType.TAX}
                         isProduction={false}
-                        columns={columnsTax}
+                        columns={
+                            [{label: 'SELECT', key: 'select'}, ...columnsTax]
+                        }
                         filterFields={fieldsConfigTax}
                         newObjectUrl={'/tax/new'}
                         collection={CollectionEnum.TAX_STAGING}

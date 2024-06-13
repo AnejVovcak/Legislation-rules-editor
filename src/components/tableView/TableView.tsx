@@ -16,12 +16,13 @@ import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 import {EnumValue} from "../../enums/EnumValue";
+import { handleSubmitFixed } from "../../utils/detailPageUtil";
 
 type TableViewProps<T> = {
     dataType: DataType;
     isProduction: boolean;
     filterFields: { fieldName: string, enumType: any }[];
-    columns: { label: string, key: keyof T }[];
+    columns: { label: string, key: keyof T}[];
     newObjectUrl: string;
     collection: CollectionEnum;
 }
@@ -59,6 +60,29 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
         });
     };
 
+    //function that publishes the selected documents
+    const publishSelected = async () => {
+        //get all checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        //get all checked checkboxes
+        const selectedIDs = Array.from(checkboxes).filter((checkbox) => (checkbox as HTMLInputElement).checked)
+            .map((checkbox) => checkbox.id);
+
+        //get selected data, filter it by id. selectedIDs is an array of strings
+        //@ts-ignore
+        const selectedData = data.filter((item) => selectedIDs.includes(item._id)) as (Mig | SocSec | Tax)[];
+
+        //submit the selected data
+        for (let i = 0; i < selectedData.length; i++) {
+            //console.log(selectedData[i]);
+            await handleSubmitFixed(selectedData[i], setData, selectedData[i]._id as string, "mig");
+        }
+
+        //reload the page
+        window.location.reload();
+    };
+
     useEffect(() => {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
     }, [filters,column,direction]); // Re-fetch data whenever filters change
@@ -82,13 +106,23 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
                 <TableFilters fieldsConfig={filterValues}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
-                {!isProduction &&
-                    <Button
-                        className="fixed-button"
-                        primary
-                        size='large'
-                        onClick={() =>
-                            window.open(newObjectUrl)}>Add new</Button>
+                {!isProduction && (
+                    <div className="fixed-container" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        <Button
+                            className=""
+                            primary
+                            size='large'
+                            onClick={() => window.open(newObjectUrl)}>Add new
+                        </Button>
+
+                        <Button
+                            className=""
+                            primary
+                            size='large'
+                            onClick={() => publishSelected()}>Publish selected
+                        </Button>
+                    </div>
+                )
                 }
             </div>
             <Table celled sortable selectable>

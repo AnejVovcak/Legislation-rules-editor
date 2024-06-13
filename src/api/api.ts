@@ -85,6 +85,24 @@ export const updateObject = async (id: string, data: Tax | Mig | SocSec, collect
     return response.data;
 }
 
+//fixed update object that updates if it exists and creates if it doesn't
+export const updateObjectFixed = async (id: string | undefined, data: Tax | Mig | SocSec, collectionName: string) => {
+    delete data._id;
+    const response = await axios.post(API_BASE_URL + Actions.UPDATE, {
+        dataSource: "LawBrainerTest",
+        database: "lawBrainer",
+        collection: collectionName,
+        filter: {
+            _id: {"$oid": id},
+        },
+        update: {"$set": {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}},
+        upsert: true
+    }, {
+        headers: headers,
+    });
+    return response.data;
+}
+
 export const updateEnumObject = async (id: string, data: EnumValue, newValue:string) => {
     data.values.push(newValue);
     //remove _id from data

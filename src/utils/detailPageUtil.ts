@@ -40,16 +40,12 @@ export async function handleSubmit<T>(data: Mig | SocSec | Tax,
 }
 
 //publish the object fixed
-export async function handleSubmitFixed<T>(data: Mig | SocSec | Tax,
-                                          setData: React.Dispatch<React.SetStateAction<T>>,
+export async function handleSubmitFixed(data: Mig | SocSec | Tax,
                                           id: string | undefined,
                                           collectionName: string): Promise<boolean> {
     const content = data.content;
     const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
     const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
-    const newContent = content.replace(regex, subst);
-    data.content = newContent;
-    //setData(prev => ({...prev, content: newContent}));
+    data.content = content.replace(regex, subst);
     return await updateObjectFixed(id, data, collectionName);
-    return true;
 }

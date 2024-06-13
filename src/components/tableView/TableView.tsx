@@ -16,13 +16,13 @@ import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 import {EnumValue} from "../../enums/EnumValue";
-import { handleSubmitFixed } from "../../utils/detailPageUtil";
+import {handleSubmitFixed} from "../../utils/detailPageUtil";
 
 type TableViewProps<T> = {
     dataType: DataType;
     isProduction: boolean;
     filterFields: { fieldName: string, enumType: any }[];
-    columns: { label: string, key: keyof T}[];
+    columns: { label: string, key: keyof T }[];
     newObjectUrl: string;
     collection: CollectionEnum;
 }
@@ -53,7 +53,7 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
-        getAllDocuments(getRequestWithFilterAndSort(request, filters,column,direction)).then((result) => {
+        getAllDocuments(getRequestWithFilterAndSort(request, filters, column, direction)).then((result) => {
             setData(result as unknown as T[]);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
@@ -76,7 +76,11 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
         //submit the selected data
         for (let i = 0; i < selectedData.length; i++) {
             //console.log(selectedData[i]);
-            await handleSubmitFixed(selectedData[i], setData, selectedData[i]._id as string, "mig");
+            await handleSubmitFixed({...selectedData[i], published: true}, selectedData[i]._id as string, collection);
+            await handleSubmitFixed({...selectedData[i], published: true}, selectedData[i]._id as string,
+                collection === CollectionEnum.TAX_STAGING ? CollectionEnum.TAX_PRODUCTION :
+                    collection === CollectionEnum.MIG_STAGING ? CollectionEnum.MIG_PRODUCTION :
+                        collection === CollectionEnum.SOC_SEC_STAGING ? CollectionEnum.SOC_SEC_PRODUCTION : "");
         }
 
         //reload the page
@@ -85,7 +89,7 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
     useEffect(() => {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
-    }, [filters,column,direction]); // Re-fetch data whenever filters change
+    }, [filters, column, direction]); // Re-fetch data whenever filters change
 
     const handleSortClick = (clickedColumn: keyof T) => () => {
         if (column !== clickedColumn) {

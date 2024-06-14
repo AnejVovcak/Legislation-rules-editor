@@ -74,7 +74,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
         const initializeData = () => {
             setData({} as T);
             // if url contains the word dev, set isDev to true
-            if (window.location.href.includes("Dev")) {
+            if (window.location.pathname.includes("/dev")) {
                 setIsDev(true);
             }
             switch (dataType) {
@@ -94,15 +94,12 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
         const loadData = async () => {
             if (id && id !== "new") {
-                try {
+                if(window.location.pathname.includes("/dev")){
+                    await fetchData(id, collectionDev);
+                    setIsDev(true);
+                }
+                else {
                     await fetchData(id, collectionStaging);
-                } catch {
-                    try {
-                        await fetchData(id, collectionDev);
-                        setIsDev(true);
-                    } catch (error) {
-                        window.close();
-                    }
                 }
             } else {
                 initializeData();

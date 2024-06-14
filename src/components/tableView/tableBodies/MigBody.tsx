@@ -7,7 +7,7 @@ import truncateHtml from "../../../utils/tableViewBodyUtil";
 function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
-            window.open(`/mig/${id}`, "_blank");
+                window.open(`mig/${id}`, "_blank");
         }
     };
 

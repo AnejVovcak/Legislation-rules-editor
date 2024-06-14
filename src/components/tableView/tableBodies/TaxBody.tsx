@@ -7,7 +7,7 @@ import truncateHtml from "../../../utils/tableViewBodyUtil";
 function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
-            window.open(`/tax/${id}`, "_blank");
+            window.open(`tax/${id}`, "_blank");
         }
     }
 

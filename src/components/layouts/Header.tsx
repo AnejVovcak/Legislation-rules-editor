@@ -1,100 +1,49 @@
-import {Link} from "react-router-dom";
 import {Dropdown, DropdownItem, DropdownMenu, Menu, MenuItem} from "semantic-ui-react";
 import {Component} from "react";
+import { Link } from 'react-router-dom';
 
-export default class Header extends Component {
+class Header extends Component {
+    state = { activeItem: '' }
 
-    state = {activeItem: ''}
-
-    //check the route and set the active item
+    // Check the route and set the active item
     componentDidMount() {
-        const path = window.location.pathname;
-        switch (path) {
-            case '/migDev':
-                this.setState({activeItem: 'migDev'});
-                break;
-            case '/socSecDev':
-                this.setState({activeItem: 'socSecDev'});
-                break;
-            case '/taxDev':
-                this.setState({activeItem: 'taxDev'});
-                break;
-            case '/mig':
-                this.setState({activeItem: 'mig'});
-                break;
-            case '/socSec':
-                this.setState({activeItem: 'socSec'});
-                break;
-            case '/tax':
-                this.setState({activeItem: 'tax'});
-                break;
-            case '/migProd':
-                this.setState({activeItem: 'migProd'});
-                break;
-            case '/socSecProd':
-                this.setState({activeItem: 'socSecProd'});
-                break;
-            case '/taxProd':
-                this.setState({activeItem: 'taxProd'});
-                break;
+        const path = window.location.pathname.substring(1); // Remove leading slash
+        this.setState({ activeItem: path });
+    }
+
+    componentDidUpdate() {
+        const path = window.location.pathname.substring(1); // Remove leading slash
+        if (this.state.activeItem !== path) {
+            this.setState({ activeItem: path });
         }
     }
 
+    handleNavigation = (path: string) => {
+        this.setState({ activeItem: path });
+        //clear the path and redirect to the new one
+        window.location.replace(`/${path}`);
+    };
+
     render() {
-        const {activeItem} = this.state
+        const { activeItem } = this.state;
         return (
-            <header style={{padding: '1.5rem', backgroundColor: '#f0f0f0'}}>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+            <header style={{ padding: '1.5rem', backgroundColor: '#f0f0f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
                         <Link to={'/'}>
-                            <h1 style={{margin: 0}}>Backoffice</h1>
+                            <h1 style={{ margin: 0 }}>Backoffice</h1>
                         </Link>
                     </div>
                     <div>
-                        {/*<Menu secondary>*/}
-                        {/*    <MenuItem*/}
-                        {/*        name='migration'*/}
-                        {/*        active={activeItem === 'mig'}*/}
-                        {/*        href={'/mig'}*/}
-                        {/*    />*/}
-                        {/*    <MenuItem*/}
-                        {/*        name='social security'*/}
-                        {/*        active={activeItem === 'socSec'}*/}
-                        {/*        href={'/socSec'}*/}
-                        {/*    />*/}
-                        {/*    <MenuItem*/}
-                        {/*        name='tax'*/}
-                        {/*        active={activeItem === 'tax'}*/}
-                        {/*        href={'/tax'}*/}
-                        {/*    />*/}
-                        {/*    /!*</Menu>*!/*/}
-                        {/*    /!*<Menu secondary>*!/*/}
-                        {/*    <MenuItem*/}
-                        {/*        name='migration ⚠️'*/}
-                        {/*        active={activeItem === 'migProd'}*/}
-                        {/*        href={'/migProd'}*/}
-                        {/*    />*/}
-                        {/*    <MenuItem*/}
-                        {/*        name='social security ⚠️'*/}
-                        {/*        active={activeItem === 'socSecProd'}*/}
-                        {/*        href={'/socSecProd'}*/}
-                        {/*    />*/}
-                        {/*    <MenuItem*/}
-                        {/*        name='tax ⚠️'*/}
-                        {/*        active={activeItem === 'taxProd'}*/}
-                        {/*        href={'/taxProd'}*/}
-                        {/*    />*/}
-                        {/*</Menu>*/}
-
                         <Menu horizontal>
-                            <MenuItem href={'/mig'}
-                                      active={activeItem === 'mig'}
+                            <MenuItem onClick={() => this.handleNavigation('staging/mig')}
+                                      active={activeItem === 'staging/mig'}
                             >migration</MenuItem>
-                            <MenuItem href={'/socSec'}
-                                      active={activeItem === 'socSec'}
+                            <MenuItem onClick={() => this.handleNavigation('staging/socSec')}
+                                      active={activeItem === 'staging/socSec'}
                             >social security</MenuItem>
-                            <MenuItem href={'/tax'}
-                                      active={activeItem === 'tax'}
+                            <MenuItem onClick={() => this.handleNavigation('staging/tax')}
+                                      active={activeItem === 'staging/tax'}
                             >tax</MenuItem>
 
                             <Dropdown
@@ -104,19 +53,19 @@ export default class Header extends Component {
                                 className='link item'>
                                 <DropdownMenu>
                                     <DropdownItem
-                                        key='migProd'
-                                        href={'/migProd'}
-                                        active={activeItem === 'migProd'}
+                                        key='prod/mig'
+                                        onClick={() => this.handleNavigation('prod/mig')}
+                                        active={activeItem === 'prod/mig'}
                                     >Migration</DropdownItem>
                                     <DropdownItem
-                                        key='socSecProd'
-                                        href={'/socSecProd'}
-                                        active={activeItem === 'socSecProd'}
+                                        key='prod/socSec'
+                                        onClick={() => this.handleNavigation('prod/socSec')}
+                                        active={activeItem === 'prod/socSec'}
                                     >Social Security</DropdownItem>
                                     <DropdownItem
-                                        key='taxProd'
-                                        href={'/taxProd'}
-                                        active={activeItem === 'taxProd'}
+                                        key='prod/tax'
+                                        onClick={() => this.handleNavigation('prod/tax')}
+                                        active={activeItem === 'prod/tax'}
                                     >Tax</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -128,19 +77,19 @@ export default class Header extends Component {
                                 className='link item'>
                                 <DropdownMenu>
                                     <DropdownItem
-                                        key='migDev'
-                                        href={'/migDev'}
-                                        active={activeItem === 'migDev'}
+                                        key='dev/mig'
+                                        onClick={() => this.handleNavigation('dev/mig')}
+                                        active={activeItem === 'dev/mig'}
                                     >Migration</DropdownItem>
                                     <DropdownItem
-                                        key='socSecDev'
-                                        href={'/socSecDev'}
-                                        active={activeItem === 'socSecDev'}
+                                        key='dev/socSec'
+                                        onClick={() => this.handleNavigation('dev/socSec')}
+                                        active={activeItem === 'dev/socSec'}
                                     >Social Security</DropdownItem>
                                     <DropdownItem
-                                        key='taxDev'
-                                        href={'/taxDev'}
-                                        active={activeItem === 'taxDev'}
+                                        key='dev/tax'
+                                        onClick={() => this.handleNavigation('dev/tax')}
+                                        active={activeItem === 'dev/tax'}
                                     >Tax</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -149,6 +98,7 @@ export default class Header extends Component {
                 </div>
             </header>
         );
-
     }
 }
+
+export default Header;

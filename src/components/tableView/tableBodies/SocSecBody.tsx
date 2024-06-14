@@ -4,7 +4,7 @@ import React from "react";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolean }) {
+function SocSecBody({data, isProduction, isDev}: { data: SocSec[], isProduction: boolean, isDev:boolean }) {
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
             window.open(`socSec/${id}`, "_blank");
@@ -16,7 +16,7 @@ function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolea
             {data.map((item, index) => (
                 <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
 
-                    {!isProduction && (
+                    {!isProduction && !isDev && (
                         <td onClick={(e) => e.stopPropagation()}>
                             <input type="checkbox" />
                         </td>

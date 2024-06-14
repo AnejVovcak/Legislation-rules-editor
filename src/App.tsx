@@ -27,9 +27,7 @@ function App() {
                 <TableView
                     dataType={DataType.MIG}
                     isProduction={false}
-                    columns={
-                        [{label: 'SELECT', key: 'select'}, ...columnsMig]
-                    }
+                    columns={columnsMig}
                     filterFields={fieldsConfigMig}
                     newObjectUrl={'mig/new'}
                     collection={CollectionEnum.MIG_DEV}
@@ -64,9 +62,7 @@ function App() {
                     <TableView
                         dataType={DataType.SOC_SEC}
                         isProduction={false}
-                        columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsSocSec]
-                        }
+                        columns={columnsSocSec}
                         filterFields={fieldsConfigSocSec}
                         newObjectUrl={'socSec/new'}
                         collection={CollectionEnum.SOC_SEC_DEV}
@@ -101,9 +97,7 @@ function App() {
                     <TableView
                         dataType={DataType.TAX}
                         isProduction={false}
-                        columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsTax]
-                        }
+                        columns={columnsTax}
                         filterFields={fieldsConfigTax}
                         newObjectUrl={'tax/new'}
                         collection={CollectionEnum.TAX_DEV}

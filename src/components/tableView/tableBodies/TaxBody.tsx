@@ -4,7 +4,7 @@ import {Tax} from "../../../dtos/tax";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
+function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boolean, isDev:boolean }) {
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
             window.open(`tax/${id}`, "_blank");
@@ -16,7 +16,7 @@ function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
             {data.map((item, index) => (
                 <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
 
-                    {!isProduction && (
+                    {!isProduction && !isDev && (
                         <td onClick={(e) => e.stopPropagation()}>
                             <input type="checkbox" />
                         </td>

@@ -35,6 +35,8 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
+    const [isDev, setIsDev] = useState<boolean>(false);
+
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
@@ -43,6 +45,7 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     }
 
     useEffect(() => {
+        setIsDev(window.location.pathname.includes("/dev"))
         getAllDocuments({...request, collection: "enums"}).then((result) => {
             setFilterValues((result as unknown as EnumValue[]).filter(
                 (value) => value.domain.includes(dataType)));
@@ -119,12 +122,14 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
                             onClick={() => window.open(newObjectUrl)}>Add new
                         </Button>
 
-                        <Button
-                            className=""
-                            primary
-                            size='large'
-                            onClick={() => publishSelected()}>Publish selected
-                        </Button>
+                        {!isDev &&
+                            <Button
+                                className=""
+                                primary
+                                size='large'
+                                onClick={() => publishSelected()}>Publish selected
+                            </Button>
+                        }
                     </div>
                 )
                 }
@@ -137,10 +142,12 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
                         ))}
                     </TableRow>
                 </TableHeader>
-                {dataType === DataType.MIG && <MigBody data={data as unknown as Mig[]} isProduction={isProduction}/>}
+                {dataType === DataType.MIG &&
+                    <MigBody data={data as unknown as Mig[]} isProduction={isProduction} isDev={isDev}/>}
                 {dataType === DataType.SOC_SEC &&
-                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction}/>}
-                {dataType === DataType.TAX && <TaxBody data={data as unknown as Tax[]} isProduction={isProduction}/>}
+                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction} isDev={isDev}/>}
+                {dataType === DataType.TAX &&
+                    <TaxBody data={data as unknown as Tax[]} isProduction={isProduction} isDev={isDev}/>}
             </Table>
         </div>
     );

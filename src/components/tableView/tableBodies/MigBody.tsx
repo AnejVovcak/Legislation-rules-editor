@@ -4,7 +4,8 @@ import {TableBody} from "semantic-ui-react";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
+function MigBody({data, isProduction, isDev}: { data: Mig[], isProduction: boolean, isDev:boolean }) {
+
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
                 window.open(`mig/${id}`, "_blank");
@@ -16,7 +17,7 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
             {data.map((item, index) => (
                 <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
                     
-                    {!isProduction && (
+                    {!isProduction && !isDev && (
                         <td onClick={(e) => e.stopPropagation()} >
                             <input type="checkbox" id={item._id as string}/>
                         </td>

@@ -10,6 +10,15 @@ export default class Header extends Component {
     componentDidMount() {
         const path = window.location.pathname;
         switch (path) {
+            case '/migDev':
+                this.setState({activeItem: 'migDev'});
+                break;
+            case '/socSecDev':
+                this.setState({activeItem: 'socSecDev'});
+                break;
+            case '/taxDev':
+                this.setState({activeItem: 'taxDev'});
+                break;
             case '/mig':
                 this.setState({activeItem: 'mig'});
                 break;
@@ -108,6 +117,30 @@ export default class Header extends Component {
                                         key='taxProd'
                                         href={'/taxProd'}
                                         active={activeItem === 'taxProd'}
+                                    >Tax</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+
+                            <Dropdown
+                                selection
+                                text='Development 🪛'
+                                pointing='top'
+                                className='link item'>
+                                <DropdownMenu>
+                                    <DropdownItem
+                                        key='migDev'
+                                        href={'/migDev'}
+                                        active={activeItem === 'migDev'}
+                                    >Migration</DropdownItem>
+                                    <DropdownItem
+                                        key='socSecDev'
+                                        href={'/socSecDev'}
+                                        active={activeItem === 'socSecDev'}
+                                    >Social Security</DropdownItem>
+                                    <DropdownItem
+                                        key='taxDev'
+                                        href={'/taxDev'}
+                                        active={activeItem === 'taxDev'}
                                     >Tax</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>

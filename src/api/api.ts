@@ -51,49 +51,15 @@ export const getById = async (id: string, collectionName: string): Promise<Tax |
     return response.data.documents[0];
 }
 
-export const createObject = async (data: Tax | Mig | SocSec, collectionName: string) => {
-    const response = await axios.post(API_BASE_URL + Actions.INSERT, {
-        dataSource: "LawBrainerTest",
-        database: "lawBrainer",
-        collection: collectionName,
-        document: {
-            ...data,
-            last_modified: new Date(),
-            last_modified_by: localStorage.getItem('email'),
-            _id: data._id ? {"$oid": data._id} : undefined
-        }
-    }, {
-        headers: headers,
-    });
-    return response.data;
-}
-
-export const updateObject = async (id: string, data: Tax | Mig | SocSec, collectionName: string) => {
-    //remove _id from data
-    delete data._id;
-    const response = await axios.post(API_BASE_URL + Actions.UPDATE, {
-        dataSource: "LawBrainerTest",
-        database: "lawBrainer",
-        collection: collectionName,
-        filter: {
-            _id: {"$oid": id},
-        },
-        update: {"$set": {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}}
-    }, {
-        headers: headers,
-    });
-    return response.data;
-}
-
 //fixed update object that updates if it exists and creates if it doesn't
-export const updateObjectFixed = async (id: string | undefined, data: Tax | Mig | SocSec, collectionName: string) => {
+export const updateObject = async (id: string | undefined, data: Tax | Mig | SocSec, collectionName: string) => {
     delete data._id;
     const response = await axios.post(API_BASE_URL + Actions.UPDATE, {
         dataSource: "LawBrainerTest",
         database: "lawBrainer",
         collection: collectionName,
         filter: {
-            _id: {"$oid": id},
+            _id: id !== undefined ? {"$oid": id} : undefined,
         },
         update: {"$set": {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}},
         upsert: true
@@ -103,7 +69,7 @@ export const updateObjectFixed = async (id: string | undefined, data: Tax | Mig 
     return response.data;
 }
 
-export const updateEnumObject = async (id: string, data: EnumValue, newValue:string) => {
+export const updateEnumObject = async (id: string, data: EnumValue, newValue: string) => {
     data.values.push(newValue);
     //remove _id from data
     const response = await axios.post(API_BASE_URL + Actions.UPDATE, {

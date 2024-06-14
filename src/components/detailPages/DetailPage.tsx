@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {Mig} from "../../dtos/mig";
 import {getAllDocuments, getById} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
-import {handleSubmit} from "../../utils/detailPageUtil";
 import {Button, Form, FormGroup, FormInput} from "semantic-ui-react";
 import TextEditor from "./textEditor/TextEditor";
 import Sources from "./Sources";
@@ -18,26 +17,29 @@ import SocSecForm from "./forms/SocSecForm";
 import TaxForm from "./forms/TaxForm";
 import {EnumValue} from "../../enums/EnumValue";
 import {MongoRequest} from "../../dtos/mongo-request";
+import {handleSubmit} from "../../utils/detailPageUtil";
 
 type DetailPageProps = {
     dataType: DataType;
+    collectionDev: CollectionEnum;
     collectionStaging: CollectionEnum;
     collectionProduction: CollectionEnum;
 }
 
 function DetailPage<T extends Mig | SocSec | Tax>({
                                                       dataType,
+                                                      collectionDev,
                                                       collectionStaging,
                                                       collectionProduction
                                                   }: DetailPageProps) {
-    const {id} = useParams();
+    const {id} = useParams<{ id: string }>();
     const navigate = useNavigate(); // For navigation
     const [data, setData] = useState<T>({} as T);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const [onProduction, setOnProduction] = useState(false);
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
+    const [isDev, setIsDev] = useState<boolean>(false);
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
@@ -55,54 +57,72 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     }, []);
 
     useEffect(() => {
-        if (id !== "new" && id) {
-            getById(id, collectionStaging).then((result) => {
+        const fetchData = async (id: string, collection: CollectionEnum) => {
+            try {
+                const result = await getById(id, collection);
                 setData(result as T);
                 const content = result.content;
                 const regex = /<span class="tooltip">(.*?)<span class="tooltip-content">(.*?)<\/span><\/span>/g;
                 const subst = `<a href="[info]$2">$1</a>`;
                 const newContent = content.replace(regex, subst);
                 setData(prev => ({...prev, content: newContent}));
+            } catch (error) {
+                throw new Error(`Failed to fetch data from ${collection}: ${error}`);
+            }
+        };
 
+        const initializeData = () => {
+            setData({} as T);
+            // if url contains the word dev, set isDev to true
+            if (window.location.href.includes("Dev")) {
+                setIsDev(true);
+            }
+            switch (dataType) {
+                case DataType.MIG:
+                    setData(prev => ({...prev, time: [], article: []}));
+                    break;
+                case DataType.SOC_SEC:
+                    setData(prev => ({...prev, article: [], covered: [], statute: []}));
+                    break;
+                case DataType.TAX:
+                    setData(prev => ({...prev, article: [], covered: []}));
+                    break;
+                default:
+                    break;
+            }
+        };
 
-            }).catch((error) => {
-                console.error("Failed to fetch data:", error);
-                window.close();
-            });
-        } else {
-            setData({} as T)
-
-            if (dataType === DataType.MIG)
-                setData(prev => ({...prev, time: [], article: []}))
-            if (dataType === DataType.SOC_SEC)
-                setData(prev => ({...prev, article: [], covered: [], statute: []}))
-            if (dataType === DataType.TAX)
-                setData(prev => ({...prev, article: [], covered: []}))
-        }
-
-        //check if object exists in production
-        if (id && id !== "new") {
-            getById(id, collectionProduction).then((result) => {
-                if (result) {
-                    setOnProduction(true);
-                } else {
-                    setOnProduction(false);
+        const loadData = async () => {
+            if (id && id !== "new") {
+                try {
+                    await fetchData(id, collectionStaging);
+                } catch {
+                    try {
+                        await fetchData(id, collectionDev);
+                        setIsDev(true);
+                    } catch (error) {
+                        window.close();
+                    }
                 }
-                console.log("onProduction", onProduction)
-            });
-        }
+            } else {
+                initializeData();
+            }
+        };
+
+        loadData();
     }, [id, navigate]);
 
-    const handleSubmitWrapper = (collection: CollectionEnum, published: boolean, production: boolean): Promise<boolean> => {
+
+    const handleSubmitWrapper = (collection: CollectionEnum, published: boolean): Promise<boolean> => {
         return handleSubmit({
             ...data,
             published: published
-        }, setData, id, collection, published && !onProduction && production);
+        }, setData, id==='new' ? undefined : id, collection);
     }
 
     const handleProductionPush = async () => {
-        if (await handleSubmitWrapper(collectionProduction, true, true)) {
-            if (await handleSubmitWrapper(collectionStaging, true, false)) {
+        if (await handleSubmitWrapper(collectionProduction, true)) {
+            if (await handleSubmitWrapper(collectionStaging, true)) {
                 setSuccess(true);
                 setTimeout(() => {
                     window.close();
@@ -115,8 +135,8 @@ function DetailPage<T extends Mig | SocSec | Tax>({
         }
     };
 
-    const handleStagingPush = async () => {
-        if (await handleSubmitWrapper(collectionStaging, false, false)) {
+    const handleNonProdPush = async () => {
+        if (await handleSubmitWrapper(isDev ? collectionDev : collectionStaging, false)) {
             setSuccess(true);
             setTimeout(() => {
                 window.close();
@@ -129,36 +149,32 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
     return (
         <Form>
-            <div>
-                {data.source && data.source.map((value) => {
-                    return <div>{value.source}</div>
-                })}
-            </div>
             <div style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                <FormInput name="title" label='Title' placeholder='Title' value={data.title || ''}
-                           onChange={(e) => setData(prev => ({
-                               ...prev, title: e.target.value
-                           }))}/>
+                {data &&
+                    <FormInput name="title" label='Title' placeholder='Title' value={data.title || ''}
+                               onChange={(e) => setData(prev => ({
+                                   ...prev, title: e.target.value
+                               }))}/>}
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div>
-                        <Button positive onClick={() => handleStagingPush()}>Save</Button>
+                        <Button positive onClick={() => handleNonProdPush()}>Save</Button>
                         <Button negative onClick={() => window.close()}>Cancel</Button>
-                        {id !== "new" && id && <Button negative onClick={() => setModalOpen(true)}>
+                        {id !== "new" && id && !isDev && <Button negative onClick={() => setModalOpen(true)}>
                             Publish
                         </Button>}
                     </div>
                 </div>
             </div>
 
-            {dataType === DataType.MIG &&
+            {data && dataType === DataType.MIG &&
                 <MigForm fieldsConfig={filterValues}
                          data={data as Mig}
                          setData={setData as React.Dispatch<React.SetStateAction<Mig>>}/>}
-            {dataType === DataType.SOC_SEC &&
+            {data && dataType === DataType.SOC_SEC &&
                 <SocSecForm fieldsConfig={filterValues}
                             data={data as SocSec}
                             setData={setData as React.Dispatch<React.SetStateAction<SocSec>>}/>}
-            {dataType === DataType.TAX &&
+            {data && dataType === DataType.TAX &&
                 <TaxForm fieldsConfig={filterValues}
                          data={data as Tax}
                          setData={setData as React.Dispatch<React.SetStateAction<Tax>>}/>}
@@ -167,21 +183,22 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             the
             text put [info]
             <FormGroup inline>
-                <TextEditor
-                    value={data.content}
-                    onChange={(value) => setData(prev => ({
-                        ...prev, content: value
-                    }))}
-                />
+                {data &&
+                    <TextEditor
+                        value={data.content}
+                        onChange={(value) => setData(prev => ({
+                            ...prev, content: value
+                        }))}
+                    />}
             </FormGroup>
-            {data.source && filterValues &&
+            {data && data.source && filterValues &&
                 <Sources sources={data.source || []}
-                     sourceEnum={filterValues.find(value => value._id === 'source')!}
-                     setSources={(newSources) => setData({...data, source: newSources})}/>
+                         sourceEnum={filterValues.find(value => value._id === 'source')!}
+                         setSources={(newSources) => setData({...data, source: newSources})}/>
             }
             {success && <SuccessToastr/>}
             {error && <ErrorToastr/>}
-            {id && id !== "new" &&
+            {id && id !== "new" && data &&
                 <div style={{fontStyle: 'italic', color: 'grey', textAlign: 'right'}}>
                     <div>last
                         modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>

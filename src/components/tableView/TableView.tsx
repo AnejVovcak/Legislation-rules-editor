@@ -16,7 +16,7 @@ import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 import {EnumValue} from "../../enums/EnumValue";
-import {handleSubmitFixed} from "../../utils/detailPageUtil";
+import {handleSubmitBatch} from "../../utils/detailPageUtil";
 
 type TableViewProps<T> = {
     dataType: DataType;
@@ -76,8 +76,8 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
         //submit the selected data
         for (let i = 0; i < selectedData.length; i++) {
             //console.log(selectedData[i]);
-            await handleSubmitFixed({...selectedData[i], published: true}, selectedData[i]._id as string, collection);
-            await handleSubmitFixed({...selectedData[i], published: true}, selectedData[i]._id as string,
+            await handleSubmitBatch({...selectedData[i], published: true}, selectedData[i]._id as string, collection);
+            await handleSubmitBatch({...selectedData[i], published: true}, selectedData[i]._id as string,
                 collection === CollectionEnum.TAX_STAGING ? CollectionEnum.TAX_PRODUCTION :
                     collection === CollectionEnum.MIG_STAGING ? CollectionEnum.MIG_PRODUCTION :
                         collection === CollectionEnum.SOC_SEC_STAGING ? CollectionEnum.SOC_SEC_PRODUCTION : "");

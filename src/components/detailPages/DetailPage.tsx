@@ -188,7 +188,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                         }))}
                     />}
             </FormGroup>
-            {data && data.source && filterValues &&
+            {data && filterValues &&
                 <Sources sources={data.source || []}
                          sourceEnum={filterValues.find(value => value._id === 'source')!}
                          setSources={(newSources) => setData({...data, source: newSources})}/>

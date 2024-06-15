@@ -18,7 +18,7 @@ function SocSecBody({data, isProduction, isDev}: { data: SocSec[], isProduction:
 
                     {!isProduction && !isDev && (
                         <td onClick={(e) => e.stopPropagation()}>
-                            <input type="checkbox" />
+                            <input type="checkbox" id={item._id as string}/>
                         </td>
                     )}
                     

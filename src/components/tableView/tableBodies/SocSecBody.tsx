@@ -4,16 +4,24 @@ import React from "react";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolean }) {
+function SocSecBody({data, isProduction, isDev}: { data: SocSec[], isProduction: boolean, isDev:boolean }) {
+    const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
+        if ((e.target as HTMLInputElement).type !== 'checkbox') {
+            window.open(`socSec/${id}`, "_blank");
+        }
+    };
 
     return (
         <TableBody>
             {data.map((item, index) => (
-                <tr key={index} onClick={() =>
-                    //isProduction ? {} : navigate(`/socSec/${item._id as string}`)}>
-                    //open in new page
-                    isProduction ? {} : window.open(`/socSec/${item._id as string}`, "_blank")}>
-                    {/* Render table cells as per your data structure */}
+                <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
+
+                    {!isProduction && !isDev && (
+                        <td onClick={(e) => e.stopPropagation()}>
+                            <input type="checkbox" id={item._id as string}/>
+                        </td>
+                    )}
+                    
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>

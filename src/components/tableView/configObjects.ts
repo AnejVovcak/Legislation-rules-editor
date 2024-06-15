@@ -15,9 +15,9 @@ import {Empl0EQEmpl1Enum} from "../../enums/Empl0EQEmpl1Enum";
 import {TaxEnum} from "../../enums/TaxEnum";
 import {Tax} from "../../dtos/tax";
 
-type MigKeys = keyof Mig
-type SocSecKeys = keyof SocSec
-type TaxKeys = keyof Tax
+type MigKeys = keyof Mig | 'select'
+type SocSecKeys = keyof SocSec | 'select'
+type TaxKeys = keyof Tax | 'select'
 
 export const fieldsConfigMig = [
     {fieldName: 'covered', enumType: CoveredEnum},
@@ -51,6 +51,7 @@ export const fieldsConfigTax = [
 ]
 
 export const columnsMig : {label:string, key:MigKeys}[] = [
+    //!isProduction ? {label: 'SELECT', key: 'select'} : null,
     {label: 'TITLE', key: 'title'},
     {label: 'CONTENT', key: 'content'},
     {label: 'IN', key: 'in_value'},
@@ -80,7 +81,7 @@ export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
     {label: 'PUBLISHED', key: 'published'}
 ]
 
-export const columnsTax: { label: string, key: TaxKeys }[] = [
+export const columnsTax: { label: string, key: TaxKeys}[] = [
     {label: 'TITLE', key: 'title'},
     {label: 'CONTENT', key: 'content'},
     {label: 'IN', key: 'in_value'},

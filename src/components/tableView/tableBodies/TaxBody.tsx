@@ -4,16 +4,24 @@ import {Tax} from "../../../dtos/tax";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
+function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boolean, isDev:boolean }) {
+    const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
+        if ((e.target as HTMLInputElement).type !== 'checkbox') {
+            window.open(`tax/${id}`, "_blank");
+        }
+    }
 
     return (
         <TableBody>
             {data.map((item, index) => (
-                <tr key={index} onClick={() =>
-                    //isProduction ? {} : navigate(`/tax/${item._id as string}`)}>
-                    //open in new page
-                    isProduction ? {} : window.open(`/tax/${item._id as string}`, "_blank")}>
-                    {/* Render table cells as per your data structure */}
+                <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
+
+                    {!isProduction && !isDev && (
+                        <td onClick={(e) => e.stopPropagation()}>
+                            <input type="checkbox" id={item._id as string}/>
+                        </td>
+                    )}
+                    
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>

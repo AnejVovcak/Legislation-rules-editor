@@ -16,6 +16,7 @@ import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 import {EnumValue} from "../../enums/EnumValue";
+import {handleSubmitBatch} from "../../utils/detailPageUtil";
 
 type TableViewProps<T> = {
     dataType: DataType;
@@ -34,6 +35,8 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
+    const [isDev, setIsDev] = useState<boolean>(false);
+
 
     const request: MongoRequest = {
         dataSource: "LawBrainerTest",
@@ -42,6 +45,7 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     }
 
     useEffect(() => {
+        setIsDev(window.location.pathname.includes("/dev"))
         getAllDocuments({...request, collection: "enums"}).then((result) => {
             setFilterValues((result as unknown as EnumValue[]).filter(
                 (value) => value.domain.includes(dataType)));
@@ -52,16 +56,43 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
     const fetchData = () => {
         // Now use requestWithFilter to fetch the data
-        getAllDocuments(getRequestWithFilterAndSort(request, filters,column,direction)).then((result) => {
+        getAllDocuments(getRequestWithFilterAndSort(request, filters, column, direction)).then((result) => {
             setData(result as unknown as T[]);
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
     };
 
+    //function that publishes the selected documents
+    const publishSelected = async () => {
+        //get all checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        //get all checked checkboxes
+        const selectedIDs = Array.from(checkboxes).filter((checkbox) => (checkbox as HTMLInputElement).checked)
+            .map((checkbox) => checkbox.id);
+
+        //get selected data, filter it by id. selectedIDs is an array of strings
+        //@ts-ignore
+        const selectedData = data.filter((item) => selectedIDs.includes(item._id)) as (Mig | SocSec | Tax)[];
+
+        //submit the selected data
+        for (let i = 0; i < selectedData.length; i++) {
+            //console.log(selectedData[i]);
+            await handleSubmitBatch({...selectedData[i], published: true}, selectedData[i]._id as string, collection);
+            await handleSubmitBatch({...selectedData[i], published: true}, selectedData[i]._id as string,
+                collection === CollectionEnum.TAX_STAGING ? CollectionEnum.TAX_PRODUCTION :
+                    collection === CollectionEnum.MIG_STAGING ? CollectionEnum.MIG_PRODUCTION :
+                        collection === CollectionEnum.SOC_SEC_STAGING ? CollectionEnum.SOC_SEC_PRODUCTION : "");
+        }
+
+        //reload the page
+        window.location.reload();
+    };
+
     useEffect(() => {
         fetchData(); // Call your fetch function which now uses the dynamically constructed request object
-    }, [filters,column,direction]); // Re-fetch data whenever filters change
+    }, [filters, column, direction]); // Re-fetch data whenever filters change
 
     const handleSortClick = (clickedColumn: keyof T) => () => {
         if (column !== clickedColumn) {
@@ -82,13 +113,25 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
 
                 <TableFilters fieldsConfig={filterValues}
                               onFilterChange={(field, value) => handleFilterChange(field, value, setFilters)}/>
-                {!isProduction &&
-                    <Button
-                        className="fixed-button"
-                        primary
-                        size='large'
-                        onClick={() =>
-                            window.open(newObjectUrl)}>Add new</Button>
+                {!isProduction && (
+                    <div className="fixed-container" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        <Button
+                            className=""
+                            primary
+                            size='large'
+                            onClick={() => window.open(newObjectUrl)}>Add new
+                        </Button>
+
+                        {!isDev &&
+                            <Button
+                                className=""
+                                primary
+                                size='large'
+                                onClick={() => publishSelected()}>Publish selected
+                            </Button>
+                        }
+                    </div>
+                )
                 }
             </div>
             <Table celled sortable selectable>
@@ -99,10 +142,12 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
                         ))}
                     </TableRow>
                 </TableHeader>
-                {dataType === DataType.MIG && <MigBody data={data as unknown as Mig[]} isProduction={isProduction}/>}
+                {dataType === DataType.MIG &&
+                    <MigBody data={data as unknown as Mig[]} isProduction={isProduction} isDev={isDev}/>}
                 {dataType === DataType.SOC_SEC &&
-                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction}/>}
-                {dataType === DataType.TAX && <TaxBody data={data as unknown as Tax[]} isProduction={isProduction}/>}
+                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction} isDev={isDev}/>}
+                {dataType === DataType.TAX &&
+                    <TaxBody data={data as unknown as Tax[]} isProduction={isProduction} isDev={isDev}/>}
             </Table>
         </div>
     );

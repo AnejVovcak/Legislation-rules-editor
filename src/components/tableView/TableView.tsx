@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {MongoRequest} from "../../dtos/mongo-request";
 import {getAllDocuments} from "../../api/api";
 import {Button, Table, TableHeader, TableRow} from "semantic-ui-react";
 import {Mig} from "../../dtos/mig";
@@ -38,15 +37,9 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     const [isDev, setIsDev] = useState<boolean>(false);
 
 
-    const request: MongoRequest = {
-        dataSource: "LawBrainerTest",
-        database: "lawBrainer",
-        collection: collection
-    }
-
     useEffect(() => {
         setIsDev(window.location.pathname.includes("/dev"))
-        getAllDocuments({...request, collection: "enums"}).then((result) => {
+        getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
             setFilterValues((result as unknown as EnumValue[]).filter(
                 (value) => value.domain.includes(dataType)));
         }).catch((error) => {
@@ -55,10 +48,15 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     }, []);
 
     const fetchData = () => {
+        let getRequestWithFilterAndSortReturn =
+            getRequestWithFilterAndSort(filters, column, direction);
         // Now use requestWithFilter to fetch the data
-        getAllDocuments(getRequestWithFilterAndSort(request, filters, column, direction)).then((result) => {
-            setData(result as unknown as T[]);
-        }).catch((error) => {
+        getAllDocuments(collection,
+            getRequestWithFilterAndSortReturn.filter,
+            getRequestWithFilterAndSortReturn.sort)
+            .then((result) => {
+                setData(result as unknown as T[]);
+            }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
     };
@@ -83,7 +81,7 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
             await handleSubmitBatch({...selectedData[i], published: true}, selectedData[i]._id as string,
                 collection === CollectionEnum.TAX_STAGING ? CollectionEnum.TAX_PRODUCTION :
                     collection === CollectionEnum.MIG_STAGING ? CollectionEnum.MIG_PRODUCTION :
-                        collection === CollectionEnum.SOC_SEC_STAGING ? CollectionEnum.SOC_SEC_PRODUCTION : "");
+                        collection === CollectionEnum.SOC_SEC_STAGING ? CollectionEnum.SOC_SEC_PRODUCTION : CollectionEnum.CODEBOOK);
         }
 
         //reload the page

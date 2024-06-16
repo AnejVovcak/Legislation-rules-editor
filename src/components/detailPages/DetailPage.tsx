@@ -16,7 +16,6 @@ import MigForm from "./forms/MigForm";
 import SocSecForm from "./forms/SocSecForm";
 import TaxForm from "./forms/TaxForm";
 import {EnumValue} from "../../enums/EnumValue";
-import {MongoRequest} from "../../dtos/mongo-request";
 import {handleSubmit} from "../../utils/detailPageUtil";
 
 type DetailPageProps = {
@@ -41,14 +40,9 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
     const [isDev, setIsDev] = useState<boolean>(false);
 
-    const request: MongoRequest = {
-        dataSource: "LawBrainerTest",
-        database: "lawBrainer",
-        collection: "enums"
-    }
 
     useEffect(() => {
-        getAllDocuments({...request}).then((result) => {
+        getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
             setFilterValues((result as unknown as EnumValue[]).filter(
                 (value) => value.domain.includes(dataType) || value._id === 'source'));
         }).catch((error) => {

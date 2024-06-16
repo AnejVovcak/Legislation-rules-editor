@@ -4,15 +4,13 @@ interface FilterCriteria {
     [key: string]: { $in: string[] };
 }
 
-export function getRequestWithFilterAndSort(request: MongoRequest, filters: Record<string, string[]>, column:  string | number | symbol, direction: 'ascending' | 'descending') {
+export function getRequestWithFilterAndSort(filters: Record<string, string[]>, column:  string | number | symbol, direction: 'ascending' | 'descending') {
     return {
-        ...request, // Your base request object
         filter: Object.keys(filters).reduce<FilterCriteria>((acc, key) => {
             // For each filter, add its criterion to the request using $in
             acc[key] = {$in: filters[key]};
             return acc;
-        },
-        {}),
+        }, {}),
         sort: {
             [column]: direction === 'ascending' ? 1 : -1
         }

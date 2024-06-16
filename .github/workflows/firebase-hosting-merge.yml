@@ -10,6 +10,10 @@ jobs:
   build_and_deploy:
     env:
       CI: ""
+      REACT_APP_API_BASE_URL: '{{ secrets.REACT_APP_API_BASE_URL }}'
+      REACT_APP_JWT_BASE_URL: '{{ secrets.REACT_APP_JWT_BASE_URL }}'
+      REACT_APP_MONGODB_DATA_SOURCE: '{{ secrets.REACT_APP_MONGODB_DATA_SOURCE }}'
+      REACT_APP_MONGODB_DATABASE: '{{ secrets.REACT_APP_MONGODB_DATABASE }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

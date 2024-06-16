@@ -2,26 +2,34 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on PR
-'on': pull_request
+
+on:
+  pull_request
+
 permissions:
   checks: write
   contents: read
   pull-requests: write
+
 jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
-    env:
-      CI: ""
-      REACT_APP_API_BASE_URL: '{{ secrets.REACT_APP_API_BASE_URL }}'
-      REACT_APP_JWT_BASE_URL: '{{ secrets.REACT_APP_JWT_BASE_URL }}'
-      REACT_APP_MONGODB_DATA_SOURCE: '{{ secrets.REACT_APP_MONGODB_DATA_SOURCE }}'
-      REACT_APP_MONGODB_DATABASE: '{{ secrets.REACT_APP_MONGODB_DATABASE }}'
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
+
+      # Create the .env file with the four specified secrets
+      - name: Create .env file
+        run: |
+          echo "REACT_APP_API_BASE_URL=${{ secrets.REACT_APP_API_BASE_URL }}" >> .env
+          echo "REACT_APP_JWT_BASE_URL=${{ secrets.REACT_APP_JWT_BASE_URL }}" >> .env
+          echo "REACT_APP_MONGODB_DATA_SOURCE=${{ secrets.REACT_APP_MONGODB_DATA_SOURCE }}" >> .env
+          echo "REACT_APP_MONGODB_DATABASE=${{ secrets.REACT_APP_MONGODB_DATABASE }}" >> .env
+
+      - run: npm ci
+      - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_LAW_BRAINER_RULES_EDITOR }}'
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LAW_BRAINER_RULES_EDITOR }}
           projectId: law-brainer-rules-editor

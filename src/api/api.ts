@@ -7,6 +7,7 @@ import {Login} from "../dtos/login";
 import {EnumValue} from "../enums/EnumValue";
 import config from "../config";
 import {CollectionEnum, CollectionEnumValues} from "../enums/CollectionEnum";
+import {ObjectId} from "bson";
 
 const API_BASE_URL = config.baseUrl;
 const JWT_BASE_URL = config.jwtUrl;
@@ -67,13 +68,16 @@ export const getById = async (id: string, collectionName: CollectionEnum): Promi
 
 //fixed update object that updates if it exists and creates if it doesn't
 export const updateObject = async (id: string | undefined, data: Tax | Mig | SocSec, collectionName: CollectionEnum) => {
+
+    let _id = {"$oid": id !== undefined ? id : new ObjectId().toHexString()};
+
     delete data._id;
 
     const requestBody = {
         ...requestBodyTemplate,
         collection: CollectionEnumValues[collectionName],
         filter: {
-            _id: id !== undefined ? {"$oid": id} : undefined,
+            _id: _id,
         },
         update: {"$set": {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}},
         upsert: true

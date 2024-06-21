@@ -15,6 +15,7 @@ const JWT_BASE_URL = config.jwtUrl;
 const enum Actions {
     FIND = 'find',
     UPDATE = 'updateOne',
+    DELETE = 'deleteOne',
 }
 
 const requestBodyTemplate: MongoRequest = {
@@ -84,6 +85,20 @@ export const updateObject = async (id: string | undefined, data: Tax | Mig | Soc
     }
 
     const response = await axios.post(API_BASE_URL + Actions.UPDATE, requestBody, {
+        headers: headers,
+    });
+    return response.data;
+}
+
+export const deleteObject = async (id: string, collectionName: CollectionEnum) => {
+    const requestBody = {
+        ...requestBodyTemplate,
+        collection: CollectionEnumValues[collectionName],
+        filter: {
+            _id: {"$oid": id},
+        },
+    }
+    const response = await axios.post(API_BASE_URL + Actions.DELETE, requestBody, {
         headers: headers,
     });
     return response.data;

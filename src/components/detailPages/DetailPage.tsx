@@ -1,7 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Mig} from "../../dtos/mig";
-import {getAllDocuments, getById} from "../../api/api";
+import {deleteObject, getAllDocuments, getById} from "../../api/api";
 import {CollectionEnum} from "../../enums/CollectionEnum";
 import {Button, Form, FormGroup, FormInput} from "semantic-ui-react";
 import TextEditor from "./textEditor/TextEditor";
@@ -35,8 +35,10 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const navigate = useNavigate(); // For navigation
     const [data, setData] = useState<T>({} as T);
     const [success, setSuccess] = useState(false);
+    const [successDelete, setSuccessDelete] = useState(false);
     const [error, setError] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
+    const [publishModalOpen, setPublishModalOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
     const [isDev, setIsDev] = useState<boolean>(false);
 
@@ -61,7 +63,8 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                 const newContent = content.replace(regex, subst);
                 setData(prev => ({...prev, content: newContent}));
             } catch (error) {
-                throw new Error(`Failed to fetch data from ${collection}: ${error}`);
+                console.error("Failed to fetch data:", error);
+                navigate('/');
             }
         };
 
@@ -88,11 +91,10 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
         const loadData = async () => {
             if (id && id !== "new") {
-                if(window.location.pathname.includes("/dev")){
+                if (window.location.pathname.includes("/dev")) {
                     await fetchData(id, collectionDev);
                     setIsDev(true);
-                }
-                else {
+                } else {
                     await fetchData(id, collectionStaging);
                 }
             } else {
@@ -108,7 +110,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
         return handleSubmit({
             ...data,
             published: published
-        }, setData, id==='new' ? undefined : id, collection);
+        }, setData, id === 'new' ? undefined : id, collection);
     }
 
     const handleProductionPush = async () => {
@@ -137,6 +139,21 @@ function DetailPage<T extends Mig | SocSec | Tax>({
         }
     };
 
+    const handleDelete = async () => {
+        if (await deleteObject(id!, isDev ? collectionDev : collectionStaging)) {
+            if (await deleteObject(id!, collectionProduction)) {
+                setSuccessDelete(true);
+                setTimeout(() => {
+                    window.close();
+                }, 1500);
+            } else {
+                setError(true);
+            }
+        } else {
+            setError(true);
+        }
+    }
+
 
     return (
         <Form>
@@ -150,8 +167,11 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                     <div>
                         <Button positive onClick={() => handleNonProdPush()}>Save</Button>
                         <Button negative onClick={() => window.close()}>Cancel</Button>
-                        {id !== "new" && id && !isDev && <Button negative onClick={() => setModalOpen(true)}>
+                        {id !== "new" && id && !isDev && <Button negative onClick={() => setPublishModalOpen(true)}>
                             Publish
+                        </Button>}
+                        {id !== "new" && id && <Button negative onClick={() => setDeleteModalOpen(true)}>
+                            Delete
                         </Button>}
                     </div>
                 </div>
@@ -188,6 +208,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                          setSources={(newSources) => setData({...data, source: newSources})}/>
             }
             {success && <SuccessToastr/>}
+            {successDelete && <SuccessToastr content={"Data deleted!"}/>}
             {error && <ErrorToastr/>}
             {id && id !== "new" && data &&
                 <div style={{fontStyle: 'italic', color: 'grey', textAlign: 'right'}}>
@@ -195,8 +216,17 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                         modified: {data.last_modified_by}, {new Date(data.last_modified).toLocaleString()}</div>
                 </div>
             }
-            <ModalWarning modalOpen={modalOpen} setModalOpen={setModalOpen}
-                          handleProductionPush={handleProductionPush}/>
+            <ModalWarning modalHeader={"Publish"}
+                          modalContent={"Are you sure you want to publish this on production? " +
+                              "Changes will be visible immediately visible to the public."}
+                          modalOpen={publishModalOpen} setModalOpen={setPublishModalOpen}
+                          onClickEvent={handleProductionPush}/>
+
+            <ModalWarning modalHeader={"Delete"}
+                          modalContent={"Are you sure you want to delete this element? " +
+                              "This action cannot be undone. Element will be deleted from both staging and production."}
+                          modalOpen={deleteModalOpen} setModalOpen={setDeleteModalOpen}
+                          onClickEvent={handleDelete}/>
         </Form>
     );
 }

@@ -1,22 +1,23 @@
 import {Button, Modal, ModalActions, ModalContent, ModalHeader} from "semantic-ui-react";
 import React from "react";
 
-const modalWarning = ({modalOpen, setModalOpen, handleProductionPush}: {
+const modalWarning = ({modalHeader, modalContent, modalOpen, setModalOpen, onClickEvent}: {
+    modalHeader: string,
+    modalContent: string,
     modalOpen: boolean,
     setModalOpen: (open: boolean) => void,
-    handleProductionPush: () => void
+    onClickEvent: () => void
 }) => {
 
     return (
         <Modal
-            size={'mini'}
+            size={'small'}
             open={modalOpen}
             onClose={() => setModalOpen(false)}
         >
-            <ModalHeader>Publish</ModalHeader>
+            <ModalHeader>{modalHeader}</ModalHeader>
             <ModalContent>
-                <p>Are you sure you want to publish this on production?
-                    Changes will be visible immediately visible to the public.</p>
+                <p>{modalContent}</p>
             </ModalContent>
             <ModalActions>
                 <Button negative onClick={() => setModalOpen(false)}>
@@ -24,7 +25,7 @@ const modalWarning = ({modalOpen, setModalOpen, handleProductionPush}: {
                 </Button>
                 <Button positive onClick={() => {
                     setModalOpen(false);
-                    handleProductionPush();
+                    onClickEvent();
                 }}>
                     Yes
                 </Button>

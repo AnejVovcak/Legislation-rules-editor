@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
 import {toast, ToastContainer} from "react-toastify";
 
-const SuccessToastr = () => {
+const SuccessToastr = ({content}: { content?: string }) => {
     useEffect(() => {
-        toast.success("Success! Data saved!");
+        toast.success(content ? content : "Success! Data saved!");
     }, []);
     return <ToastContainer position="bottom-right"
                            closeOnClick={false}

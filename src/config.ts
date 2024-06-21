@@ -10,7 +10,7 @@ const config = {
     collectionSocSecProduction: process.env.REACT_APP_MONGODB_COLLECTION_SOC_SEC_PRODUCTION || 'socSec',
     collectionSocSecStaging: process.env.REACT_APP_MONGODB_COLLECTION_SOC_SEC_STAGING || 'socSecStaging',
     collectionSocSecDev: process.env.REACT_APP_MONGODB_COLLECTION_SOC_SEC_DEV || 'socSecDev',
-    collectionMigProduction: process.env.REACT_APP_MONGODB_COLLECTION_MIG_PRODUCTION || 'migProd',
+    collectionMigProduction: process.env.REACT_APP_MONGODB_COLLECTION_MIG_PRODUCTION || 'mig',
     collectionMigStaging: process.env.REACT_APP_MONGODB_COLLECTION_MIG_STAGING || 'migStaging',
     collectionMigDev: process.env.REACT_APP_MONGODB_COLLECTION_MIG_DEV || 'migDev',
     collectionCodebook: process.env.REACT_APP_MONGODB_COLLECTION_CODEBOOK || 'codebook',

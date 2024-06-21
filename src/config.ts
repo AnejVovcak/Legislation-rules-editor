@@ -14,6 +14,9 @@ const config = {
     collectionMigStaging: process.env.REACT_APP_MONGODB_COLLECTION_MIG_STAGING || 'migStaging',
     collectionMigDev: process.env.REACT_APP_MONGODB_COLLECTION_MIG_DEV || 'migDev',
     collectionCodebook: process.env.REACT_APP_MONGODB_COLLECTION_CODEBOOK || 'codebook',
+    testingUrlMig: process.env.REACT_APP_TESTING_URL_MIG,
+    testingUrlSocSec: process.env.REACT_APP_TESTING_URL_SOC_SEC,
+    testingUrlTax: process.env.REACT_APP_TESTING_URL_TAX,
 };
 
 export default config;

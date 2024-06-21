@@ -25,6 +25,9 @@ jobs:
           echo "REACT_APP_JWT_BASE_URL=${{ secrets.REACT_APP_JWT_BASE_URL }}" >> .env
           echo "REACT_APP_MONGODB_DATA_SOURCE=${{ secrets.REACT_APP_MONGODB_DATA_SOURCE }}" >> .env
           echo "REACT_APP_MONGODB_DATABASE=${{ secrets.REACT_APP_MONGODB_DATABASE }}" >> .env
+          echo "REACT_APP_TESTING_URL_MIG=${{ secrets.REACT_APP_TESTING_URL_MIG }}" >> .env
+          echo "REACT_APP_TESTING_URL_SOC_SEC=${{ secrets.REACT_APP_TESTING_URL_SOC_SEC }}" >> .env
+          echo "REACT_APP_TESTING_URL_TAX=${{ secrets.REACT_APP_TESTING_URL_TAX }}" >> .env
 
       - run: npm ci
       - run: npm run build

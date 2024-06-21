@@ -16,6 +16,7 @@ import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
 import {EnumValue} from "../../enums/EnumValue";
 import {handleSubmitBatch} from "../../utils/detailPageUtil";
+import config from "../../config";
 
 type TableViewProps<T> = {
     dataType: DataType;
@@ -126,6 +127,19 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
                                 primary
                                 size='large'
                                 onClick={() => publishSelected()}>Publish selected
+                            </Button>
+                        }
+
+                        {!isDev &&
+                            <Button
+                                className=""
+                                primary
+                                size='large'
+                                onClick={() => window.open(
+                                    dataType === DataType.MIG ? config.testingUrlMig :
+                                        dataType === DataType.SOC_SEC ? config.testingUrlSocSec :
+                                            dataType === DataType.TAX ? config.testingUrlTax : ""
+                                )}>Testing view
                             </Button>
                         }
                     </div>

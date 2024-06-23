@@ -1,14 +1,27 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {FormGroup} from "semantic-ui-react";
 import {SocSec} from "../../../dtos/socSec";
 import {EnumValue} from "../../../enums/EnumValue";
 import DropdownSelect from "../../dropdown/DropdownSelect";
 
-function SocSecForm({data, setData, fieldsConfig}: {
+function SocSecForm({data, setData, fieldsConfig, onValidationChange, submitted}: {
     data: SocSec,
     setData: React.Dispatch<React.SetStateAction<any>>,
-    fieldsConfig: EnumValue[]
+    fieldsConfig: EnumValue[],
+    onValidationChange: (isValid: boolean) => void
+    submitted: boolean
 }) {
+    const [dropdownErrors, setDropdownErrors] = useState(new Map<string, boolean>());
+
+    useEffect(() => {
+        onValidationChange(Array.from(dropdownErrors.values()).every(value => !value));
+    }, [data, dropdownErrors]);
+
+    function setDropdownError(fieldKey: string,hasError: boolean,) {
+        setDropdownErrors(prev => {
+            return prev.set(fieldKey, hasError);
+        });
+    }
 
     return (
         <div>
@@ -22,6 +35,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             label="Covered"
                             multiple={true}
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -30,6 +45,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             label="Article"
                             multiple={true}
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -38,6 +55,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             label="Statute"
                             multiple={true}
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -45,6 +64,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             fieldKey="out_value"
                             label="Out Value"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -52,6 +73,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             fieldKey="in_value"
                             label="In Value"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -59,6 +82,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             fieldKey="empl"
                             label="Empl"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -66,6 +91,8 @@ function SocSecForm({data, setData, fieldsConfig}: {
                             fieldKey="if_empl0_eq_empl1"
                             label="If Empl0 Eq Empl1"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                     </FormGroup>
                 </>

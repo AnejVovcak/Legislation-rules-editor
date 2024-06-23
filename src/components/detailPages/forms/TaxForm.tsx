@@ -1,14 +1,28 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {FormGroup} from "semantic-ui-react";
 import {Tax} from "../../../dtos/tax";
 import {EnumValue} from "../../../enums/EnumValue";
 import DropdownSelect from "../../dropdown/DropdownSelect";
 
-function TaxForm({data, setData, fieldsConfig}: {
+function TaxForm({data, setData, fieldsConfig, onValidationChange, submitted}: {
     data: Tax,
     setData: React.Dispatch<React.SetStateAction<any>>,
-    fieldsConfig: EnumValue[]
+    fieldsConfig: EnumValue[],
+    onValidationChange: (isValid: boolean) => void
+    submitted: boolean
 }) {
+
+    const [dropdownErrors, setDropdownErrors] = useState(new Map<string, boolean>());
+
+    useEffect(() => {
+        onValidationChange(Array.from(dropdownErrors.values()).every(value => !value));
+    }, [data, dropdownErrors]);
+
+    function setDropdownError(fieldKey: string,hasError: boolean,) {
+        setDropdownErrors(prev => {
+            return prev.set(fieldKey, hasError);
+        });
+    }
 
     return (
         <div>
@@ -22,6 +36,8 @@ function TaxForm({data, setData, fieldsConfig}: {
                             label="Covered"
                             multiple={true}
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -30,6 +46,8 @@ function TaxForm({data, setData, fieldsConfig}: {
                             label="Article"
                             multiple={true}
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -37,6 +55,8 @@ function TaxForm({data, setData, fieldsConfig}: {
                             fieldKey="out_value"
                             label="Out"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -44,6 +64,8 @@ function TaxForm({data, setData, fieldsConfig}: {
                             fieldKey="in_value"
                             label="In"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -51,6 +73,8 @@ function TaxForm({data, setData, fieldsConfig}: {
                             fieldKey="empl"
                             label="Empl"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                         <DropdownSelect
                             data={data}
@@ -58,6 +82,8 @@ function TaxForm({data, setData, fieldsConfig}: {
                             fieldKey="tax"
                             label="Tax"
                             fieldsConfig={fieldsConfig}
+                            onErrorChange={setDropdownError}
+                            submitted={submitted}
                         />
                     </FormGroup>
                 </>

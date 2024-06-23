@@ -41,6 +41,8 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
     const [isDev, setIsDev] = useState<boolean>(false);
+    const [validForm, setValidForm] = useState<boolean>(false);
+    const [submitted, setSubmitted] = useState(false);
 
 
     useEffect(() => {
@@ -76,13 +78,13 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             }
             switch (dataType) {
                 case DataType.MIG:
-                    setData(prev => ({...prev, time: [], article: []}));
+                    setData(prev => ({...prev, time: [], article: [], content: ''}));
                     break;
                 case DataType.SOC_SEC:
-                    setData(prev => ({...prev, article: [], covered: [], statute: []}));
+                    setData(prev => ({...prev, article: [], covered: [], statute: [], content: ''}));
                     break;
                 case DataType.TAX:
-                    setData(prev => ({...prev, article: [], covered: []}));
+                    setData(prev => ({...prev, article: [], covered: [], content: ''}));
                     break;
                 default:
                     break;
@@ -114,6 +116,14 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     }
 
     const handleProductionPush = async () => {
+        setSubmitted(true)
+
+        if (!validForm || !data.title || data.title.trim().length === 0) {
+            setError(true);
+            return;
+        } else {
+            setError(false);
+        }
         if (await handleSubmitWrapper(collectionProduction, true)) {
             if (await handleSubmitWrapper(collectionStaging, true)) {
                 setSuccess(true);
@@ -129,6 +139,14 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     };
 
     const handleNonProdPush = async () => {
+        setSubmitted(true)
+
+        if (!validForm || !data.title || data.title.trim().length === 0) {
+            setError(true);
+            return;
+        } else {
+            setError(false);
+        }
         if (await handleSubmitWrapper(isDev ? collectionDev : collectionStaging, false)) {
             setSuccess(true);
             setTimeout(() => {
@@ -160,6 +178,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
             <div style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
                 {data &&
                     <FormInput name="title" label='Title' placeholder='Title' value={data.title || ''}
+                               error={(data.title == undefined || data.title.trim().length === 0) && submitted}
                                onChange={(e) => setData(prev => ({
                                    ...prev, title: e.target.value
                                }))}/>}
@@ -179,14 +198,20 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
             {data && dataType === DataType.MIG &&
                 <MigForm fieldsConfig={filterValues}
+                         onValidationChange={setValidForm}
+                         submitted={submitted}
                          data={data as Mig}
                          setData={setData as React.Dispatch<React.SetStateAction<Mig>>}/>}
             {data && dataType === DataType.SOC_SEC &&
                 <SocSecForm fieldsConfig={filterValues}
+                            onValidationChange={setValidForm}
+                            submitted={submitted}
                             data={data as SocSec}
                             setData={setData as React.Dispatch<React.SetStateAction<SocSec>>}/>}
             {data && dataType === DataType.TAX &&
                 <TaxForm fieldsConfig={filterValues}
+                         onValidationChange={setValidForm}
+                         submitted={submitted}
                          data={data as Tax}
                          setData={setData as React.Dispatch<React.SetStateAction<Tax>>}/>}
 

@@ -1,14 +1,27 @@
 import {Mig} from "../../../dtos/mig";
 import {FormGroup} from "semantic-ui-react";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {EnumValue} from "../../../enums/EnumValue";
 import DropdownSelect from "../../dropdown/DropdownSelect";
 
-function MigForm({data, setData, fieldsConfig}: {
+function MigForm({data, setData, fieldsConfig, onValidationChange,submitted}: {
     data: Mig,
     setData: React.Dispatch<React.SetStateAction<any>>,
-    fieldsConfig: EnumValue[]
+    fieldsConfig: EnumValue[],
+    onValidationChange: (isValid: boolean) => void
+    submitted: boolean
 }) {
+    const [dropdownErrors, setDropdownErrors] = useState(new Map<string, boolean>());
+
+    useEffect(() => {
+        onValidationChange(Array.from(dropdownErrors.values()).every(value => !value));
+    }, [data, dropdownErrors]);
+
+    function setDropdownError(fieldKey: string,hasError: boolean,) {
+        setDropdownErrors(prev => {
+            return prev.set(fieldKey, hasError);
+        });
+    }
 
     return (
         <div>
@@ -20,6 +33,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="covered"
                         label="Covered"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -28,6 +43,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         label="Article"
                         multiple={true}
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -35,6 +52,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="out_value"
                         label="Out"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -42,6 +61,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="in_value"
                         label="In"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -49,6 +70,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="nat"
                         label="Nat"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -56,6 +79,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="out_title"
                         label="Out Title"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -63,6 +88,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="in_title"
                         label="In Title"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -71,6 +98,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         label="Time"
                         multiple={true}
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                     <DropdownSelect
                         data={data}
@@ -78,6 +107,8 @@ function MigForm({data, setData, fieldsConfig}: {
                         fieldKey="secondment"
                         label="Secondment"
                         fieldsConfig={fieldsConfig}
+                        onErrorChange={setDropdownError}
+                        submitted={submitted}
                     />
                 </FormGroup>
                 </>

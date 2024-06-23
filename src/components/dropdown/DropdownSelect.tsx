@@ -1,9 +1,9 @@
-import React, { SyntheticEvent, useState } from "react";
-import { DropdownProps, FormSelect, Modal, Button } from "semantic-ui-react";
-import { updateEnumObject } from "../../api/api";
-import { deleteEnumObject } from "../../api/api";
-import { EnumValue } from "../../enums/EnumValue";
-import { SemanticColorUtil } from "../../utils/semanticColorUtil";
+import React, {SyntheticEvent, useEffect, useState} from "react";
+import {DropdownProps, FormSelect, Modal, Button, Message} from "semantic-ui-react";
+import {updateEnumObject} from "../../api/api";
+import {deleteEnumObject} from "../../api/api";
+import {EnumValue} from "../../enums/EnumValue";
+import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 type GenericData = { [key: string]: any };
 
@@ -13,14 +13,45 @@ type DropdownSelectProps = {
     fieldKey: string,
     label: string,
     multiple?: boolean,
-    fieldsConfig: EnumValue[]
+    fieldsConfig: EnumValue[],
+    onErrorChange: (filedKey:string,hasError: boolean,) => void
+    submitted: boolean
 };
 
-const DropdownSelect = ({ data, setData, fieldKey, label, multiple = false, fieldsConfig }: DropdownSelectProps) => {
+const DropdownSelect = ({
+                            data,
+                            setData,
+                            fieldKey,
+                            label,
+                            multiple = false,
+                            fieldsConfig,
+                            onErrorChange,
+                            submitted
+                        }: DropdownSelectProps) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+    const [error, setError] = useState(false);
 
     const options = SemanticColorUtil.getDropdownOptions(fieldsConfig, fieldKey);
+
+    useEffect(() => {
+        const initialError = (!data[fieldKey] || data[fieldKey] === '') && !multiple;
+        setError(initialError);
+        if (onErrorChange) {
+            onErrorChange(fieldKey,initialError);
+        }
+    }, [data]);
+
+    const handleChange = (_e: any, {value}: any) => {
+        const hasError = (!value || value === '') && !multiple;
+        setError(hasError);
+        if (onErrorChange) {
+            onErrorChange(fieldKey,hasError);
+        }
+        setData(prev => ({
+            ...prev, [fieldKey]: multiple ? value : value
+        }));
+    };
 
     const handleAddition = (event: SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
         console.log("data.value", data.value);
@@ -53,13 +84,14 @@ const DropdownSelect = ({ data, setData, fieldKey, label, multiple = false, fiel
                 fluid
                 search
                 allowAdditions
+                error={error && submitted}
                 label={label}
                 multiple={multiple}
                 value={data[fieldKey] || (multiple ? [] : '')}
                 options={options.map(option => ({
                     ...option,
                     content: (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                             <span>{option.text}</span>
                             <button
                                 style={{
@@ -78,14 +110,12 @@ const DropdownSelect = ({ data, setData, fieldKey, label, multiple = false, fiel
                                     setModalOpen(true);
                                 }}
                             >
-                                <span style={{ fontSize: '1.5em' }}>&times;</span> {/* Increased font size of × */}
+                                <span style={{fontSize: '1.5em'}}>&times;</span> {/* Increased font size of × */}
                             </button>
                         </div>
                     )
                 }))}
-                onChange={(_e, { value }) => setData(prev => ({
-                    ...prev, [fieldKey]: multiple ? value : value
-                }))}
+                onChange={handleChange}
                 renderLabel={multiple ? (label) => ({
                     color: label.color,
                     content: label.text,

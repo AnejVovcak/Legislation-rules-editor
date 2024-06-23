@@ -12,8 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Create the .env file with the secrets
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Clear npm cache
+        run: npm cache clean --force
       - name: Create .env file
         run: |
           echo "REACT_APP_API_BASE_URL=${{ secrets.REACT_APP_API_BASE_URL }}" >> .env
@@ -23,9 +30,8 @@ jobs:
           echo "REACT_APP_TESTING_URL_MIG=${{ secrets.REACT_APP_TESTING_URL_MIG }}" >> .env
           echo "REACT_APP_TESTING_URL_SOC_SEC=${{ secrets.REACT_APP_TESTING_URL_SOC_SEC }}" >> .env
           echo "REACT_APP_TESTING_URL_TAX=${{ secrets.REACT_APP_TESTING_URL_TAX }}" >> .env
-
-      - run: npm ci
-      - run: npm run build
+      - run: npm ci --verbose
+      - run: npm run build --verbose
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

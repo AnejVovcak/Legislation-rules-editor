@@ -21,13 +21,12 @@ import config from "../../config";
 type TableViewProps<T> = {
     dataType: DataType;
     isProduction: boolean;
-    filterFields: { fieldName: string, enumType: any }[];
     columns: { label: string, key: keyof T }[];
     newObjectUrl: string;
     collection: CollectionEnum;
 }
 
-function TableView<T>({dataType, isProduction, filterFields, columns, newObjectUrl, collection}: TableViewProps<T>) {
+function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection}: TableViewProps<T>) {
 
     //data of type TaxEnum[] to store the fetched data
     const [data, setData] = useState<T[]>([]);
@@ -42,7 +41,12 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
         setIsDev(window.location.pathname.includes("/dev"))
         getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
             setFilterValues((result as unknown as CodebookValue[]).filter(
-                (value) => value.domain.includes(dataType)));
+                (value) => value.domain.includes(dataType)
+            ).sort((a, b) => {
+                const indexA = columns.findIndex(column => column.key === a._id);
+                const indexB = columns.findIndex(column => column.key === b._id);
+                return indexA - indexB;
+            }));
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });

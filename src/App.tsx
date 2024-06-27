@@ -10,9 +10,6 @@ import {
     columnsMig,
     columnsSocSec,
     columnsTax,
-    fieldsConfigMig,
-    fieldsConfigSocSec,
-    fieldsConfigTax
 } from "./components/tableView/configObjects";
 import {CollectionEnum} from "./enums/CollectionEnum";
 import {DataType} from "./enums/DataType";
@@ -28,7 +25,6 @@ function App() {
                     dataType={DataType.MIG}
                     isProduction={false}
                     columns={columnsMig}
-                    filterFields={fieldsConfigMig}
                     newObjectUrl={'mig/new'}
                     collection={CollectionEnum.MIG_DEV}
                 />
@@ -42,7 +38,6 @@ function App() {
                         columns={
                             [{label: 'SELECT', key: 'select'}, ...columnsMig]
                         }
-                        filterFields={fieldsConfigMig}
                         newObjectUrl={'mig/new'}
                         collection={CollectionEnum.MIG_STAGING}
                     />
@@ -52,7 +47,6 @@ function App() {
                     dataType={DataType.MIG}
                     isProduction={true}
                     columns={columnsMig}
-                    filterFields={fieldsConfigMig}
                     newObjectUrl={'mig/new'} //unused
                     collection={CollectionEnum.MIG_PRODUCTION}
                 />
@@ -63,7 +57,6 @@ function App() {
                         dataType={DataType.SOC_SEC}
                         isProduction={false}
                         columns={columnsSocSec}
-                        filterFields={fieldsConfigSocSec}
                         newObjectUrl={'socSec/new'}
                         collection={CollectionEnum.SOC_SEC_DEV}
                     />
@@ -76,7 +69,6 @@ function App() {
                         columns={
                             [{label: 'SELECT', key: 'select'}, ...columnsSocSec]
                         }
-                        filterFields={fieldsConfigSocSec}
                         newObjectUrl={'socSec/new'}
                         collection={CollectionEnum.SOC_SEC_STAGING}
                     />
@@ -87,7 +79,6 @@ function App() {
                         dataType={DataType.SOC_SEC}
                         isProduction={true}
                         columns={columnsSocSec}
-                        filterFields={fieldsConfigSocSec}
                         newObjectUrl={'/socSec/new'} //unused
                         collection={CollectionEnum.SOC_SEC_PRODUCTION}
                     />
@@ -98,7 +89,6 @@ function App() {
                         dataType={DataType.TAX}
                         isProduction={false}
                         columns={columnsTax}
-                        filterFields={fieldsConfigTax}
                         newObjectUrl={'tax/new'}
                         collection={CollectionEnum.TAX_DEV}
                     />
@@ -111,7 +101,6 @@ function App() {
                         columns={
                             [{label: 'SELECT', key: 'select'}, ...columnsTax]
                         }
-                        filterFields={fieldsConfigTax}
                         newObjectUrl={'tax/new'}
                         collection={CollectionEnum.TAX_STAGING}
                     />
@@ -122,7 +111,6 @@ function App() {
                         dataType={DataType.TAX}
                         isProduction={true}
                         columns={columnsTax}
-                        filterFields={fieldsConfigTax}
                         newObjectUrl={'/tax/new'} //unused
                         collection={CollectionEnum.TAX_PRODUCTION}
                     />

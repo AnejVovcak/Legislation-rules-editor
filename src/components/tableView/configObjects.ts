@@ -19,37 +19,6 @@ type MigKeys = keyof Mig | 'select'
 type SocSecKeys = keyof SocSec | 'select'
 type TaxKeys = keyof Tax | 'select'
 
-export const fieldsConfigMig = [
-    {fieldName: 'covered', enumType: CoveredEnum},
-    {fieldName: 'article', enumType: ArticleEnum},
-    {fieldName: 'in_value', enumType: InEnum},
-    {fieldName: 'out_value', enumType: OutEnum},
-    {fieldName: 'secondment', enumType: SecondmentEnum},
-    {fieldName: 'nat', enumType: NatEnum},
-    {fieldName: 'in_title', enumType: InTitleEnum},
-    {fieldName: 'out_title', enumType: OutTitleEnum},
-    {fieldName: 'time', enumType: MigTimeEnum}
-]
-
-export const fieldsConfigSocSec = [
-    {fieldName: 'in_value', enumType: InEnum},
-    {fieldName: 'out_value', enumType: OutEnum},
-    {fieldName: 'covered', enumType: CoveredEnum},
-    {fieldName: 'article', enumType: ArticleEnum},
-    {fieldName: 'statute', enumType: StatueEnum},
-    {fieldName: 'empl', enumType: EmplEnum},
-    {fieldName: 'if_empl0_eq_empl1', enumType: Empl0EQEmpl1Enum}
-]
-
-export const fieldsConfigTax = [
-    {fieldName: 'in_value', enumType: InEnum},
-    {fieldName: 'out_value', enumType: OutEnum},
-    {fieldName: 'covered', enumType: CoveredEnum},
-    {fieldName: 'article', enumType: ArticleEnum},
-    {fieldName: 'empl', enumType: EmplEnum},
-    {fieldName: 'tax', enumType: TaxEnum}
-]
-
 export const columnsMig : {label:string, key:MigKeys}[] = [
     //!isProduction ? {label: 'SELECT', key: 'select'} : null,
     {label: 'TITLE', key: 'title'},

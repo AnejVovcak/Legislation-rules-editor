@@ -2,7 +2,7 @@ import React, {SyntheticEvent, useEffect, useState} from "react";
 import {DropdownProps, FormSelect, Modal, Button, Message} from "semantic-ui-react";
 import {updateEnumObject} from "../../api/api";
 import {deleteEnumObject} from "../../api/api";
-import {EnumValue} from "../../enums/EnumValue";
+import {CodebookValue} from "../../enums/CodebookValue";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
 
 type GenericData = { [key: string]: any };
@@ -13,7 +13,7 @@ type DropdownSelectProps = {
     fieldKey: string,
     label: string,
     multiple?: boolean,
-    fieldsConfig: EnumValue[],
+    fieldsConfig: CodebookValue[],
     onErrorChange: (filedKey:string,hasError: boolean,) => void
     submitted: boolean
 };

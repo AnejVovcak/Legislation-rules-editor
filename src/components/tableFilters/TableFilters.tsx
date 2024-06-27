@@ -1,10 +1,10 @@
 import {Dropdown} from "semantic-ui-react";
 import {ReactNode} from "react";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
-import {EnumValue} from "../../enums/EnumValue";
+import {CodebookValue} from "../../enums/CodebookValue";
 
 interface TableFilterProps {
-    fieldsConfig: EnumValue[];
+    fieldsConfig: CodebookValue[];
     onFilterChange: (field: string, value: string| string[]) => void;
 }
 

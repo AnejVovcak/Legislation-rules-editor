@@ -15,7 +15,7 @@ import {SocSec} from "../../dtos/socSec";
 import MigForm from "./forms/MigForm";
 import SocSecForm from "./forms/SocSecForm";
 import TaxForm from "./forms/TaxForm";
-import {EnumValue} from "../../enums/EnumValue";
+import {CodebookValue} from "../../enums/CodebookValue";
 import {handleSubmit} from "../../utils/detailPageUtil";
 
 type DetailPageProps = {
@@ -39,7 +39,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const [error, setError] = useState(false);
     const [publishModalOpen, setPublishModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
+    const [filterValues, setFilterValues] = useState<CodebookValue[]>([]);
     const [isDev, setIsDev] = useState<boolean>(false);
     const [validForm, setValidForm] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState(false);
@@ -47,7 +47,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
     useEffect(() => {
         getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
-            setFilterValues((result as unknown as EnumValue[]).filter(
+            setFilterValues((result as unknown as CodebookValue[]).filter(
                 (value) => value.domain.includes(dataType) || value._id === 'source'));
         }).catch((error) => {
             console.error("Failed to fetch data:", error);

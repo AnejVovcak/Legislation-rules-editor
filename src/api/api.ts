@@ -4,7 +4,7 @@ import {Tax} from "../dtos/tax";
 import {SocSec} from "../dtos/socSec";
 import {Mig} from "../dtos/mig";
 import {Login} from "../dtos/login";
-import {EnumValue} from "../enums/EnumValue";
+import {CodebookValue} from "../enums/CodebookValue";
 import config from "../config";
 import {CollectionEnum, CollectionEnumValues} from "../enums/CollectionEnum";
 import {ObjectId} from "bson";
@@ -39,7 +39,7 @@ export const getJWT = async (loginDto: Login) => {
     return response.data;
 }
 
-export const getAllDocuments = async (collection:CollectionEnum,filter?:any,sort?:any): Promise<Mig[] | SocSec[] | Tax[] | EnumValue[]> => {
+export const getAllDocuments = async (collection:CollectionEnum,filter?:any,sort?:any): Promise<Mig[] | SocSec[] | Tax[] | CodebookValue[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND,
         {
             ...requestBodyTemplate,
@@ -104,7 +104,7 @@ export const deleteObject = async (id: string, collectionName: CollectionEnum) =
     return response.data;
 }
 
-export const updateEnumObject = async (id: string, data: EnumValue, newValue: string) => {
+export const updateEnumObject = async (id: string, data: CodebookValue, newValue: string) => {
     data.values.push(newValue);
 
     const requestBody = {

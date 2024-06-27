@@ -14,7 +14,7 @@ import SocSecBody from "./tableBodies/SocSecBody";
 import TaxBody from "./tableBodies/TaxBody";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
-import {EnumValue} from "../../enums/EnumValue";
+import {CodebookValue} from "../../enums/CodebookValue";
 import {handleSubmitBatch} from "../../utils/detailPageUtil";
 import config from "../../config";
 
@@ -34,14 +34,14 @@ function TableView<T>({dataType, isProduction, filterFields, columns, newObjectU
     const [filters, setFilters] = useState<Record<string, string[]>>({});
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
-    const [filterValues, setFilterValues] = useState<EnumValue[]>([]);
+    const [filterValues, setFilterValues] = useState<CodebookValue[]>([]);
     const [isDev, setIsDev] = useState<boolean>(false);
 
 
     useEffect(() => {
         setIsDev(window.location.pathname.includes("/dev"))
         getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
-            setFilterValues((result as unknown as EnumValue[]).filter(
+            setFilterValues((result as unknown as CodebookValue[]).filter(
                 (value) => value.domain.includes(dataType)));
         }).catch((error) => {
             console.error("Failed to fetch data:", error);

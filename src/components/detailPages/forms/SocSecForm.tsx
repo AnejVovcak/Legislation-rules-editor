@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {FormGroup} from "semantic-ui-react";
 import {SocSec} from "../../../dtos/socSec";
-import {EnumValue} from "../../../enums/EnumValue";
+import {CodebookValue} from "../../../enums/CodebookValue";
 import DropdownSelect from "../../dropdown/DropdownSelect";
 
 function SocSecForm({data, setData, fieldsConfig, onValidationChange, submitted}: {
     data: SocSec,
     setData: React.Dispatch<React.SetStateAction<any>>,
-    fieldsConfig: EnumValue[],
+    fieldsConfig: CodebookValue[],
     onValidationChange: (isValid: boolean) => void
     submitted: boolean
 }) {

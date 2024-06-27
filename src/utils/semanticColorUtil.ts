@@ -1,4 +1,4 @@
-import {EnumValue} from "../enums/EnumValue";
+import {CodebookValue} from "../enums/CodebookValue";
 
 export class SemanticColorUtil {
     static semanticColors = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
@@ -31,7 +31,7 @@ export class SemanticColorUtil {
         });
     };
 
-    static getDropdownOptions = (fieldsConfig: EnumValue[], enumName: string) => {
+    static getDropdownOptions = (fieldsConfig: CodebookValue[], enumName: string) => {
         // const values = Object.values(enumObj);
         return SemanticColorUtil.getDropdownOptionsUtil(fieldsConfig.find(value => value._id === enumName)!.values);
     };

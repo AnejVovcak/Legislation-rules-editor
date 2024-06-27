@@ -3,14 +3,14 @@ import {Button, FormField, FormGroup, FormInput, FormSelect, Radio} from "semant
 import {Source} from "../../dtos/entity";
 import {SourceTrackingEnum} from "../../enums/SourceTrackingEnum";
 import {SemanticColorUtil} from "../../utils/semanticColorUtil";
-import {EnumValue} from "../../enums/EnumValue";
+import {CodebookValue} from "../../enums/CodebookValue";
 
 type SourceFieldTypes = keyof Source;
 
 const SourcesInput = ({sources, setSources, sourceEnum}: {
     sources: Source[],
     setSources: (sources: Source[]) => void,
-    sourceEnum: EnumValue
+    sourceEnum: CodebookValue
 }) => {
     const handleSourceChange = <T extends SourceFieldTypes>(index: number, field: T, value: Source[T]) => {
         const newSources = [...sources];

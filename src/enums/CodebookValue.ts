@@ -1,6 +1,6 @@
 import {DataType} from "./DataType";
 
-export interface EnumValue{
+export interface CodebookValue{
     _id:string,
     values:string[],
     domain:DataType[]

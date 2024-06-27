@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {FormGroup} from "semantic-ui-react";
 import {Tax} from "../../../dtos/tax";
-import {EnumValue} from "../../../enums/EnumValue";
+import {CodebookValue} from "../../../enums/CodebookValue";
 import DropdownSelect from "../../dropdown/DropdownSelect";
 
 function TaxForm({data, setData, fieldsConfig, onValidationChange, submitted}: {
     data: Tax,
     setData: React.Dispatch<React.SetStateAction<any>>,
-    fieldsConfig: EnumValue[],
+    fieldsConfig: CodebookValue[],
     onValidationChange: (isValid: boolean) => void
     submitted: boolean
 }) {

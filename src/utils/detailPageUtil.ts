@@ -10,7 +10,7 @@ export async function handleSubmit<T>(data: Mig | SocSec | Tax,
                                       id: string | undefined,
                                       collectionName: CollectionEnum): Promise<boolean> {
     const content = data.content;
-    const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
+    const regex = /<a href="\[info\](.*?)".*?>(.*?)<\/a>/g;
     const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
     data.content = content.replace(regex, subst);
     return await updateObject(id, data, collectionName);
@@ -21,7 +21,7 @@ export async function handleSubmitBatch(data: Mig | SocSec | Tax,
                                           id: string | undefined,
                                           collectionName: CollectionEnum): Promise<boolean> {
     const content = data.content;
-    const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
+    const regex = /<a href="\[info\](.*?)".*?>(.*?)<\/a>/g;
     const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
     data.content = content.replace(regex, subst);
     return await updateObject(id, data, collectionName);

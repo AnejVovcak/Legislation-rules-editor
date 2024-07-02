@@ -12,9 +12,7 @@ export async function handleSubmit<T>(data: Mig | SocSec | Tax,
     const content = data.content;
     const regex = /<a href="\[info\](.*?)">(.*?)<\/a>/g;
     const subst = `<span class="tooltip">$2<span class="tooltip-content">$1</span></span>`;
-    const newContent = content.replace(regex, subst);
-    console.log(newContent)
-    setData(prev => ({...prev, content: newContent}));
+    data.content = content.replace(regex, subst);
     return await updateObject(id, data, collectionName);
 }
 

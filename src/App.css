@@ -69,3 +69,8 @@
   min-height: 300px;
 }
 
+.custom-quill-editor .ql-editor {
+  font-size: 16px; /* Adjust this value to set the default font size */
+}
+
+

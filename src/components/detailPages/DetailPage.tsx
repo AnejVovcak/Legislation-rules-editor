@@ -159,13 +159,20 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
     const handleDelete = async () => {
         if (await deleteObject(id!, isDev ? collectionDev : collectionStaging)) {
-            if (await deleteObject(id!, collectionProduction)) {
+            if (isDev) {
                 setSuccessDelete(true);
                 setTimeout(() => {
                     window.close();
                 }, 1500);
             } else {
-                setError(true);
+                if (await deleteObject(id!, collectionProduction)) {
+                    setSuccessDelete(true);
+                    setTimeout(() => {
+                        window.close();
+                    }, 1500);
+                } else {
+                    setError(true);
+                }
             }
         } else {
             setError(true);
@@ -248,7 +255,8 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                           onClickEvent={handleProductionPush}/>
 
             <ModalWarning modalHeader={"Delete"}
-                          modalContent={"Are you sure you want to delete this element? " +
+                          modalContent={isDev ? "Are you sure you want to delete this element? " :
+                              "Are you sure you want to delete this element? " +
                               "This action cannot be undone. Element will be deleted from both staging and production."}
                           modalOpen={deleteModalOpen} setModalOpen={setDeleteModalOpen}
                           onClickEvent={handleDelete}/>

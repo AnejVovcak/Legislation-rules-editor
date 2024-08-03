@@ -1,10 +1,10 @@
 import React from 'react';
 import {SemanticColorUtil} from "../../../utils/semanticColorUtil";
 
-const SemanticLabel = ({value}: { value: string }) => {
+const SemanticLabel = ({value}: { value?: string }) => {
 
     return (
-        <div className = {SemanticColorUtil.getColorClass(value)} >
+        <div className = {value ? SemanticColorUtil.getColorClass(value) : ''}>
             {value}
         </div>
     );

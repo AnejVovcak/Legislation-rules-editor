@@ -16,16 +16,16 @@ function MigBody({data, isProduction, isDev}: { data: Mig[], isProduction: boole
         <TableBody>
             {data.map((item, index) => (
                 <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
-                    
+
                     {!isProduction && !isDev && (
-                        <td onClick={(e) => e.stopPropagation()} >
+                        <td onClick={(e) => e.stopPropagation()}>
                             <input type="checkbox" id={item._id as string}/>
                         </td>
                     )}
 
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
-                    <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content,500)}}/>
+                    <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>
                     <td><SemanticLabel value={item.in_value}/></td>
                     <td><SemanticLabel value={item.out_value}/></td>
                     <td>{item.article.map((article, index) => (
@@ -43,6 +43,7 @@ function MigBody({data, isProduction, isDev}: { data: Mig[], isProduction: boole
                             <SemanticLabel value={time} key={index}/>
                         </div>
                     ))}</td>
+                    {isDev && <td><SemanticLabel value={item.platform_title}/></td>}
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

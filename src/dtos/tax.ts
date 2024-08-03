@@ -9,4 +9,5 @@ export interface Tax extends Entity{
     covered: CoveredEnum[];
     empl: EmplEnum;
     tax: TaxEnum;
+    platform_title?: string;
 }

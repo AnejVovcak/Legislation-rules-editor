@@ -36,7 +36,7 @@ function App() {
                         isProduction={false}
                         //add column for select at the beginning
                         columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsMig]
+                            [{label: 'SELECT', key: 'select'}, ...columnsMig.filter(column => column.key !== 'platform_title')]
                         }
                         newObjectUrl={'mig/new'}
                         collection={CollectionEnum.MIG_STAGING}
@@ -46,7 +46,9 @@ function App() {
                 <TableView
                     dataType={DataType.MIG}
                     isProduction={true}
-                    columns={columnsMig}
+                    columns={
+                        columnsMig.filter(column => column.key !== 'platform_title')
+                    }
                     newObjectUrl={'mig/new'} //unused
                     collection={CollectionEnum.MIG_PRODUCTION}
                 />
@@ -67,7 +69,7 @@ function App() {
                         dataType={DataType.SOC_SEC}
                         isProduction={false}
                         columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsSocSec]
+                            [{label: 'SELECT', key: 'select'}, ...columnsSocSec.filter(column => column.key !== 'platform_title')] //add column for select at the beginning
                         }
                         newObjectUrl={'socSec/new'}
                         collection={CollectionEnum.SOC_SEC_STAGING}
@@ -78,7 +80,7 @@ function App() {
                     <TableView
                         dataType={DataType.SOC_SEC}
                         isProduction={true}
-                        columns={columnsSocSec}
+                        columns={columnsSocSec.filter(column => column.key !== 'platform_title')}
                         newObjectUrl={'/socSec/new'} //unused
                         collection={CollectionEnum.SOC_SEC_PRODUCTION}
                     />
@@ -99,7 +101,7 @@ function App() {
                         dataType={DataType.TAX}
                         isProduction={false}
                         columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsTax]
+                            [{label: 'SELECT', key: 'select'}, ...columnsTax.filter(column => column.key !== 'platform_title')] //add column for select at the beginning
                         }
                         newObjectUrl={'tax/new'}
                         collection={CollectionEnum.TAX_STAGING}
@@ -110,7 +112,7 @@ function App() {
                     <TableView
                         dataType={DataType.TAX}
                         isProduction={true}
-                        columns={columnsTax}
+                        columns={columnsTax.filter(column => column.key !== 'platform_title')}
                         newObjectUrl={'/tax/new'} //unused
                         collection={CollectionEnum.TAX_PRODUCTION}
                     />

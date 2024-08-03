@@ -39,6 +39,9 @@ function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boole
                     ))}</td>
                     <td><SemanticLabel value={item.empl}/></td>
                     <td><SemanticLabel value={item.tax}/></td>
+                    {isDev && (
+                        <td><SemanticLabel value={item.platform_title}/></td>
+                    )}
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

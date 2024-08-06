@@ -85,15 +85,6 @@ function TaxForm({data, setData, fieldsConfig, onValidationChange, submitted}: {
                             onErrorChange={setDropdownError}
                             submitted={submitted}
                         />
-                        <DropdownSelect
-                            data={data}
-                            setData={setData}
-                            fieldKey="platform_title"
-                            label="Platform Title"
-                            fieldsConfig={fieldsConfig}
-                            onErrorChange={setDropdownError}
-                            submitted={submitted}
-                        />
                     </FormGroup>
                 </>
             }

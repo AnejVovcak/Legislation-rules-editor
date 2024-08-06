@@ -7,8 +7,7 @@ type SocSecKeys = keyof SocSec | 'select'
 type TaxKeys = keyof Tax | 'select'
 
 export const columnsMig : {label:string, key:MigKeys}[] = [
-    //!isProduction ? {label: 'SELECT', key: 'select'} : null,
-    {label: 'TITLE', key: 'title'},
+    {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
     {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},
@@ -25,7 +24,7 @@ export const columnsMig : {label:string, key:MigKeys}[] = [
 ];
 
 export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
-    {label: 'TITLE', key: 'title'},
+    {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
     {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},
@@ -40,7 +39,7 @@ export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
 ]
 
 export const columnsTax: { label: string, key: TaxKeys}[] = [
-    {label: 'TITLE', key: 'title'},
+    {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
     {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},

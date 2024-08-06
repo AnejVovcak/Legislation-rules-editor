@@ -17,6 +17,7 @@ import SocSecForm from "./forms/SocSecForm";
 import TaxForm from "./forms/TaxForm";
 import {CodebookValue} from "../../enums/CodebookValue";
 import {handleSubmit} from "../../utils/detailPageUtil";
+import DropdownSelect from "../dropdown/DropdownSelect";
 
 type DetailPageProps = {
     dataType: DataType;
@@ -183,12 +184,30 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     return (
         <Form>
             <div style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                {data &&
-                    <FormInput name="title" label='Title' placeholder='Title' value={data.title || ''}
-                               error={(data.title == undefined || data.title.trim().length === 0) && submitted}
-                               onChange={(e) => setData(prev => ({
-                                   ...prev, title: e.target.value
-                               }))}/>}
+                <div style={{flexDirection: 'row', display: 'flex', gap: '1rem'}}>
+                    {data &&
+                        <FormInput name="title" label='ID' placeholder='ID' value={data.title || ''}
+                                   error={(data.title == undefined || data.title.trim().length === 0) && submitted}
+                                   onChange={(e) => setData(prev => ({
+                                       ...prev, title: e.target.value
+                                   }))}/>
+                    }
+                    {data && filterValues.length != 0 &&
+                        <div style={{minWidth: '15rem'}}>
+                            <DropdownSelect
+                                data={data}
+                                setData={setData as React.Dispatch<React.SetStateAction<any>>}
+                                fieldKey="platform_title"
+                                label="Platform Title"
+                                fieldsConfig={filterValues}
+                                onErrorChange={(fieldKey, hasError,) => {
+                                    setValidForm(!hasError);
+                                }}
+                                submitted={submitted}
+                            />
+                        </div>
+                    }
+                </div>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div>
                         <Button positive onClick={() => handleNonProdPush()}>Save</Button>

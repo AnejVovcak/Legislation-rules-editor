@@ -40,7 +40,7 @@ function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boole
                     <td><SemanticLabel value={item.empl}/></td>
                     <td><SemanticLabel value={item.tax}/></td>
                     {isDev && (
-                        <td><SemanticLabel value={item.platform_title}/></td>
+                        <td><SemanticLabel value={item.platform_title_tax}/></td>
                     )}
                     <td>
                         <div>{item.last_modified_by}</div>

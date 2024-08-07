@@ -192,12 +192,16 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                                        ...prev, title: e.target.value
                                    }))}/>
                     }
-                    {data && filterValues.length != 0 &&
+                    {data && filterValues.length !== 0 &&
                         <div style={{minWidth: '15rem'}}>
                             <DropdownSelect
                                 data={data}
                                 setData={setData as React.Dispatch<React.SetStateAction<any>>}
-                                fieldKey="platform_title"
+                                fieldKey={
+                                    dataType === DataType.MIG ? 'platform_title_mig' :
+                                        dataType === DataType.SOC_SEC ? 'platform_title_soc_sec' :
+                                            dataType === DataType.TAX ? 'platform_title_tax' : ''
+                                }
                                 label="Platform Title"
                                 fieldsConfig={filterValues}
                                 onErrorChange={(fieldKey, hasError,) => {

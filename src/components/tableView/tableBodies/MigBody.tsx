@@ -43,7 +43,7 @@ function MigBody({data, isProduction, isDev}: { data: Mig[], isProduction: boole
                             <SemanticLabel value={time} key={index}/>
                         </div>
                     ))}</td>
-                    {isDev && <td><SemanticLabel value={item.platform_title}/></td>}
+                    {isDev && <td><SemanticLabel value={item.platform_title_mig}/></td>}
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

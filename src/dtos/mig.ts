@@ -15,5 +15,5 @@ export interface Mig extends Entity {
     out_title: OutTitleEnum;
     secondment: SecondmentEnum;
     time: MigTimeEnum[];
-    platform_title?: string;
+    platform_title_mig?: string;
 }

@@ -11,5 +11,5 @@ export interface SocSec extends Entity{
     statute: StatueEnum[];
     empl: EmplEnum;
     if_empl0_eq_empl1: Empl0EQEmpl1Enum;
-    platform_title?: string;
+    platform_title_soc_sec?: string;
 }

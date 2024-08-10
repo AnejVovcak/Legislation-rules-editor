@@ -64,6 +64,9 @@ export const modules = {
         delay: 500,
         maxStack: 100,
         userOnly: true
+    },
+    clipboard: {
+        matchVisual: false
     }
 };
 

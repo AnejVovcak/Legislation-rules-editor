@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {Route, Routes} from 'react-router-dom';
 import MainPage from "./components/layouts/MainPage";
@@ -14,8 +14,22 @@ import {
 import {CollectionEnum} from "./enums/CollectionEnum";
 import {DataType} from "./enums/DataType";
 import DetailPage from "./components/detailPages/DetailPage";
+import {jwtUtil} from "./utils/jwtUtil";
 
 function App() {
+
+    useEffect(() => {
+        console.log("App mounted")
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (refreshToken) {
+            jwtUtil().scheduleRefresh(refreshToken);
+        }
+
+        // Cleanup on unmount
+        return () => {
+            jwtUtil().clearRefresh();
+        };
+    }, []);
 
     return (
         <Routes>

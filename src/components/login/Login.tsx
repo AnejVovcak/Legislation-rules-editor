@@ -11,6 +11,7 @@ import {
     ModalHeader
 } from "semantic-ui-react";
 import {getJWT} from "../../api/api";
+import {jwtUtil} from "../../utils/jwtUtil";
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -19,9 +20,9 @@ function Login() {
     const handleLogin = () => {
         getJWT({email, password}).then((data) => {
             setError(false);
-            console.log("JWT token:", data);
-            //save access_token to local storage
+
             localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('refresh_token', data.refresh_token);
             localStorage.setItem('email', email)
             //redirect to previous page
             window.location.href = '/';

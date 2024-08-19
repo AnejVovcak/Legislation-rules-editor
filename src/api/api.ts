@@ -39,7 +39,18 @@ export const getJWT = async (loginDto: Login) => {
     return response.data;
 }
 
-export const getAllDocuments = async (collection:CollectionEnum,filter?:any,sort?:any): Promise<Mig[] | SocSec[] | Tax[] | CodebookValue[]> => {
+// refresh JWT token
+export const refreshJWT = async () => {
+    const response = await axios.post('https://services.cloud.mongodb.com/api/client/v2.0/auth/session', {}, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('refresh_token')}`,
+        },
+    });
+    return response.data;
+}
+
+export const getAllDocuments = async (collection: CollectionEnum, filter?: any, sort?: any): Promise<Mig[] | SocSec[] | Tax[] | CodebookValue[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND,
         {
             ...requestBodyTemplate,
@@ -48,8 +59,8 @@ export const getAllDocuments = async (collection:CollectionEnum,filter?:any,sort
             sort: sort,
         }
         , {
-        headers: headers,
-    });
+            headers: headers,
+        });
     return response.data.documents;
 }
 

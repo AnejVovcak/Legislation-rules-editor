@@ -19,11 +19,7 @@ import {jwtUtil} from "./utils/jwtUtil";
 function App() {
 
     useEffect(() => {
-        console.log("App mounted")
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (refreshToken) {
-            jwtUtil().scheduleRefresh(refreshToken);
-        }
+        jwtUtil().scheduleRefresh();
 
         // Cleanup on unmount
         return () => {
@@ -50,7 +46,10 @@ function App() {
                         isProduction={false}
                         //add column for select at the beginning
                         columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsMig.filter(column => column.key !== 'platform_title_mig')]
+                            [{
+                                label: 'SELECT',
+                                key: 'select'
+                            }, ...columnsMig.filter(column => column.key !== 'platform_title_mig')]
                         }
                         newObjectUrl={'mig/new'}
                         collection={CollectionEnum.MIG_STAGING}
@@ -83,7 +82,10 @@ function App() {
                         dataType={DataType.SOC_SEC}
                         isProduction={false}
                         columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsSocSec.filter(column => column.key !== 'platform_title_soc_sec')] //add column for select at the beginning
+                            [{
+                                label: 'SELECT',
+                                key: 'select'
+                            }, ...columnsSocSec.filter(column => column.key !== 'platform_title_soc_sec')] //add column for select at the beginning
                         }
                         newObjectUrl={'socSec/new'}
                         collection={CollectionEnum.SOC_SEC_STAGING}
@@ -115,7 +117,10 @@ function App() {
                         dataType={DataType.TAX}
                         isProduction={false}
                         columns={
-                            [{label: 'SELECT', key: 'select'}, ...columnsTax.filter(column => column.key !== 'platform_title_tax')] //add column for select at the beginning
+                            [{
+                                label: 'SELECT',
+                                key: 'select'
+                            }, ...columnsTax.filter(column => column.key !== 'platform_title_tax')] //add column for select at the beginning
                         }
                         newObjectUrl={'tax/new'}
                         collection={CollectionEnum.TAX_STAGING}
@@ -132,29 +137,29 @@ function App() {
                     />
                 </Layout>}/>
             <Route path="staging/tax/:id" element={<Layout><DetailPage dataType={DataType.TAX}
-                                                                collectionDev={CollectionEnum.TAX_DEV}
-                                                                collectionProduction={CollectionEnum.TAX_PRODUCTION}
-                                                                collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
+                                                                       collectionDev={CollectionEnum.TAX_DEV}
+                                                                       collectionProduction={CollectionEnum.TAX_PRODUCTION}
+                                                                       collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
             <Route path="staging/mig/:id" element={<Layout><DetailPage dataType={DataType.MIG}
-                                                                collectionDev={CollectionEnum.MIG_DEV}
-                                                                collectionProduction={CollectionEnum.MIG_PRODUCTION}
-                                                                collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
+                                                                       collectionDev={CollectionEnum.MIG_DEV}
+                                                                       collectionProduction={CollectionEnum.MIG_PRODUCTION}
+                                                                       collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
             <Route path="staging/socSec/:id" element={<Layout><DetailPage dataType={DataType.SOC_SEC}
-                                                                     collectionDev={CollectionEnum.SOC_SEC_DEV}
-                                                                   collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
-                                                                   collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
+                                                                          collectionDev={CollectionEnum.SOC_SEC_DEV}
+                                                                          collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
+                                                                          collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
             <Route path="dev/tax/:id" element={<Layout><DetailPage dataType={DataType.TAX}
-                                                                collectionDev={CollectionEnum.TAX_DEV}
-                                                                collectionProduction={CollectionEnum.TAX_PRODUCTION}
-                                                                collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
+                                                                   collectionDev={CollectionEnum.TAX_DEV}
+                                                                   collectionProduction={CollectionEnum.TAX_PRODUCTION}
+                                                                   collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
             <Route path="dev/mig/:id" element={<Layout><DetailPage dataType={DataType.MIG}
-                                                                collectionDev={CollectionEnum.MIG_DEV}
-                                                                collectionProduction={CollectionEnum.MIG_PRODUCTION}
-                                                                collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
+                                                                   collectionDev={CollectionEnum.MIG_DEV}
+                                                                   collectionProduction={CollectionEnum.MIG_PRODUCTION}
+                                                                   collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
             <Route path="dev/socSec/:id" element={<Layout><DetailPage dataType={DataType.SOC_SEC}
-                                                                   collectionDev={CollectionEnum.SOC_SEC_DEV}
-                                                                   collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
-                                                                   collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
+                                                                      collectionDev={CollectionEnum.SOC_SEC_DEV}
+                                                                      collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
+                                                                      collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
             <Route path="/login" element={<Login></Login>}/>
         </Routes>
     );

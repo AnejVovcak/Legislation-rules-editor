@@ -3,7 +3,7 @@ import {refreshJWT} from "../api/api";
 export function jwtUtil() {
     let refreshIntervalId: NodeJS.Timeout;
 
-    const scheduleRefresh = (refreshToken: string) => {
+    const scheduleRefresh = () => {
         // Clear any existing interval to avoid setting multiple intervals
         if (refreshIntervalId) {
             clearInterval(refreshIntervalId);
@@ -13,8 +13,8 @@ export function jwtUtil() {
             console.log("Refreshing token...");
             refreshJWT().then((data) => {
                 // If a new refresh token is provided, reschedule with it
-                if (data.refresh_token) {
-                    scheduleRefresh(data.refresh_token);
+                if (data.access_token) {
+                    localStorage.setItem('access_token', data.access_token);
                 }
             }).catch((error) => {
                 // Handle refresh failure (e.g., log out the user)

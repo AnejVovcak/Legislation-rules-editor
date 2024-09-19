@@ -101,7 +101,7 @@ function App() {
                     <TableView
                         dataType={DataType.TAX}
                         isProduction={true}
-                        columns={columnsTax.filter(column => column.key !== 'platform_title_tax')}
+                        columns={columnsTax}
                         newObjectUrl={'/tax/new'} //unused
                         collection={CollectionEnum.TAX_PRODUCTION}
                     />

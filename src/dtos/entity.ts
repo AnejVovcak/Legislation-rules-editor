@@ -18,6 +18,7 @@ export interface Entity {
     out_value: OutEnum;
     title: string;
     source: Source[],
+    position?: string[];
     last_modified: string;
     last_modified_by: string;
     published: boolean;

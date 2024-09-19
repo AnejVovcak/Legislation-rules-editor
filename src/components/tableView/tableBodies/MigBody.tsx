@@ -44,6 +44,11 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
                         </div>
                     ))}</td>
                     <td><SemanticLabel value={item.platform_title_mig}/></td>
+                    <td>{item.position?.map((time, index) => (
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={time} key={index}/>
+                        </div>
+                    ))}</td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

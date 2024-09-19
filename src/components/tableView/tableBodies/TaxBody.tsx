@@ -40,6 +40,11 @@ function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
                     <td><SemanticLabel value={item.empl}/></td>
                     <td><SemanticLabel value={item.tax}/></td>
                     <td><SemanticLabel value={item.platform_title_tax}/></td>
+                    <td>{item.position?.map((time, index) => (
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={time} key={index}/>
+                        </div>
+                    ))}</td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

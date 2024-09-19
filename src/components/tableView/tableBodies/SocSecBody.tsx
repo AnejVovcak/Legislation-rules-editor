@@ -21,7 +21,7 @@ function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolea
                             <input type="checkbox" id={item._id as string}/>
                         </td>
                     )}
-                    
+
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>
@@ -45,6 +45,11 @@ function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolea
                     <td><SemanticLabel value={item.empl}/></td>
                     <td><SemanticLabel value={item.if_empl0_eq_empl1}/></td>
                     <td><SemanticLabel value={item.platform_title_soc_sec}/></td>
+                    <td>{item.position?.map((time, index) => (
+                        <div style={{marginBottom: '5px'}}>
+                            <SemanticLabel value={time} key={index}/>
+                        </div>
+                    ))}</td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

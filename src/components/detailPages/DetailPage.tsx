@@ -175,22 +175,38 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                                    }))}/>
                     }
                     {data && filterValues.length !== 0 &&
-                        <div style={{minWidth: '15rem'}}>
-                            <DropdownSelect
-                                data={data}
-                                setData={setData as React.Dispatch<React.SetStateAction<any>>}
-                                fieldKey={
-                                    dataType === DataType.MIG ? 'platform_title_mig' :
-                                        dataType === DataType.SOC_SEC ? 'platform_title_soc_sec' :
-                                            dataType === DataType.TAX ? 'platform_title_tax' : ''
-                                }
-                                label="Platform Title"
-                                fieldsConfig={filterValues}
-                                onErrorChange={(fieldKey, hasError,) => {
-                                    setValidForm(!hasError);
-                                }}
-                                submitted={submitted}
-                            />
+                        <div style={{flexDirection: 'row', display: 'flex', gap: '1rem'}}>
+                            <div style={{minWidth: '15rem'}}>
+                                <DropdownSelect
+                                    data={data}
+                                    setData={setData as React.Dispatch<React.SetStateAction<any>>}
+                                    fieldKey={
+                                        dataType === DataType.MIG ? 'platform_title_mig' :
+                                            dataType === DataType.SOC_SEC ? 'platform_title_soc_sec' :
+                                                dataType === DataType.TAX ? 'platform_title_tax' : ''
+                                    }
+                                    label="Platform Title"
+                                    fieldsConfig={filterValues}
+                                    onErrorChange={(fieldKey, hasError,) => {
+                                        setValidForm(!hasError);
+                                    }}
+                                    submitted={submitted}
+                                />
+                            </div>
+                            <div style={{minWidth: '15rem'}}>
+                                <DropdownSelect
+                                    data={data}
+                                    setData={setData as React.Dispatch<React.SetStateAction<any>>}
+                                    fieldKey={'position'}
+                                    label="Position"
+                                    fieldsConfig={filterValues}
+                                    onErrorChange={(fieldKey, hasError,) => {
+                                        setValidForm(!hasError);
+                                    }}
+                                    submitted={submitted}
+                                    multiple={true}
+                                />
+                            </div>
                         </div>
                     }
                 </div>

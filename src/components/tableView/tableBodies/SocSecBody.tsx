@@ -4,7 +4,7 @@ import React from "react";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function SocSecBody({data, isProduction, isDev}: { data: SocSec[], isProduction: boolean, isDev:boolean }) {
+function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolean }) {
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
             window.open(`socSec/${id}`, "_blank");
@@ -16,7 +16,7 @@ function SocSecBody({data, isProduction, isDev}: { data: SocSec[], isProduction:
             {data.map((item, index) => (
                 <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
 
-                    {!isProduction && !isDev && (
+                    {!isProduction && (
                         <td onClick={(e) => e.stopPropagation()}>
                             <input type="checkbox" id={item._id as string}/>
                         </td>
@@ -44,7 +44,7 @@ function SocSecBody({data, isProduction, isDev}: { data: SocSec[], isProduction:
                     ))}</td>
                     <td><SemanticLabel value={item.empl}/></td>
                     <td><SemanticLabel value={item.if_empl0_eq_empl1}/></td>
-                    {isDev && <td><SemanticLabel value={item.platform_title_soc_sec}/></td>}
+                    <td><SemanticLabel value={item.platform_title_soc_sec}/></td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

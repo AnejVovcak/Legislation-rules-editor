@@ -21,14 +21,12 @@ import DropdownSelect from "../dropdown/DropdownSelect";
 
 type DetailPageProps = {
     dataType: DataType;
-    collectionDev: CollectionEnum;
     collectionStaging: CollectionEnum;
     collectionProduction: CollectionEnum;
 }
 
 function DetailPage<T extends Mig | SocSec | Tax>({
                                                       dataType,
-                                                      collectionDev,
                                                       collectionStaging,
                                                       collectionProduction
                                                   }: DetailPageProps) {
@@ -41,7 +39,6 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     const [publishModalOpen, setPublishModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [filterValues, setFilterValues] = useState<CodebookValue[]>([]);
-    const [isDev, setIsDev] = useState<boolean>(false);
     const [validForm, setValidForm] = useState<boolean>(false);
     const [submitted, setSubmitted] = useState(false);
 
@@ -73,10 +70,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
         const initializeData = () => {
             setData({} as T);
-            // if url contains the word dev, set isDev to true
-            if (window.location.pathname.includes("/dev")) {
-                setIsDev(true);
-            }
+
             switch (dataType) {
                 case DataType.MIG:
                     setData(prev => ({...prev, time: [], article: [], content: ''}));
@@ -94,12 +88,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
         const loadData = async () => {
             if (id && id !== "new") {
-                if (window.location.pathname.includes("/dev")) {
-                    await fetchData(id, collectionDev);
-                    setIsDev(true);
-                } else {
-                    await fetchData(id, collectionStaging);
-                }
+                await fetchData(id, collectionStaging);
             } else {
                 initializeData();
             }
@@ -148,7 +137,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
         } else {
             setError(false);
         }
-        if (await handleSubmitWrapper(isDev ? collectionDev : collectionStaging, false)) {
+        if (await handleSubmitWrapper(collectionStaging, false)) {
             setSuccess(true);
             setTimeout(() => {
                 window.close();
@@ -159,21 +148,14 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     };
 
     const handleDelete = async () => {
-        if (await deleteObject(id!, isDev ? collectionDev : collectionStaging)) {
-            if (isDev) {
+        if (await deleteObject(id!, collectionStaging)) {
+            if (await deleteObject(id!, collectionProduction)) {
                 setSuccessDelete(true);
                 setTimeout(() => {
                     window.close();
                 }, 1500);
             } else {
-                if (await deleteObject(id!, collectionProduction)) {
-                    setSuccessDelete(true);
-                    setTimeout(() => {
-                        window.close();
-                    }, 1500);
-                } else {
-                    setError(true);
-                }
+                setError(true);
             }
         } else {
             setError(true);
@@ -216,7 +198,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                     <div>
                         <Button positive onClick={() => handleNonProdPush()}>Save</Button>
                         <Button negative onClick={() => window.close()}>Cancel</Button>
-                        {id !== "new" && id && !isDev && <Button negative onClick={() => setPublishModalOpen(true)}>
+                        {id !== "new" && id && <Button negative onClick={() => setPublishModalOpen(true)}>
                             Publish
                         </Button>}
                         {id !== "new" && id && <Button negative onClick={() => setDeleteModalOpen(true)}>
@@ -278,8 +260,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                           onClickEvent={handleProductionPush}/>
 
             <ModalWarning modalHeader={"Delete"}
-                          modalContent={isDev ? "Are you sure you want to delete this element? " :
-                              "Are you sure you want to delete this element? " +
+                          modalContent={"Are you sure you want to delete this element? " +
                               "This action cannot be undone. Element will be deleted from both staging and production."}
                           modalOpen={deleteModalOpen} setModalOpen={setDeleteModalOpen}
                           onClickEvent={handleDelete}/>

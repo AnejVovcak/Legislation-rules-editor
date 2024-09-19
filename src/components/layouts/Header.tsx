@@ -70,29 +70,29 @@ class Header extends Component {
                                 </DropdownMenu>
                             </Dropdown>
 
-                            <Dropdown
-                                selection
-                                text='Development 🪛'
-                                pointing='top'
-                                className='link item'>
-                                <DropdownMenu>
-                                    <DropdownItem
-                                        key='dev/mig'
-                                        onClick={() => this.handleNavigation('dev/mig')}
-                                        active={activeItem === 'dev/mig'}
-                                    >Migration</DropdownItem>
-                                    <DropdownItem
-                                        key='dev/socSec'
-                                        onClick={() => this.handleNavigation('dev/socSec')}
-                                        active={activeItem === 'dev/socSec'}
-                                    >Social Security</DropdownItem>
-                                    <DropdownItem
-                                        key='dev/tax'
-                                        onClick={() => this.handleNavigation('dev/tax')}
-                                        active={activeItem === 'dev/tax'}
-                                    >Tax</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
+                            {/*<Dropdown*/}
+                            {/*    selection*/}
+                            {/*    text='Development 🪛'*/}
+                            {/*    pointing='top'*/}
+                            {/*    className='link item'>*/}
+                            {/*    <DropdownMenu>*/}
+                            {/*        <DropdownItem*/}
+                            {/*            key='dev/mig'*/}
+                            {/*            onClick={() => this.handleNavigation('dev/mig')}*/}
+                            {/*            active={activeItem === 'dev/mig'}*/}
+                            {/*        >Migration</DropdownItem>*/}
+                            {/*        <DropdownItem*/}
+                            {/*            key='dev/socSec'*/}
+                            {/*            onClick={() => this.handleNavigation('dev/socSec')}*/}
+                            {/*            active={activeItem === 'dev/socSec'}*/}
+                            {/*        >Social Security</DropdownItem>*/}
+                            {/*        <DropdownItem*/}
+                            {/*            key='dev/tax'*/}
+                            {/*            onClick={() => this.handleNavigation('dev/tax')}*/}
+                            {/*            active={activeItem === 'dev/tax'}*/}
+                            {/*        >Tax</DropdownItem>*/}
+                            {/*    </DropdownMenu>*/}
+                            {/*</Dropdown>*/}
                         </Menu>
                     </div>
                 </div>

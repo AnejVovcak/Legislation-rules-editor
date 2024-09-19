@@ -30,26 +30,16 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Layout><MainPage/></Layout>}/>
-            <Route path="dev/mig" element={<Layout>
-                <TableView
-                    dataType={DataType.MIG}
-                    isProduction={false}
-                    columns={columnsMig}
-                    newObjectUrl={'mig/new'}
-                    collection={CollectionEnum.MIG_DEV}
-                />
-            </Layout>}/>
             <Route path="staging/mig" element={
                 <Layout>
                     <TableView
                         dataType={DataType.MIG}
                         isProduction={false}
-                        //add column for select at the beginning
                         columns={
                             [{
                                 label: 'SELECT',
                                 key: 'select'
-                            }, ...columnsMig.filter(column => column.key !== 'platform_title_mig')]
+                            }, ...columnsMig]
                         }
                         newObjectUrl={'mig/new'}
                         collection={CollectionEnum.MIG_STAGING}
@@ -60,22 +50,12 @@ function App() {
                     dataType={DataType.MIG}
                     isProduction={true}
                     columns={
-                        columnsMig.filter(column => column.key !== 'platform_title_mig')
+                        columnsMig
                     }
                     newObjectUrl={'mig/new'} //unused
                     collection={CollectionEnum.MIG_PRODUCTION}
                 />
             </Layout>}/>
-            <Route path="dev/socSec" element={
-                <Layout>
-                    <TableView
-                        dataType={DataType.SOC_SEC}
-                        isProduction={false}
-                        columns={columnsSocSec}
-                        newObjectUrl={'socSec/new'}
-                        collection={CollectionEnum.SOC_SEC_DEV}
-                    />
-                </Layout>}/>
             <Route path="staging/socSec" element={
                 <Layout>
                     <TableView
@@ -85,7 +65,7 @@ function App() {
                             [{
                                 label: 'SELECT',
                                 key: 'select'
-                            }, ...columnsSocSec.filter(column => column.key !== 'platform_title_soc_sec')] //add column for select at the beginning
+                            }, ...columnsSocSec]
                         }
                         newObjectUrl={'socSec/new'}
                         collection={CollectionEnum.SOC_SEC_STAGING}
@@ -96,19 +76,9 @@ function App() {
                     <TableView
                         dataType={DataType.SOC_SEC}
                         isProduction={true}
-                        columns={columnsSocSec.filter(column => column.key !== 'platform_title_soc_sec')}
+                        columns={columnsSocSec}
                         newObjectUrl={'/socSec/new'} //unused
                         collection={CollectionEnum.SOC_SEC_PRODUCTION}
-                    />
-                </Layout>}/>
-            <Route path="dev/tax" element={
-                <Layout>
-                    <TableView
-                        dataType={DataType.TAX}
-                        isProduction={false}
-                        columns={columnsTax}
-                        newObjectUrl={'tax/new'}
-                        collection={CollectionEnum.TAX_DEV}
                     />
                 </Layout>}/>
             <Route path="staging/tax" element={
@@ -120,7 +90,7 @@ function App() {
                             [{
                                 label: 'SELECT',
                                 key: 'select'
-                            }, ...columnsTax.filter(column => column.key !== 'platform_title_tax')] //add column for select at the beginning
+                            }, ...columnsTax]
                         }
                         newObjectUrl={'tax/new'}
                         collection={CollectionEnum.TAX_STAGING}
@@ -137,29 +107,14 @@ function App() {
                     />
                 </Layout>}/>
             <Route path="staging/tax/:id" element={<Layout><DetailPage dataType={DataType.TAX}
-                                                                       collectionDev={CollectionEnum.TAX_DEV}
                                                                        collectionProduction={CollectionEnum.TAX_PRODUCTION}
                                                                        collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
             <Route path="staging/mig/:id" element={<Layout><DetailPage dataType={DataType.MIG}
-                                                                       collectionDev={CollectionEnum.MIG_DEV}
                                                                        collectionProduction={CollectionEnum.MIG_PRODUCTION}
                                                                        collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
             <Route path="staging/socSec/:id" element={<Layout><DetailPage dataType={DataType.SOC_SEC}
-                                                                          collectionDev={CollectionEnum.SOC_SEC_DEV}
                                                                           collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
                                                                           collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
-            <Route path="dev/tax/:id" element={<Layout><DetailPage dataType={DataType.TAX}
-                                                                   collectionDev={CollectionEnum.TAX_DEV}
-                                                                   collectionProduction={CollectionEnum.TAX_PRODUCTION}
-                                                                   collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
-            <Route path="dev/mig/:id" element={<Layout><DetailPage dataType={DataType.MIG}
-                                                                   collectionDev={CollectionEnum.MIG_DEV}
-                                                                   collectionProduction={CollectionEnum.MIG_PRODUCTION}
-                                                                   collectionStaging={CollectionEnum.MIG_STAGING}/></Layout>}/>
-            <Route path="dev/socSec/:id" element={<Layout><DetailPage dataType={DataType.SOC_SEC}
-                                                                      collectionDev={CollectionEnum.SOC_SEC_DEV}
-                                                                      collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
-                                                                      collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
             <Route path="/login" element={<Login></Login>}/>
         </Routes>
     );

@@ -34,11 +34,10 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
     const [column, setColumn] = useState<keyof T>('title' as keyof T);
     const [direction, setDirection] = useState<'ascending' | 'descending'>('ascending');
     const [filterValues, setFilterValues] = useState<CodebookValue[]>([]);
-    const [isDev, setIsDev] = useState<boolean>(false);
 
 
     useEffect(() => {
-        setIsDev(window.location.pathname.includes("/dev"))
+        // setIsDev(window.location.pathname.includes("/dev"))
         getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
             setFilterValues((result as unknown as CodebookValue[]).filter(
                 (value) => value.domain.includes(dataType)
@@ -125,16 +124,14 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
                             onClick={() => window.open(newObjectUrl)}>Add new
                         </Button>
 
-                        {!isDev &&
+
                             <Button
                                 className=""
                                 primary
                                 size='large'
                                 onClick={() => publishSelected()}>Publish selected
                             </Button>
-                        }
 
-                        {!isDev &&
                             <Button
                                 className=""
                                 primary
@@ -145,7 +142,6 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
                                             dataType === DataType.TAX ? config.testingUrlTax : ""
                                 )}>Testing view
                             </Button>
-                        }
                     </div>
                 )
                 }
@@ -159,11 +155,11 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
                     </TableRow>
                 </TableHeader>
                 {dataType === DataType.MIG &&
-                    <MigBody data={data as unknown as Mig[]} isProduction={isProduction} isDev={isDev}/>}
+                    <MigBody data={data as unknown as Mig[]} isProduction={isProduction} />}
                 {dataType === DataType.SOC_SEC &&
-                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction} isDev={isDev}/>}
+                    <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction} />}
                 {dataType === DataType.TAX &&
-                    <TaxBody data={data as unknown as Tax[]} isProduction={isProduction} isDev={isDev}/>}
+                    <TaxBody data={data as unknown as Tax[]} isProduction={isProduction} />}
             </Table>
         </div>
     );

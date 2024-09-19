@@ -4,7 +4,7 @@ import {Tax} from "../../../dtos/tax";
 import SemanticLabel from "./SemanticLabel";
 import truncateHtml from "../../../utils/tableViewBodyUtil";
 
-function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boolean, isDev:boolean }) {
+function TaxBody({data, isProduction}: { data: Tax[], isProduction: boolean }) {
     const handleRowClick = (e: React.MouseEvent<HTMLTableRowElement>, id: string) => {
         if ((e.target as HTMLInputElement).type !== 'checkbox') {
             window.open(`tax/${id}`, "_blank");
@@ -16,12 +16,12 @@ function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boole
             {data.map((item, index) => (
                 <tr key={index} onClick={(e) => !isProduction && handleRowClick(e, item._id as string)}>
 
-                    {!isProduction && !isDev && (
+                    {!isProduction && (
                         <td onClick={(e) => e.stopPropagation()}>
                             <input type="checkbox" id={item._id as string}/>
                         </td>
                     )}
-                    
+
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>
@@ -39,9 +39,7 @@ function TaxBody({data, isProduction, isDev}: { data: Tax[], isProduction: boole
                     ))}</td>
                     <td><SemanticLabel value={item.empl}/></td>
                     <td><SemanticLabel value={item.tax}/></td>
-                    {isDev && (
-                        <td><SemanticLabel value={item.platform_title_tax}/></td>
-                    )}
+                    <td><SemanticLabel value={item.platform_title_tax}/></td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

@@ -11,6 +11,7 @@ export enum CollectionEnum {
     MIG_STAGING = 'MIG_STAGING',
     MIG_DEV = 'MIG_DEV',
     CODEBOOK = 'CODEBOOK',
+    CHAT_BOT = 'CHAT_BOT',
 }
 export const CollectionEnumValues: { [key in CollectionEnum]: string } = {
     [CollectionEnum.TAX_PRODUCTION]: config.collectionTaxProduction,
@@ -23,4 +24,5 @@ export const CollectionEnumValues: { [key in CollectionEnum]: string } = {
     [CollectionEnum.MIG_STAGING]: config.collectionMigStaging,
     [CollectionEnum.MIG_DEV]: config.collectionMigDev,
     [CollectionEnum.CODEBOOK]: config.collectionCodebook,
+    [CollectionEnum.CHAT_BOT]: config.collectionChatBot,
 };

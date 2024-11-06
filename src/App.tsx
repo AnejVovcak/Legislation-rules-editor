@@ -15,6 +15,7 @@ import {CollectionEnum} from "./enums/CollectionEnum";
 import {DataType} from "./enums/DataType";
 import DetailPage from "./components/detailPages/DetailPage";
 import {jwtUtil} from "./utils/jwtUtil";
+import {PromptConfig} from "./components/promptConfig/PromptConfig";
 
 function App() {
 
@@ -116,6 +117,7 @@ function App() {
                                                                           collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
                                                                           collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
             <Route path="/login" element={<Login></Login>}/>
+            <Route path="/promptConfig" element={<Layout><PromptConfig></PromptConfig></Layout>}/>
         </Routes>
     );
 }

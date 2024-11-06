@@ -8,6 +8,7 @@ import {CodebookValue} from "../enums/CodebookValue";
 import config from "../config";
 import {CollectionEnum, CollectionEnumValues} from "../enums/CollectionEnum";
 import {ObjectId} from "bson";
+import {ChatBotConfig} from "../dtos/ChatBotConfig";
 
 const API_BASE_URL = config.baseUrl;
 const JWT_BASE_URL = config.jwtUrl;
@@ -146,6 +147,34 @@ export const deleteEnumObject = async (itemToDelete: string, fieldKey: string) =
             _id: fieldKey,
         },
         update: {"$pull": {values: itemToDelete}}
+    }
+
+    const response = await axios.post(API_BASE_URL + Actions.UPDATE, requestBody, {
+        headers: headers,
+    });
+    return response.data;
+}
+
+export const getChatBotConfig = async ():Promise<ChatBotConfig> => {
+    const response = await axios.post(API_BASE_URL + Actions.FIND, {
+        ...requestBodyTemplate,
+        collection: CollectionEnumValues.CHAT_BOT,
+        filter: {},
+    }, {
+        headers: headers,
+    });
+    return response.data.documents[0];
+}
+
+export const updateChatBotConfig = async (data: ChatBotConfig) => {
+    const requestBody = {
+        ...requestBodyTemplate,
+        collection: CollectionEnumValues.CHAT_BOT,
+        filter: {
+            _id: data._id,
+        },
+        update: {"$set": {...data, last_modified: new Date(), last_modified_by: localStorage.getItem('email')}},
+        upsert: true
     }
 
     const response = await axios.post(API_BASE_URL + Actions.UPDATE, requestBody, {

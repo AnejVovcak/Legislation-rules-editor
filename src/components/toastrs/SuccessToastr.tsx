@@ -7,7 +7,7 @@ const SuccessToastr = ({content}: { content?: string }) => {
     }, []);
     return <ToastContainer position="bottom-right"
                            closeOnClick={false}
-                           autoClose={false}
+                           autoClose={4000}
                            hideProgressBar={false}
                            limit={1}
                            closeButton={false}/>

@@ -16,6 +16,7 @@ const config = {
     testingUrlMig: process.env.REACT_APP_TESTING_URL_MIG,
     testingUrlSocSec: process.env.REACT_APP_TESTING_URL_SOC_SEC,
     testingUrlTax: process.env.REACT_APP_TESTING_URL_TAX,
+    collectionChatBot: process.env.REACT_APP_MONGODB_COLLECTION_CHATBOT || 'chatbot',
 };
 
 export default config;

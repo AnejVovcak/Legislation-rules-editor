@@ -207,6 +207,21 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                                     multiple={true}
                                 />
                             </div>
+                            <div style={{minWidth: '15rem'}}>
+                                <DropdownSelect
+                                    data={data}
+                                    setData={setData as React.Dispatch<React.SetStateAction<any>>}
+                                    fieldKey={
+                                        'general'
+                                    }
+                                    label="General"
+                                    fieldsConfig={filterValues}
+                                    onErrorChange={(fieldKey, hasError,) => {
+                                        setValidForm(!hasError);
+                                    }}
+                                    submitted={submitted}
+                                />
+                            </div>
                         </div>
                     }
                 </div>

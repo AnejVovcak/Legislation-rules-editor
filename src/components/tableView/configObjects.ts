@@ -20,6 +20,7 @@ export const columnsMig : {label:string, key:MigKeys}[] = [
     {label: 'TIME', key: 'time'},
     {label: 'PLATFORM TITLE', key: 'platform_title_mig'},
     {label: 'POSITION', key: 'position'},
+    {label: 'GENERAL', key: 'general'},
     {label: 'LAST MODIFIED', key: 'last_modified'},
     {label: 'PUBLISHED', key: 'published'}
 ];
@@ -36,6 +37,7 @@ export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
     {label: 'IF EMPL0 EQ EMPL1', key: 'if_empl0_eq_empl1'},
     {label: 'PLATFORM TITLE', key: 'platform_title_soc_sec'},
     {label: 'POSITION', key: 'position'},
+    {label: 'GENERAL', key: 'general'},
     {label: 'LAST MODIFIED', key: 'last_modified'},
     {label: 'PUBLISHED', key: 'published'}
 ]
@@ -51,6 +53,7 @@ export const columnsTax: { label: string, key: TaxKeys}[] = [
     {label: 'TAX', key: 'tax'},
     {label: 'PLATFORM TITLE', key: 'platform_title_tax'},
     {label: 'POSITION', key: 'position'},
+    {label: 'GENERAL', key: 'general'},
     {label: 'LAST MODIFIED', key: 'last_modified'},
     {label: 'PUBLISHED', key: 'published'}
 ];

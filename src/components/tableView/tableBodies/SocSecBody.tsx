@@ -50,6 +50,7 @@ function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolea
                             <SemanticLabel value={time} key={index}/>
                         </div>
                     ))}</td>
+                    <td><SemanticLabel value={item.general}/></td>
                     <td>
                         <div>{item.last_modified_by}</div>
                         <div>{new Date(item.last_modified).toLocaleString()}</div>

@@ -7,6 +7,7 @@ import Layout from "./components/layouts/Layout";
 import Login from "./components/login/Login";
 import 'react-quill/dist/quill.snow.css';
 import {
+    columnsGeneral,
     columnsMig,
     columnsSocSec,
     columnsTax,
@@ -107,6 +108,31 @@ function App() {
                         collection={CollectionEnum.TAX_PRODUCTION}
                     />
                 </Layout>}/>
+            <Route path="staging/general" element={
+                <Layout>
+                    <TableView
+                        dataType={DataType.GENERAL}
+                        isProduction={false}
+                        columns={
+                            [{
+                                label: 'SELECT',
+                                key: 'select'
+                            }, ...columnsGeneral]
+                        }
+                        newObjectUrl={'general/new'}
+                        collection={CollectionEnum.GENERAL_STAGING}
+                    />
+                </Layout>}/>
+            <Route path="prod/general" element={
+                <Layout>
+                    <TableView
+                        dataType={DataType.GENERAL}
+                        isProduction={true}
+                        columns={columnsGeneral}
+                        newObjectUrl={'/general/new'} //unused
+                        collection={CollectionEnum.GENERAL_PRODUCTION}
+                    />
+                </Layout>}/>
             <Route path="staging/tax/:id" element={<Layout><DetailPage dataType={DataType.TAX}
                                                                        collectionProduction={CollectionEnum.TAX_PRODUCTION}
                                                                        collectionStaging={CollectionEnum.TAX_STAGING}/></Layout>}/>
@@ -116,6 +142,9 @@ function App() {
             <Route path="staging/socSec/:id" element={<Layout><DetailPage dataType={DataType.SOC_SEC}
                                                                           collectionProduction={CollectionEnum.SOC_SEC_PRODUCTION}
                                                                           collectionStaging={CollectionEnum.SOC_SEC_STAGING}/></Layout>}/>
+            <Route path="staging/general/:id" element={<Layout><DetailPage dataType={DataType.GENERAL}
+                                                                            collectionProduction={CollectionEnum.GENERAL_PRODUCTION}
+                                                                            collectionStaging={CollectionEnum.GENERAL_STAGING}/></Layout>}/>
             <Route path="/login" element={<Login></Login>}/>
             <Route path="/promptConfig" element={<Layout><PromptConfig></PromptConfig></Layout>}/>
         </Routes>

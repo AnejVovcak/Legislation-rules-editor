@@ -3,9 +3,10 @@ import {SocSec} from "../dtos/socSec";
 import {Tax} from "../dtos/tax";
 import {Mig} from "../dtos/mig";
 import {CollectionEnum} from "../enums/CollectionEnum";
+import {General} from "../dtos/general";
 
 //publish the object
-export async function handleSubmit<T>(data: Mig | SocSec | Tax,
+export async function handleSubmit<T>(data: Mig | SocSec | Tax | General,
                                       setData: React.Dispatch<React.SetStateAction<T>>,
                                       id: string | undefined,
                                       collectionName: CollectionEnum): Promise<boolean> {
@@ -17,7 +18,7 @@ export async function handleSubmit<T>(data: Mig | SocSec | Tax,
 }
 
 //publish the object fixed
-export async function handleSubmitBatch(data: Mig | SocSec | Tax,
+export async function handleSubmitBatch(data: Mig | SocSec | Tax | General,
                                           id: string | undefined,
                                           collectionName: CollectionEnum): Promise<boolean> {
     const content = data.content;

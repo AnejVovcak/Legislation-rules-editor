@@ -9,6 +9,7 @@ import config from "../config";
 import {CollectionEnum, CollectionEnumValues} from "../enums/CollectionEnum";
 import {ObjectId} from "bson";
 import {ChatBotConfig} from "../dtos/ChatBotConfig";
+import {General} from "../dtos/general";
 
 const API_BASE_URL = config.baseUrl;
 const JWT_BASE_URL = config.jwtUrl;
@@ -51,7 +52,7 @@ export const refreshJWT = async () => {
     return response.data;
 }
 
-export const getAllDocuments = async (collection: CollectionEnum, filter?: any, sort?: any): Promise<Mig[] | SocSec[] | Tax[] | CodebookValue[]> => {
+export const getAllDocuments = async (collection: CollectionEnum, filter?: any, sort?: any): Promise<Mig[] | SocSec[] | Tax[] | CodebookValue[] | General[]> => {
     const response = await axios.post(API_BASE_URL + Actions.FIND,
         {
             ...requestBodyTemplate,
@@ -65,7 +66,7 @@ export const getAllDocuments = async (collection: CollectionEnum, filter?: any, 
     return response.data.documents;
 }
 
-export const getById = async (id: string, collectionName: CollectionEnum): Promise<Tax | Mig | SocSec> => {
+export const getById = async (id: string, collectionName: CollectionEnum): Promise<Tax | Mig | SocSec | General> => {
     const requestBody = {
         ...requestBodyTemplate,
         collection: CollectionEnumValues[collectionName],
@@ -80,7 +81,7 @@ export const getById = async (id: string, collectionName: CollectionEnum): Promi
 }
 
 //fixed update object that updates if it exists and creates if it doesn't
-export const updateObject = async (id: string | undefined, data: Tax | Mig | SocSec, collectionName: CollectionEnum) => {
+export const updateObject = async (id: string | undefined, data: Tax | Mig | SocSec | General, collectionName: CollectionEnum) => {
 
     let _id = {"$oid": id !== undefined ? id : new ObjectId().toHexString()};
 

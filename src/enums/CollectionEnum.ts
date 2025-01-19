@@ -10,6 +10,8 @@ export enum CollectionEnum {
     MIG_PRODUCTION = 'MIG_PRODUCTION',
     MIG_STAGING = 'MIG_STAGING',
     MIG_DEV = 'MIG_DEV',
+    GENERAL_PRODUCTION = 'GENERAL_PRODUCTION',
+    GENERAL_STAGING = 'GENERAL_STAGING',
     CODEBOOK = 'CODEBOOK',
     CHAT_BOT = 'CHAT_BOT',
 }
@@ -22,6 +24,8 @@ export const CollectionEnumValues: { [key in CollectionEnum]: string } = {
     [CollectionEnum.SOC_SEC_DEV]: config.collectionSocSecDev,
     [CollectionEnum.MIG_PRODUCTION]: config.collectionMigProduction,
     [CollectionEnum.MIG_STAGING]: config.collectionMigStaging,
+    [CollectionEnum.GENERAL_PRODUCTION]: config.collectionGeneralProduction,
+    [CollectionEnum.GENERAL_STAGING]: config.collectionGeneralStaging,
     [CollectionEnum.MIG_DEV]: config.collectionMigDev,
     [CollectionEnum.CODEBOOK]: config.collectionCodebook,
     [CollectionEnum.CHAT_BOT]: config.collectionChatBot,

@@ -17,6 +17,8 @@ import {Tax} from "../../dtos/tax";
 import {CodebookValue} from "../../enums/CodebookValue";
 import {handleSubmitBatch} from "../../utils/detailPageUtil";
 import config from "../../config";
+import GeneralBody from "./tableBodies/GeneralBody";
+import {General} from "../../dtos/general";
 
 type TableViewProps<T> = {
     dataType: DataType;
@@ -76,7 +78,7 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
 
         //get selected data, filter it by id. selectedIDs is an array of strings
         //@ts-ignore
-        const selectedData = data.filter((item) => selectedIDs.includes(item._id)) as (Mig | SocSec | Tax)[];
+        const selectedData = data.filter((item) => selectedIDs.includes(item._id)) as (Mig | SocSec | Tax | General)[];
 
         //submit the selected data
         for (let i = 0; i < selectedData.length; i++) {
@@ -85,6 +87,7 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
             await handleSubmitBatch({...selectedData[i], published: true}, selectedData[i]._id as string,
                 collection === CollectionEnum.TAX_STAGING ? CollectionEnum.TAX_PRODUCTION :
                     collection === CollectionEnum.MIG_STAGING ? CollectionEnum.MIG_PRODUCTION :
+                        collection === CollectionEnum.GENERAL_STAGING ? CollectionEnum.GENERAL_PRODUCTION :
                         collection === CollectionEnum.SOC_SEC_STAGING ? CollectionEnum.SOC_SEC_PRODUCTION : CollectionEnum.CODEBOOK);
         }
 
@@ -160,6 +163,8 @@ function TableView<T>({dataType, isProduction, columns, newObjectUrl, collection
                     <SocSecBody data={data as unknown as SocSec[]} isProduction={isProduction} />}
                 {dataType === DataType.TAX &&
                     <TaxBody data={data as unknown as Tax[]} isProduction={isProduction} />}
+                {dataType === DataType.GENERAL &&
+                    <GeneralBody data={data as unknown as General[]} isProduction={isProduction} />}
             </Table>
         </div>
     );

@@ -45,6 +45,9 @@ class Header extends Component {
                             <MenuItem onClick={() => this.handleNavigation('staging/tax')}
                                       active={activeItem === 'staging/tax'}
                             >tax</MenuItem>
+                            <MenuItem onClick={() => this.handleNavigation('staging/general')}
+                                      active={activeItem === 'staging/general'}
+                            >general</MenuItem>
 
                             <Dropdown
                                 selection
@@ -67,6 +70,11 @@ class Header extends Component {
                                         onClick={() => this.handleNavigation('prod/tax')}
                                         active={activeItem === 'prod/tax'}
                                     >Tax</DropdownItem>
+                                    <DropdownItem
+                                        key='prod/general'
+                                        onClick={() => this.handleNavigation('prod/general')}
+                                        active={activeItem === 'prod/general'}
+                                    >General</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
 

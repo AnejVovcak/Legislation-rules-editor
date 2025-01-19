@@ -1,10 +1,12 @@
 import {Mig} from "../../dtos/mig";
 import {SocSec} from "../../dtos/socSec";
 import {Tax} from "../../dtos/tax";
+import {General} from "../../dtos/general";
 
 type MigKeys = keyof Mig | 'select'
 type SocSecKeys = keyof SocSec | 'select'
 type TaxKeys = keyof Tax | 'select'
+type GeneralKeys = keyof General | 'select'
 
 export const columnsMig : {label:string, key:MigKeys}[] = [
     {label: 'ID', key: 'title'},
@@ -50,6 +52,17 @@ export const columnsTax: { label: string, key: TaxKeys}[] = [
     {label: 'EMPL', key: 'empl'},
     {label: 'TAX', key: 'tax'},
     {label: 'PLATFORM TITLE', key: 'platform_title_tax'},
+    {label: 'POSITION', key: 'position'},
+    {label: 'LAST MODIFIED', key: 'last_modified'},
+    {label: 'PUBLISHED', key: 'published'}
+];
+
+export const columnsGeneral: { label: string, key: GeneralKeys}[] = [
+    {label: 'ID', key: 'title'},
+    {label: 'CONTENT', key: 'content'},
+    {label: 'IN', key: 'in_value'},
+    {label: 'OUT', key: 'out_value'},
+    {label: 'PLATFORM TITLE', key: 'platform_title_general'},
     {label: 'POSITION', key: 'position'},
     {label: 'LAST MODIFIED', key: 'last_modified'},
     {label: 'PUBLISHED', key: 'published'}

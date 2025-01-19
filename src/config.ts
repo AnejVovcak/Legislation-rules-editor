@@ -3,6 +3,8 @@ const config = {
     jwtUrl: process.env.REACT_APP_JWT_BASE_URL!,
     dataSource: process.env.REACT_APP_MONGODB_DATA_SOURCE!,
     database: process.env.REACT_APP_MONGODB_DATABASE!,
+    collectionGeneralProduction: process.env.REACT_APP_MONGODB_COLLECTION_GENERAL_PRODUCTION || 'generalMobilityPortal',
+    collectionGeneralStaging: process.env.REACT_APP_MONGODB_COLLECTION_GENERAL_STAGING || 'generalMobilityPortalStaging',
     collectionTaxProduction: process.env.REACT_APP_MONGODB_COLLECTION_TAX_PRODUCTION || 'taxMobilityPortal',
     collectionTaxStaging: process.env.REACT_APP_MONGODB_COLLECTION_TAX_STAGING || 'taxMobilityPortalStaging',
     collectionTaxDev: process.env.REACT_APP_MONGODB_COLLECTION_TAX_DEV || 'taxDev',

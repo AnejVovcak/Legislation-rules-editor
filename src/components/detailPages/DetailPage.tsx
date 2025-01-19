@@ -18,6 +18,8 @@ import TaxForm from "./forms/TaxForm";
 import {CodebookValue} from "../../enums/CodebookValue";
 import {handleSubmit} from "../../utils/detailPageUtil";
 import DropdownSelect from "../dropdown/DropdownSelect";
+import {General} from "../../dtos/general";
+import GeneralForm from "./forms/GeneralForm";
 
 type DetailPageProps = {
     dataType: DataType;
@@ -25,7 +27,7 @@ type DetailPageProps = {
     collectionProduction: CollectionEnum;
 }
 
-function DetailPage<T extends Mig | SocSec | Tax>({
+function DetailPage<T extends Mig | SocSec | Tax | General>({
                                                       dataType,
                                                       collectionStaging,
                                                       collectionProduction
@@ -46,7 +48,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
     useEffect(() => {
         getAllDocuments(CollectionEnum.CODEBOOK).then((result) => {
             setFilterValues((result as unknown as CodebookValue[]).filter(
-                (value) => value.domain.includes(dataType) || value._id === 'source'));
+                (value) => value._id === 'source' || value.domain.includes(dataType)));
         }).catch((error) => {
             console.error("Failed to fetch data:", error);
         });
@@ -81,6 +83,9 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                 case DataType.TAX:
                     setData(prev => ({...prev, article: [], covered: [], content: ''}));
                     break;
+                    case DataType.GENERAL:
+                    setData(prev => ({...prev, in_value: '', out_value: ''}));
+                    break;
                 default:
                     break;
             }
@@ -88,6 +93,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
 
         const loadData = async () => {
             if (id && id !== "new") {
+                console.log(id)
                 await fetchData(id, collectionStaging);
             } else {
                 initializeData();
@@ -183,7 +189,7 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                                     fieldKey={
                                         dataType === DataType.MIG ? 'platform_title_mig' :
                                             dataType === DataType.SOC_SEC ? 'platform_title_soc_sec' :
-                                                dataType === DataType.TAX ? 'platform_title_tax' : ''
+                                                dataType === DataType.TAX ? 'platform_title_tax' : 'platform_title_general'
                                     }
                                     label="Platform Title"
                                     fieldsConfig={filterValues}
@@ -242,6 +248,12 @@ function DetailPage<T extends Mig | SocSec | Tax>({
                          submitted={submitted}
                          data={data as Tax}
                          setData={setData as React.Dispatch<React.SetStateAction<Tax>>}/>}
+            {data && dataType === DataType.GENERAL &&
+                <GeneralForm fieldsConfig={filterValues}
+                                onValidationChange={setValidForm}
+                                submitted={submitted}
+                                data={data as General}
+                                setData={setData as React.Dispatch<React.SetStateAction<General>>}/>}
 
             For info on request use the same tool as for links, just put the text instead of a link, and in front of
             the

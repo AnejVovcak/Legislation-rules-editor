@@ -19,7 +19,7 @@ export class SemanticColorUtil {
 
     static getDropdownOptionsUtil = (enumValues: string[]) => {
         // const values = Object.values(enumObj);
-        return enumValues.map((value) => {
+        return enumValues?.map((value) => {
             const colorIndex = SemanticColorUtil.getColorIndex(value);
             return {
                 key: value,
@@ -33,6 +33,6 @@ export class SemanticColorUtil {
 
     static getDropdownOptions = (fieldsConfig: CodebookValue[], enumName: string) => {
         // const values = Object.values(enumObj);
-        return SemanticColorUtil.getDropdownOptionsUtil(fieldsConfig.find(value => value._id === enumName)!.values);
+        return SemanticColorUtil.getDropdownOptionsUtil(fieldsConfig.find(value => value._id === enumName)?.values || []);
     };
 }

@@ -19,7 +19,6 @@ export interface Entity {
     title: string;
     source: Source[],
     position?: string[];
-    general?: string;
     last_modified: string;
     last_modified_by: string;
     published: boolean;

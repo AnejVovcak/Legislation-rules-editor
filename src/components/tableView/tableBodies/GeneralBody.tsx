@@ -25,8 +25,8 @@ function GeneralBody({data, isProduction}: { data: General[], isProduction: bool
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>
-                    <td><SemanticLabel value={item.in_value}/></td>
                     <td><SemanticLabel value={item.out_value}/></td>
+                    <td><SemanticLabel value={item.in_value}/></td>
                     <td><SemanticLabel value={item.platform_title_general}/></td>
                     <td>{item.position?.map((time, index) => (
                         <div style={{marginBottom: '5px'}}>

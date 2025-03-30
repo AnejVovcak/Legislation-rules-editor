@@ -25,8 +25,8 @@ function SocSecBody({data, isProduction}: { data: SocSec[], isProduction: boolea
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>
-                    <td><SemanticLabel value={item.in_value}/></td>
                     <td><SemanticLabel value={item.out_value}/></td>
+                    <td><SemanticLabel value={item.in_value}/></td>
                     <td>{item.covered.map((covered, index) => (
                         <div style={{marginBottom: '5px'}}>
                             <SemanticLabel value={covered} key={index}/>

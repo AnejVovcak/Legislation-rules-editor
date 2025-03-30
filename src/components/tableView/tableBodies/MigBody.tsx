@@ -26,8 +26,8 @@ function MigBody({data, isProduction}: { data: Mig[], isProduction: boolean }) {
                     <td>{item.title}</td>
                     {/*content is a html text, parse it to show it in a readable way*/}
                     <td dangerouslySetInnerHTML={{__html: truncateHtml(item.content, 500)}}/>
-                    <td><SemanticLabel value={item.in_value}/></td>
                     <td><SemanticLabel value={item.out_value}/></td>
+                    <td><SemanticLabel value={item.in_value}/></td>
                     <td>{item.article.map((article, index) => (
                         <div style={{marginBottom: '5px'}}>
                             <SemanticLabel value={article} key={index}/>

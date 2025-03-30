@@ -11,8 +11,8 @@ type GeneralKeys = keyof General | 'select'
 export const columnsMig : {label:string, key:MigKeys}[] = [
     {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
-    {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},
+    {label: 'IN', key: 'in_value'},
     {label: 'ARTICLE', key: 'article'},
     {label: 'COVERED', key: 'covered'},
     {label: 'IN TITLE', key: 'in_title'},
@@ -29,8 +29,8 @@ export const columnsMig : {label:string, key:MigKeys}[] = [
 export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
     {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
-    {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},
+    {label: 'IN', key: 'in_value'},
     {label: 'COVERED', key: 'covered'},
     {label: 'ARTICLE', key: 'article'},
     {label: 'STATUTE', key: 'statute'},
@@ -45,8 +45,8 @@ export const columnsSocSec:{label:string, key:SocSecKeys}[] = [
 export const columnsTax: { label: string, key: TaxKeys}[] = [
     {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
-    {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},
+    {label: 'IN', key: 'in_value'},
     {label: 'ARTICLE', key: 'article'},
     {label: 'COVERED', key: 'covered'},
     {label: 'EMPL', key: 'empl'},
@@ -60,8 +60,8 @@ export const columnsTax: { label: string, key: TaxKeys}[] = [
 export const columnsGeneral: { label: string, key: GeneralKeys}[] = [
     {label: 'ID', key: 'title'},
     {label: 'CONTENT', key: 'content'},
-    {label: 'IN', key: 'in_value'},
     {label: 'OUT', key: 'out_value'},
+    {label: 'IN', key: 'in_value'},
     {label: 'PLATFORM TITLE', key: 'platform_title_general'},
     {label: 'POSITION', key: 'position'},
     {label: 'LAST MODIFIED', key: 'last_modified'},
